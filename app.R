@@ -1,24 +1,26 @@
-library(shiny)
+modular <- readline("Enter 1 = modular, 2 = faithful, 3 = geyserApp: ")
+modular <- ifelse(is.na(modular), "3", modular)
 
-modular <- readline("Enter yes to use modules or no otherwise: ")
-modular <- !is.na(pmatch(modular, "yes"))
+switch(modular,
+  "1" = source("shinyapp.R"),
+  "2" = source("faithfulapp.R"),
+  "3" = source("geyser.R"))
 
-if(modular) {
-  source("shinyapp.R") 
+if(modular == 3) {
+  geyserApp()
 } else {
-  source("geyserapp.R")
-}
-
-ui <- geyserUI()
-
-if(modular) {
-  server <- function(input, output, session) {
-    shiny::callModule(geyserServer, "geyser")
+  
+  ui <- geyserUI()
+  
+  if(modular == 1) {
+    server <- function(input, output, session) {
+      shiny::callModule(geyserServer, "geyser")
+    }
+  } else {
+    server <- function(input, output, session) {
+      geyserServer(input, output)
+    }
   }
-} else {
-  server <- function(input, output, session) {
-    geyserServer(input, output)
-  }
+  
+  shiny::shinyApp(ui = ui, server = server)
 }
-
-shiny::shinyApp(ui = ui, server = server)

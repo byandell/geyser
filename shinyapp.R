@@ -1,5 +1,5 @@
 geyserUI <- function() {
-  bootstrapPage(
+  shiny::bootstrapPage(
  
     geyserServerInput("geyser"), 
 
@@ -14,16 +14,16 @@ geyserUI <- function() {
 geyserServer <- function(input, output, session) {
   ns <- session$ns
   
-  output$bw_adjust <- renderUI({
+  output$bw_adjust <- shiny::renderUI({
     if(input$density) {
-      sliderInput(inputId = ns("bw_adjust"),
+      shiny::sliderInput(inputId = ns("bw_adjust"),
                   label = "Bandwidth adjustment:",
                   min = 0.2, max = 2, value = 1, step = 0.2)
     }
                    
   })
   
-  output$main_plot <- renderPlot({
+  output$main_plot <- shiny::renderPlot({
     hist(faithful$eruptions,
          probability = TRUE,
          breaks = as.numeric(input$n_breaks),
@@ -46,25 +46,25 @@ geyserServer <- function(input, output, session) {
 geyserServerInput <- function(id) {
   ns <- shiny::NS(id)
   tagList(
-    selectInput(inputId = ns("n_breaks"),
+    shiny::selectInput(inputId = ns("n_breaks"),
                 label = "Number of bins in histogram (approximate):",
                 choices = c(10, 20, 35, 50),
                 selected = 20),
-    checkboxInput(inputId = ns("individual_obs"),
+    shiny::checkboxInput(inputId = ns("individual_obs"),
                   label = strong("Show individual observations"),
                   value = FALSE),
     
-    checkboxInput(inputId = ns("density"),
+    shiny::checkboxInput(inputId = ns("density"),
                   label = strong("Show density estimate"),
                   value = FALSE))
 }
 
 geyserServerCondInput <- function(id) {
   ns <- shiny::NS(id)
-  uiOutput(ns("bw_adjust"))
+  shiny::uiOutput(ns("bw_adjust"))
 }
 geyserServerOutput <- function(id) {
   ns <- shiny::NS(id)
-  plotOutput(ns("main_plot"), height = "300px")
+  shiny::plotOutput(ns("main_plot"), height = "300px")
 }
 
