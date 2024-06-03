@@ -7,7 +7,7 @@ switch(modular,
   "2" = source("faithfulapp.R"),
   "3" = source("geyser.R"))
 
-if(modular == 3) {
+if(modular == "3") {
   geyserApp()
 } else {
   
