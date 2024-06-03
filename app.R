@@ -1,3 +1,5 @@
+devtools::install_github("byandell/geyser")
+
 #modular <- readline("Enter 1 = modular, 2 = faithful, 3 = geyserApp: ")
 modular <- "3"
 modular <- ifelse(is.na(modular), "3", modular)
