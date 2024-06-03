@@ -54,11 +54,11 @@ geyserInput <- function(id) {
                 choices = c(10, 20, 35, 50),
                 selected = 20),
     shiny::checkboxInput(inputId = ns("individual_obs"),
-                  label = strong("Show individual observations"),
+                  label = shiny::strong("Show individual observations"),
                   value = FALSE),
     
     shiny::checkboxInput(inputId = ns("density"),
-                  label = strong("Show density estimate"),
+                  label = shiny::strong("Show density estimate"),
                   value = FALSE))
 }
 #' Shiny Module UI for Geyser
