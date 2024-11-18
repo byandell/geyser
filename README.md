@@ -6,9 +6,10 @@ and modularize it, either by putting `ui()` and `server()` as functions in a sep
 
 Go into one of the folders and run the `app.R` file using `shiny::runApp()`
 
-- [faithful](https://github.com/byandell/geyser/tree/main/faithful) (original code just organized into functions)
-- [modular](https://github.com/byandell/geyser/tree/main/modular) (reorganized using modules circa 2015 with callModule)
-- [geyser](https://github.com/byandell/geyser/tree/main/geyser) (modern approach using serverModule and naming)
+- [oldFaithful](https://github.com/byandell/geyser/tree/main/oldFaithful) (original code in one file `app.R`)
+- [newFaithful](https://github.com/byandell/geyser/tree/main/newFaithful) (original code offloaded into functions)
+- [modular](https://github.com/byandell/geyser/tree/main/modular) (modules using `callModule` or `moduleServer`)
+- [geyser](https://github.com/byandell/geyser/tree/main/geyser) (full module approach using `moduleServer` and `NS` namespace)
 
 Useful references include the following:
 
