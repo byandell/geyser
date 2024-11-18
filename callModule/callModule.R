@@ -1,4 +1,4 @@
-geyserServer <- function(input, output, session) {
+geyserCall <- function(input, output, session) {
   ns <- session$ns
   output$bw_adjust <- shiny::renderUI({
     if(input$density) {
