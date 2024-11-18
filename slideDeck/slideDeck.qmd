@@ -214,7 +214,8 @@ Or clone the repo <https://github.com/byandell/geyser>.
 
 <br>
 
+If you clone the repo:
+
 ``` {.bash filename="Rstudio Console"}
-> devtools::install_github("byandell/geyser")
 > shiny::runApp("moduleServer")
 ```
