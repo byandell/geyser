@@ -12,9 +12,9 @@ library(shiny)
 source("../moduleServer/moduleServer.R")
 ```
 
-# {.sidebar} 
+#  {.sidebar}
 
-##
+## 
 
 ```{r}
 geyserInput("geyser")
@@ -22,7 +22,7 @@ geyserInput("geyser")
 geyserUI("geyser")
 ```
 
-#
+# 
 
 ```{r}
 geyserOutput("geyser")

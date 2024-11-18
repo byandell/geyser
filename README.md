@@ -13,7 +13,7 @@ To run the `quarto` versions, you will need to install
 - [newFaithful](https://github.com/byandell/geyser/tree/main/newFaithful) (original code in "fake" functions)
 - [callModule](https://github.com/byandell/geyser/tree/main/callModule) (demo `callModule` vs `moduleServer`)
 - [moduleServer](https://github.com/byandell/geyser/tree/main/moduleServer) (full module approach using `moduleServer` and `NS` namespace)
-- [quarto](https://github.com/byandell/geyser/tree/main/quarto) (Quarto version of all four above)
+- [quarto](https://github.com/byandell/geyser/tree/main/quarto) (Quarto versions of all four above plus sidbar view)
 
 Useful references include the following:
 
