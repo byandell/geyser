@@ -3,7 +3,7 @@
 
 source("newFaithful.R")
 
-ui <- geyserUI()
-server <- geyserServer
+ui <- fakeUI()
+server <- fakeServer
 
 shiny::shinyApp(ui = ui, server = server)

@@ -1,4 +1,4 @@
-geyserUI <- function() {
+fakeUI <- function() {
   bootstrapPage(
     selectInput(inputId = "n_breaks",
                 label = "Number of bins in histogram (approximate):",
@@ -19,7 +19,7 @@ geyserUI <- function() {
                                  min = 0.2, max = 2, value = 1, step = 0.2))
   )
 }
-geyserServer <- function(input, output, session) {
+fakeServer <- function(input, output, session) {
   output$main_plot <- renderPlot({
     hist(faithful$eruptions, probability = TRUE,
          breaks = as.numeric(input$n_breaks),
