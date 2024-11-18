@@ -10,6 +10,7 @@ Go into one of the folders and run the `app.R` file using `shiny::runApp()`
 - [newFaithful](https://github.com/byandell/geyser/tree/main/newFaithful) (original code offloaded into functions)
 - [callModule](https://github.com/byandell/geyser/tree/main/callModule) (modules using `callModule` or `moduleServer`)
 - [moduleServer](https://github.com/byandell/geyser/tree/main/moduleServer) (full module approach using `moduleServer` and `NS` namespace)
+- [quarto](https://github.com/byandell/geyser/tree/main/quarto) (Quarto version of all four above)
 
 Useful references include the following:
 

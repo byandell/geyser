@@ -1,7 +1,7 @@
 # New Faithful with shiny content in functions
 # geyser/newFaithful/app.R
 
-source("functions")
+source("newFaithful.R")
 
 ui <- geyserUI()
 server <- geyserServer

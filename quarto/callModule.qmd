@@ -1,0 +1,27 @@
+---
+title: "callModule Quarto"
+author: "Brian Yandell"
+format: dashboard
+server: shiny
+editor: visual
+---
+
+```{r}
+#| context: setup
+library(shiny)
+source("../callModule/callModule.R")
+```
+
+##
+
+```{r}
+geyserInput("geyser")
+geyserOutput("geyser")
+# Display this only if the density is shown
+geyserUI("geyser")
+```
+
+```{r}
+#| context: server
+callModule(geyserCall, "geyser")
+```
