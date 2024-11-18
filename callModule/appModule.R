@@ -1,8 +1,8 @@
 # Call Module with shiny content in component functions
-# geyser/callModule/app.R
+# geyser/callModule/appModule.R
 
-# Uses old (pre-2020) style `callModule`.
-# Has function `geyserCall` with old style.
+# Uses new (2020) style `moduleServer`.
+# Retains function `geyserCall` with old style to show transition.
 # Uses shiny `id` to connect serer components.
 # See <https://mastering-shiny.org/scaling-modules.html>
 
@@ -16,6 +16,8 @@ ui <- shiny::bootstrapPage(
 )
 
 server <- function(input, output, session)
-  shiny::callModule(geyserCall, "geyser")
+  # Function `moduleServer` returns a new function.
+  shiny::moduleServer("geyser",
+    function(input, output, session) geyserCall(input,output,session))
 
 shiny::shinyApp(ui = ui, server = server)

@@ -3,8 +3,10 @@
 
 # This uses the `id` argument to connect UI and Server components.
 # New (>=2020) style: `moduleServer`
-# Function `geyserServer` is function that creates a `server` function.
-# See <https://mastering-shiny.org/scaling-modules.html>
+# Function `geyserServer` returns a `server` function.
+# Uses shiny `id` to connect serer components.
+# Explicit function assignment to create `server` is crucial.
+# See <https://mastering-shiny.org/scaling-modules.html>.
 
 source("moduleServer.R")
 

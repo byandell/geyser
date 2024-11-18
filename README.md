@@ -10,8 +10,8 @@ To run the `quarto` versions, you will need to install
 [my quarto notes](https://github.com/byandell/quarto).
 
 - [oldFaithful](https://github.com/byandell/geyser/tree/main/oldFaithful) (original code in one file `app.R`)
-- [newFaithful](https://github.com/byandell/geyser/tree/main/newFaithful) (original code offloaded into functions)
-- [callModule](https://github.com/byandell/geyser/tree/main/callModule) (modules using `callModule` or `moduleServer`)
+- [newFaithful](https://github.com/byandell/geyser/tree/main/newFaithful) (original code in "fake" functions)
+- [callModule](https://github.com/byandell/geyser/tree/main/callModule) (demo `callModule` vs `moduleServer`)
 - [moduleServer](https://github.com/byandell/geyser/tree/main/moduleServer) (full module approach using `moduleServer` and `NS` namespace)
 - [quarto](https://github.com/byandell/geyser/tree/main/quarto) (Quarto version of all four above)
 

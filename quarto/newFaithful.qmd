@@ -22,6 +22,7 @@ fakeUI()
 
 ```{r}
 #| context: server
+# Internal code from `fakeServer()`
 output$main_plot <- renderPlot({
   hist(faithful$eruptions, probability = TRUE,
        breaks = as.numeric(input$n_breaks),
