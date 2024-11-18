@@ -11,13 +11,13 @@
 source("moduleServer.R")
 
 ui <- shiny::bootstrapPage(
-  geyserInput("geyser"), 
-  geyserOutput("geyser"),
+  geyserInput(id = "geyser"), 
+  geyserOutput(id = "geyser"),
   # Display this only if the density is shown
-  geyserUI("geyser")
+  geyserUI(id = "geyser")
 )
 server <- function(input, output, session) {
-  geyserServer("geyser")
+  geyserServer(id = "geyser")
 }
 shiny::shinyApp(ui, server)
 

@@ -1,0 +1,220 @@
+---
+title: "Geyser Shiny Modules<br>with Old Faithful"
+footer: "[quarto.org](https://quarto.org/)"
+format:
+  revealjs:
+    theme: slides.scss
+    transition: fade
+    slide-number: true
+# https://github.com/mine-cetinkaya-rundel/quarto-dashboards/blob/main/1-hello-dashboards/index.qmd
+---
+
+## Old Faithful Shiny App
+
+:::: {.columns}
+::: {.column width="60%"}
+-   user interface `ui` and `server`
+-   combined with `shinyApp()` tool
+-   Shiny [FaithFul](https://shiny.posit.co/r/gallery/start-simple/faithful/) Demo
+-   Old Faithful code in file
+[app.R](https://github.com/byandell/geyser/blob/main/oldFaithful/app.R)
+:::
+
+::: {.column width="40%"}
+![](faithful.png)
+:::
+::::
+
+## Original Old Faithful Code {.smaller}
+
+```{.r filename="https://github.com/byandell/geyser/oldfaithful/app.R" code-line-numbers="|2-9|10|12-15|18-21|22-24|25-28"}
+ui <- bootstrapPage(
+  selectInput(inputId = "n_breaks",
+              label = "Number of bins in histogram (approximate):",
+              choices = c(10, 20, 35, 50), selected = 20),
+  checkboxInput(inputId = "individual_obs",
+                label = strong("Show individual observations"),
+                value = FALSE),
+  checkboxInput(inputId = "density", label = strong("Show density estimate"),
+                value = FALSE),
+  plotOutput(outputId = "main_plot", height = "300px"),
+  
+  # Display this only if the density is shown
+  conditionalPanel(condition = "input.density == true",
+    sliderInput(inputId = "bw_adjust", label = "Bandwidth adjustment:",
+      min = 0.2, max = 2, value = 1, step = 0.2))
+)
+server <- function(input, output) {
+  output$main_plot <- renderPlot({
+    hist(faithful$eruptions, probability = TRUE,
+         breaks = as.numeric(input$n_breaks),
+         xlab = "Duration (minutes)", main = "Geyser eruption duration")
+    if (input$individual_obs) {
+      rug(faithful$eruptions)
+    }
+    if (input$density) {
+      dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+      lines(dens, col = "blue")
+    }
+  })
+}
+shiny::shinyApp(ui, server)
+```
+
+- `ui` has input, output and conditional slider
+- `server` has `hist` and logic for optional `rug` and `density`
+
+## FaithFul code with Server Logic {.smaller}
+
+```{.r filename="https://github.com/byandell/geyser/oldfaithful/appLogic.R" code-line-numbers="|7|17|22-26"}
+ui <- bootstrapPage(
+  selectInput(inputId = "n_breaks",
+  ...
+  plotOutput(outputId = "main_plot", height = "300px"),
+  
+  # Display this only if the density is shown
+  uiOutput("bw_adjust")
+#  conditionalPanel(condition = "input.density == true",
+#    sliderInput(inputId = "bw_adjust", label = "Bandwidth adjustment:",
+#      min = 0.2, max = 2, value = 1, step = 0.2))
+)
+
+server <- function(input, output) {
+  output$main_plot <- renderPlot({
+  ...
+    if (input$density) {
+      req(input$bw_adjust)
+      dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+      lines(dens, col = "blue")
+    }
+  })
+  output$bw_adjust <- shiny::renderUI({
+    if(input$density)
+      sliderInput(inputId = "bw_adjust", label = "Bandwidth adjustment:",
+                  min = 0.2, max = 2, value = 1, step = 0.2)
+  })
+}
+```
+
+Replace `conditionalPanel` in `ui` with `server` logic:
+
+- Remove `conditionalPanel` from `ui`.
+- Use `uiOutput` in `ui` and `renderUI` in `server`,
+- Check if `bw_adjust` has been set with `req` before using.
+
+## Modular Geyser Code {.scrollable}
+
+```{.r filename="https://github.com/byandell/geyser/moduleServer/app.R" code-line-numbers="|1-6|8-10|12"}
+ui <- shiny::bootstrapPage(
+  geyserInput(id = "geyser"), 
+  geyserOutput(id = "geyser"),
+  # Display this only if the density is shown
+  geyserUI(id = "geyser")
+)
+
+server <- function(input, output, session) {
+  geyserServer(id = "geyser")
+}
+
+shiny::shinyApp(ui, server)
+```
+
+- `id = "geyser"` connects UI and Server components.
+- Function `geyserServer()` returns a `server` function.
+- Explicit function assignment to create `server` is crucial.
+
+## Modular Geyser `Input`, `Output`, `UI` Components {.scrollable .smaller}
+
+```{.r filename="https://github.com/byandell/geyser/oldfaithful/app.R" code-line-numbers="|1-2|3|16-17|20-21"}
+geyserInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::tagList(
+    shiny::selectInput(inputId = ns("n_breaks"),
+                label = "Number of bins in histogram (approximate):",
+                choices = c(10, 20, 35, 50),
+                selected = 20),
+    shiny::checkboxInput(inputId = ns("individual_obs"),
+                  label = shiny::strong("Show individual observations"),
+                  value = FALSE),
+    
+    shiny::checkboxInput(inputId = ns("density"),
+                  label = shiny::strong("Show density estimate"),
+                  value = FALSE))
+}
+geyserUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("bw_adjust"))
+}
+geyserOutput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::plotOutput(ns("main_plot"), height = "300px")
+}
+```
+
+- `shiny::NS()` sets up Shiny namespace.
+- `shiny::tagList()` for list of inputs.
+- Explicit `package::function()` clarifies function origin.
+
+## Modular `geyserServer` {.scrollable .smaller}
+
+```{.r filename="https://github.com/byandell/geyser/oldfaithful/app.R" code-line-numbers="|2|3|27"}
+geyserServer <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Output Main Plot
+    output$main_plot <- shiny::renderPlot({
+      graphics::hist(faithful$eruptions,
+                     probability = TRUE,
+                     breaks = as.numeric(input$n_breaks),
+                     xlab = "Duration (minutes)",
+                     main = "Geyser eruption duration")
+      
+      if (input$individual_obs) {
+        graphics::rug(faithful$eruptions)
+      }
+      if (input$density) {
+        shiny::req(input$bw_adjust)
+        dens <- stats::density(faithful$eruptions,
+                               adjust = input$bw_adjust)
+        graphics::lines(dens, col = "blue")
+      }
+    })
+    
+    # Input Bandwidth Adjustment
+    output$bw_adjust <- shiny::renderUI({
+      if(input$density) {
+        shiny::sliderInput(inputId = ns("bw_adjust"),
+                           label = "Bandwidth adjustment:",
+                           min = 0.2, max = 2, value = 1, step = 0.2)
+      }
+    })
+  })
+}
+```
+
+- `shiny::moduleServer` returns `server` function.
+- `session$ns` sets up Shiny namespace.
+- `ns("by_adjust")` uses Shiny namespace.
+
+## Run it yourself
+
+::: callout-tip
+Save the Faithful code in a clean folder `oldFaithful` as file `app.R`.
+<br>
+Or clone the repo <https://github.com/byandell/geyser>.
+:::
+
+<br>
+
+``` {.bash filename="Rstudio Console"}
+> library(shiny)
+> runApp("oldFaithful")
+```
+
+<br>
+
+``` {.bash filename="Rstudio Console"}
+> devtools::install_github("byandell/geyser")
+> shiny::runApp("moduleServer")
+```

@@ -12,15 +12,6 @@ geyserServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
-    # Input Bandwidth Adjustment
-    output$bw_adjust <- shiny::renderUI({
-      if(input$density) {
-        shiny::sliderInput(inputId = ns("bw_adjust"),
-                           label = "Bandwidth adjustment:",
-                           min = 0.2, max = 2, value = 1, step = 0.2)
-      }
-    })
-    
     # Output Main Plot
     output$main_plot <- shiny::renderPlot({
       graphics::hist(faithful$eruptions,
@@ -37,6 +28,15 @@ geyserServer <- function(id) {
         dens <- stats::density(faithful$eruptions,
                                adjust = input$bw_adjust)
         graphics::lines(dens, col = "blue")
+      }
+    })
+    
+    # Input Bandwidth Adjustment
+    output$bw_adjust <- shiny::renderUI({
+      if(input$density) {
+        shiny::sliderInput(inputId = ns("bw_adjust"),
+                           label = "Bandwidth adjustment:",
+                           min = 0.2, max = 2, value = 1, step = 0.2)
       }
     })
   })

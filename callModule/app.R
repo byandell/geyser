@@ -9,13 +9,13 @@
 source("callModule.R")
 
 ui <- shiny::bootstrapPage(
-  geyserInput("geyser"), 
-  geyserOutput("geyser"),
+  geyserInput(id = "geyser"), 
+  geyserOutput(id = "geyser"),
   # Display this only if the density is shown
-  geyserUI("geyser")
+  geyserUI(id = "geyser")
 )
 
 server <- function(input, output, session)
-  shiny::callModule(geyserCall, "geyser")
+  shiny::callModule(geyserCall, id = "geyser")
 
 shiny::shinyApp(ui = ui, server = server)
