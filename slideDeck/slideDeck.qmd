@@ -212,10 +212,34 @@ Or clone the repo <https://github.com/byandell/geyser>.
 > runApp("oldFaithful")
 ```
 
-<br>
-
 If you clone the repo:
 
 ``` {.bash filename="Rstudio Console"}
 > shiny::runApp("moduleServer")
+```
+
+or ...
+
+## Self-contained `geyserApp()`
+
+```{.r filename="https://github.com/byandell/geyser/moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
+geyserApp <- function() {
+  ui <- shiny::bootstrapPage(
+    geyserInput("geyser"), 
+    geyserOutput("geyser"),
+    # Display this only if the density is shown
+    geyserUI("geyser")
+  )
+  server <- function(input, output, session) {
+    geyserServer("geyser")
+  }
+  shiny::shinyApp(ui, server)
+}
+```
+
+<br>
+
+``` {.bash filename="Rstudio Console"}
+> source("moduleServer/moduleServer.R")
+> geyserApp()
 ```
