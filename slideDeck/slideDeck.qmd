@@ -197,29 +197,6 @@ geyserServer <- function(id) {
 - `session$ns` sets up Shiny namespace.
 - `ns("by_adjust")` uses Shiny namespace.
 
-## Run it yourself
-
-::: callout-tip
-Save the Faithful code in a clean folder `oldFaithful` as file `app.R`.
-<br>
-Or clone the repo <https://github.com/byandell/geyser>.
-:::
-
-<br>
-
-``` {.bash filename="Rstudio Console"}
-> library(shiny)
-> runApp("oldFaithful")
-```
-
-If you clone the repo:
-
-``` {.bash filename="Rstudio Console"}
-> shiny::runApp("moduleServer")
-```
-
-or ...
-
 ## Self-contained `geyserApp()`
 
 ```{.r filename="https://github.com/byandell/geyser/moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
@@ -237,9 +214,58 @@ geyserApp <- function() {
 }
 ```
 
-<br>
+## Shiny Module in one File {.scrollable .smaller}
+
+```{.r filename="https://github.com/byandell/geyser/moduleServer/moduleServer.R" code-line-numbers="|1-3|6-15|18-21|"}
+geyserServer <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+  ...
+}
+geyserInput <- function(id) {
+  ns <- shiny::NS(id)
+  ...
+}
+geyserUI <- function(id) {
+  ns <- shiny::NS(id)
+  ...
+}
+geyserOutput <- function(id) {
+  ns <- shiny::NS(id)
+  ...
+}
+geyserApp <- function() {
+  ui <- ...
+  server <- function(input, output, session) ...
+  shiny::shinyApp(ui, server)
+}
+```
+
+- `Server` has logic steps
+- `Input`, `Output`, `UI` has user interface
+- `App` has testable applet
+
+## Clone repo and run yourself
+
+``` {.bash filename="Rstudio Console"}
+> library(shiny)
+> runApp("oldFaithful")
+```
+
+or ...
+
+``` {.bash filename="Rstudio Console"}
+> shiny::runApp("moduleServer")
+```
+
+or ...
 
 ``` {.bash filename="Rstudio Console"}
 > source("moduleServer/moduleServer.R")
 > geyserApp()
 ```
+
+## Questions?
+
+- <https://github.com/byandell/geyser>
+- <https://byandell.github.io>
