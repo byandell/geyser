@@ -7,3 +7,4 @@ rsconnect/
 *.html
 *_files/
 data/
+*.pyc

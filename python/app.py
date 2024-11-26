@@ -1,16 +1,11 @@
-pip install shiny
-
 from shiny import App, render, ui
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
+from rpy2 import robjects
 
-# Sample data similar to faithful$eruptions
-eruptions = np.random.normal(loc=3.5, scale=1.0, size=272)
-# https://gist.githubusercontent.com/curran/4b59d1046d9e66f2787780ad51a1cd87/raw/9ec906b78a98cf300947a37b56cfe70d01183200/data.tsv
-# https://www.kaggle.com/code/niteshhalai/old-faithful-data-visualisation-and-modelling/input?select=faithful.csv
-# https://www.kaggle.com/datasets/janithwanni/old-faithful/data?select=faithful.csv
-# data=pandas.read_csv('filename.tsv',sep='\t')
+# `faithful$eruptions` from R
+eruptions = robjects.r['faithful'][0]
 
 app_ui = ui.page_fluid(
     ui.input_select(
