@@ -1,0 +1,34 @@
+---
+title: "Penguin Bills"
+format: html
+server: shiny
+---
+
+```{python}
+import seaborn as sns
+from shiny import App, render, ui
+
+# Load the penguins dataset
+penguins = sns.load_dataset("penguins")
+
+# Define the UI
+app_ui = ui.page_fluid(
+    ui.input_select("x", "Variable:", choices=["bill_length_mm", "bill_depth_mm"]),
+    ui.input_select("dist", "Distribution:", choices=["hist", "kde"]),
+    ui.input_checkbox("rug", "Show rug marks", value=False),
+    ui.output_plot("displot")
+)
+
+# Define the server logic
+def server(input, output, session):
+    @output
+    @render.plot
+    def displot():
+        sns.displot(
+            data=penguins, hue="species", multiple="stack",
+            x=input.x(), rug=input.rug(), kind=input.dist()
+        )
+
+# Create the Shiny app
+app = App(app_ui, server)
+
