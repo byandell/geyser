@@ -1,0 +1,83 @@
+---
+title: "Geyser Modules in Quarto"
+author: "Brian Yandell"
+format: dashboard
+server: shiny
+editor: visual
+---
+
+```{r}
+#| context: setup
+source("hist.R")
+source("gghist.R")
+source("ggpoint.R")
+```
+
+# hist
+
+##  {.sidebar}
+
+### 
+
+```{r}
+histInput("hist")
+# Display this only if the density is shown
+histUI("hist")
+```
+
+## 
+
+```{r}
+histOutput("hist")
+```
+
+```{r}
+#| context: server
+histServer("hist", faithful, "eruptions")
+```
+
+# geom_hist
+
+##  {.sidebar}
+
+### 
+
+```{r}
+gghistInput("gghist")
+# Display this only if the density is shown
+gghistUI("gghist")
+```
+
+## 
+
+```{r}
+gghistOutput("gghist")
+```
+
+```{r}
+#| context: server
+gghistServer("gghist", faithful, "eruptions")
+```
+
+# geom_point
+
+##  {.sidebar}
+
+### 
+
+```{r}
+ggpointInput("ggpoint")
+# Display this only if the density is shown
+ggpointUI("ggpoint")
+```
+
+## 
+
+```{r}
+ggpointOutput("ggpoint")
+```
+
+```{r}
+#| context: server
+ggpointServer("ggpoint", faithful, "eruptions", "waiting")
+```
