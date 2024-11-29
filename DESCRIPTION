@@ -1,0 +1,15 @@
+Package: geyser
+Version: 0.1.0
+Date: 2024-11-29
+Title: Geyser Shiny Module Examples
+Description: Examples to study shiny modules
+Authors@R: c(person("Brian S Yandell",
+                role = c("aut","cre"),
+                email = "brian.yandell@wisc.edu"))
+Depends:
+    R (>= 4.2.0)
+Imports:
+    dplyr, DT, ggplot2, graphics, rlang, shiny, stats, stringr, tibble
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.3.2

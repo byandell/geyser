@@ -1,37 +1,46 @@
-#' Shiny Server for Geyser Graphics Histogram
+#' Shiny Server for Geyser Ggplot2 Histogram
 #'
 #' @param id shiny identifier
-#' @param df data frame
-#' @param column column of data frame
+#' @param df reactive data frame
 
 #' @return reactive server
 #' @export
-#' @rdname histServer
+#' @rdname gghistServer
 #' @importFrom shiny bootstrapPage checkboxInput moduleServer NS plotOutput
 #'             renderPlot renderUI selectInput shinyApp sliderInput uiOutput
-#' @importFrom graphics hist lines rug
-#' @importFrom stats density
-histServer <- function(id, df, column) {
+#' @importFrom ggplot2 aes after_stat geom_histogram geom_rug ggplot ggtitle
+#'             stat_density xlab
+#' @importFrom rlang .data
+#' @importFrom stringr str_to_title
+gghistServer <- function(id, df = shiny::reactive(faithful)) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     # Output Main Plot
     output$main_plot <- shiny::renderPlot({
-      graphics::hist(df[[column]],
-                     probability = TRUE,
-                     breaks = as.numeric(input$n_breaks),
-                     xlab = "Duration (minutes)",
-                     main = "Geyser eruption duration")
+      shiny::req(df())
+      if(ncol(df()) < 1) return(ggplot2::ggplot())
+      
+      xvar <- colnames(df())[1]
+      p <- ggplot2::ggplot(df()) +
+        ggplot2::aes(.data[[xvar]]) +
+        ggplot2::geom_histogram(
+          ggplot2::aes(y = ggplot2::after_stat(density)),
+          bins = as.numeric(input$n_breaks),
+          color = "black", fill = "white") +
+        ggplot2::xlab(xvar) +
+        ggplot2::ggtitle(stringr::str_to_title(xvar))
       
       if (input$individual_obs) {
-        graphics::rug(df[[column]])
+        p <- p + ggplot2::geom_rug()
       }
       if (input$density) {
         shiny::req(input$bw_adjust)
-        dens <- stats::density(df[[column]],
-                               adjust = input$bw_adjust)
-        graphics::lines(dens, col = "blue")
+        p <- p + ggplot2::stat_density(
+          adjust = input$bw_adjust,
+          color = "blue", linewidth = 1, fill = "transparent")
       }
+      print(p)
     })
     
     # Input Bandwidth Adjustment
@@ -44,12 +53,12 @@ histServer <- function(id, df, column) {
     })
   })
 }
-#' Shiny Module Input for Geyser Graphics Histogram
+#' Shiny Module Input for Geyser Ggplot2 Histogram
 #' @param id identifier for shiny reactive
 #' @return nothing returned
-#' @rdname histServer
+#' @rdname gghistServer
 #' @export
-histInput <- function(id) {
+gghistInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
     shiny::selectInput(inputId = ns("n_breaks"),
@@ -64,37 +73,37 @@ histInput <- function(id) {
                   label = shiny::strong("Show density estimate"),
                   value = FALSE))
 }
-#' Shiny Module UI for Geyser Graphics Histogram
+#' Shiny Module UI for Geyser Ggplot2 Histogram
 #' @param id identifier for shiny reactive
 #' @return nothing returned
-#' @rdname histServer
+#' @rdname gghistServer
 #' @export
-histUI <- function(id) {
+gghistUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("bw_adjust"))
 }
-#' Shiny Module Output for Geyser Graphics Histogram
+#' Shiny Module Output for Geyser Ggplot2 Histogram
 #' @param id identifier for shiny reactive
 #' @return nothing returned
-#' @rdname histServer
+#' @rdname gghistServer
 #' @export
-histOutput <- function(id) {
+gghistOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::plotOutput(ns("main_plot"), height = "300px")
 }
-#' Shiny Module App for Geyser Graphics Histogram
+#' Shiny Module App for Geyser Ggplot2 Histogram
 #' @return nothing returned
-#' @rdname histServer
+#' @rdname gghistServer
 #' @export
-histApp <- function() {
+gghistApp <- function() {
   ui <- shiny::bootstrapPage(
-    histInput("hist"), 
-    histOutput("hist"),
+    gghistInput("gghist"), 
+    gghistOutput("gghist"),
     # Display this only if the density is shown
-    histUI("hist")
+    gghistUI("gghist")
   )
   server <- function(input, output, session) {
-    histServer("hist", faithful, "eruptions")
+    gghistServer("gghist")
   }
   shiny::shinyApp(ui, server)
 }

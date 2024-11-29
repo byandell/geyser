@@ -8,9 +8,9 @@ editor: visual
 
 ```{r}
 #| context: setup
-source("hist.R")
-source("gghist.R")
-source("ggpoint.R")
+source("../R/hist.R")
+source("../R/gghist.R")
+source("../R/ggpoint.R")
 ```
 
 # hist
@@ -33,7 +33,7 @@ histOutput("hist")
 
 ```{r}
 #| context: server
-histServer("hist", faithful, "eruptions")
+histServer("hist")
 ```
 
 # geom_hist
@@ -56,7 +56,7 @@ gghistOutput("gghist")
 
 ```{r}
 #| context: server
-gghistServer("gghist", faithful, "eruptions")
+gghistServer("gghist")
 ```
 
 # geom_point
@@ -79,5 +79,5 @@ ggpointOutput("ggpoint")
 
 ```{r}
 #| context: server
-ggpointServer("ggpoint", faithful, "eruptions", "waiting")
+ggpointServer("ggpoint")
 ```
