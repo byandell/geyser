@@ -32,7 +32,7 @@ datasetsServer <- function(id) {
       choices <- shiny::req(columnnames())
       if(shiny::isTruthy(input$columns))
         choices <- unique(c(input$columns, choices))
-      shiny::selectInput(ns("columns"), "columns", choices = choices,
+      shiny::selectInput(ns("columns"), "Variables:", choices = choices,
                          selected = input$columns,
                          multiple = TRUE)
     })
@@ -61,10 +61,15 @@ datasetsServer <- function(id) {
 #' @export
 datasetsInput <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::uiOutput(ns("dataset")),
-    shiny::uiOutput(ns("columns"))
-  )
+  shiny::uiOutput(ns("dataset"))
+}
+#' Shiny Module Input
+#' @return nothing returned
+#' @rdname datasetsServer
+#' @export
+datasetsUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("columns"))
 }
 #' Shiny Module Output
 #' @return nothing returned
@@ -81,6 +86,7 @@ datasetsOutput <- function(id) {
 datasetsApp <- function() {
   ui <- shiny::bootstrapPage(
     datasetsInput("datasets"), 
+    datasetsUI("datasets"), 
     datasetsOutput("datasets")
   )
   server <- function(input, output, session) {

@@ -5,7 +5,7 @@
 #' @return reactive server
 #' @export
 #' @rdname wrappersetServer
-#' @importFrom shiny bootstrapPage moduleServer NS 
+#' @importFrom shiny bootstrapPage column fluidRow moduleServer NS 
 #'             renderUI selectInput shinyApp uiOutput
 wrappersetServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
@@ -41,9 +41,13 @@ wrappersetServer <- function(id) {
 wrappersetInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::selectInput(ns("plottype"), "Plot Type:",
-                       c("hist","gghist","ggpoint")),
-    datasetsInput(ns("datasets")),
+    shiny::fluidRow(
+      shiny::column(4,
+        shiny::selectInput(ns("plottype"), "Plot Type:",
+                           c("hist","gghist","ggpoint"))),
+      shiny::column(4, datasetsInput(ns("datasets"))),
+      shiny::column(4, datasetsUI(ns("datasets")))
+    ),
     shiny::uiOutput(ns("inputSwitch"))
   )
 }

@@ -3,6 +3,7 @@
 \name{datasetsServer}
 \alias{datasetsServer}
 \alias{datasetsInput}
+\alias{datasetsUI}
 \alias{datasetsOutput}
 \alias{datasetsApp}
 \title{Shiny Server for Selected R Datasets}
@@ -10,6 +11,8 @@
 datasetsServer(id)
 
 datasetsInput(id)
+
+datasetsUI(id)
 
 datasetsOutput(id)
 
@@ -26,9 +29,13 @@ nothing returned
 nothing returned
 
 nothing returned
+
+nothing returned
 }
 \description{
 Shiny Server for Selected R Datasets
+
+Shiny Module Input
 
 Shiny Module Input
 

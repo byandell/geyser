@@ -1,0 +1,66 @@
+---
+title: "Geyser Modules 2 in Quarto"
+author: "Brian Yandell"
+format: 
+  dashboard:
+    orientation: rows
+server: shiny
+editor: visual
+---
+
+```{r}
+#| context: setup
+library(geyser)
+library(shiny)
+```
+
+## Row - Datasets {height="20%"}
+
+### Column dataset
+
+```{r}
+datasetsInput("datasets")
+```
+
+### Column variable
+
+```{r}
+datasetsUI("datasets")
+```
+
+## Row - Plots {height="80%"}
+
+### Column - Hist
+
+```{r}
+#| title: Basic Histogram
+histInput("hist")
+histOutput("hist")
+histUI("hist")
+```
+
+### Column - GGhist
+
+```{r}
+#| title: GGplot2 Histogram
+gghistInput("gghist")
+gghistOutput("gghist")
+gghistUI("gghist")
+```
+
+### Column - GGpoint
+
+```{r}
+#| title: GGplot2 Point Plot
+ggpointInput("ggpoint")
+ggpointOutput("ggpoint")
+ggpointUI("ggpoint")
+```
+
+```{r}
+#| context: server
+datasets <- datasetsServer("datasets")
+histServer("hist", datasets)
+gghistServer("gghist", datasets)
+ggpointServer("ggpoint", datasets)
+```
