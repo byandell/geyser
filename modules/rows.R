@@ -4,7 +4,7 @@ rowsApp <- function() {
   
   ui <- shiny::bootstrapPage(
     # context: ui
-    shiny::titlePanel("Rows"),
+    shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
     shiny::fluidRow(
       shiny::column(6, datasetsInput("datasets")),
       shiny::column(6, datasetsUI("datasets"))

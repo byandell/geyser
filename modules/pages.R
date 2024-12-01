@@ -6,7 +6,7 @@ pagesApp <- function() {
   
   ui <- shiny::bootstrapPage(
     # context: ui
-    shiny::titlePanel("Pages"),
+    shiny::titlePanel("Geyser Pages Modules in Shiny, Brian Yandell"),
     shiny::tabsetPanel(
       shiny::tabPanel("hist", shiny::tagList(
         histInput("hist"), 

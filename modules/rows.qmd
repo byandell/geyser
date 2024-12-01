@@ -1,5 +1,5 @@
 ---
-title: "Geyser Modules 2 in Quarto"
+title: "Geyser Rows Modules in Quarto"
 author: "Brian Yandell"
 format: 
   dashboard:
