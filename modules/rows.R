@@ -1,0 +1,41 @@
+rowsApp <- function() {
+  # context: setup
+  library(geyser)
+  
+  ui <- shiny::bootstrapPage(
+    # context: ui
+    shiny::titlePanel("Rows"),
+    shiny::fluidRow(
+      shiny::column(6, datasetsInput("datasets")),
+      shiny::column(6, datasetsUI("datasets"))
+    ),
+    shiny::fluidRow(
+      shiny::column(4, shiny::tagList(
+        shiny::titlePanel("hist"),
+        gghistInput("hist"), 
+        gghistOutput("hist"),
+        gghistUI("hist")
+      )),
+      shiny::column(4, shiny::tagList(
+        shiny::titlePanel("gghist"),
+        gghistInput("gghist"), 
+        gghistOutput("gghist"),
+        gghistUI("gghist")
+      )),
+      shiny::column(4, shiny::tagList(
+        shiny::titlePanel("ggpoint"),
+        ggpointInput("ggpoint"), 
+        ggpointOutput("ggpoint"),
+        ggpointUI("ggpoint")
+      ))
+    )
+  )
+  server <- function(input, output, session) {
+    # context: server
+    dataset <- datasetsServer("datasets")
+    histServer("hist", dataset)
+    gghistServer("gghist", dataset)
+    ggpointServer("ggpoint", dataset)
+  }
+  shiny::shinyApp(ui, server)
+}
