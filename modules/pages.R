@@ -4,7 +4,7 @@ pagesApp <- function() {
   source("R/gghist.R")
   source("R/ggpoint.R")
   
-  ui <- shiny::bootstrapPage(
+  ui <- shiny::fluidPage(
     # context: ui
     shiny::titlePanel("Geyser Pages Modules in Shiny, Brian Yandell"),
     shiny::tabsetPanel(

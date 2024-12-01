@@ -2,7 +2,7 @@ rowsApp <- function() {
   # context: setup
   library(geyser)
   
-  ui <- shiny::bootstrapPage(
+  ui <- shiny::fluidPage(
     # context: ui
     shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
     shiny::fluidRow(
