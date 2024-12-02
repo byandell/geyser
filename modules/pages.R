@@ -8,21 +8,21 @@ pagesApp <- function() {
     # context: ui
     shiny::titlePanel("Geyser Pages Modules in Shiny, Brian Yandell"),
     shiny::tabsetPanel(
-      shiny::tabPanel("hist", shiny::tagList(
+      shiny::tabPanel("hist",
         histInput("hist"), 
         histOutput("hist"),
         histUI("hist")
-      )),
-      shiny::tabPanel("gghist", shiny::tagList(
+      ),
+      shiny::tabPanel("gghist",
         gghistInput("gghist"), 
         gghistOutput("gghist"),
         gghistUI("gghist")
-      )),
-      shiny::tabPanel("ggpoint", shiny::tagList(
+      ),
+      shiny::tabPanel("ggpoint",
         ggpointInput("ggpoint"), 
         ggpointOutput("ggpoint"),
         ggpointUI("ggpoint")
-      ))
+      )
     )
   )
   server <- function(input, output, session) {
