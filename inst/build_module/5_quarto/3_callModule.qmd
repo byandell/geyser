@@ -1,5 +1,5 @@
 ---
-title: "moduleServer Quarto"
+title: "callModule Quarto"
 author: "Brian Yandell"
 format: dashboard
 server: shiny
@@ -9,7 +9,7 @@ editor: visual
 ```{r}
 #| context: setup
 library(shiny)
-source("../moduleServer/moduleServer.R")
+source("../3_callModule/callModule.R")
 ```
 
 ## 
@@ -23,5 +23,5 @@ geyserUI("geyser")
 
 ```{r}
 #| context: server
-geyserServer("geyser")
+callModule(geyserCall, "geyser")
 ```

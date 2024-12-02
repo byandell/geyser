@@ -9,7 +9,7 @@ editor: visual
 ```{r}
 #| context: setup
 library(shiny)
-source("../moduleServer/moduleServer.R")
+source("../4_moduleServer/moduleServer.R")
 ```
 
 #  {.sidebar}

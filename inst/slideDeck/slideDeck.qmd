@@ -6,6 +6,7 @@ format:
     theme: slides.scss
     transition: fade
     slide-number: true
+    code-block-height: 450px
 # https://github.com/mine-cetinkaya-rundel/quarto-dashboards/blob/main/1-hello-dashboards/index.qmd
 ---
 
@@ -27,7 +28,7 @@ format:
 
 ## Original Old Faithful Code {.smaller}
 
-```{.r filename="https://github.com/byandell/geyser/oldfaithful/app.R" code-line-numbers="|2-9|10|12-15|18-21|22-24|25-28"}
+```{.r filename="inst/build_module/1_oldfaithful/app.R" code-line-numbers="|2-9|10|12-15|18-21|22-24|25-28"}
 ui <- bootstrapPage(
   selectInput(inputId = "n_breaks",
               label = "Number of bins in histogram (approximate):",
@@ -66,7 +67,7 @@ shiny::shinyApp(ui, server)
 
 ## FaithFul code with Server Logic {.smaller}
 
-```{.r filename="https://github.com/byandell/geyser/oldfaithful/appLogic.R" code-line-numbers="|7|17|22-26"}
+```{.r filename="inst/build_module/1_oldfaithful/appLogic.R" code-line-numbers="|7|17|22-26"}
 ui <- bootstrapPage(
   selectInput(inputId = "n_breaks",
   ...
@@ -78,7 +79,6 @@ ui <- bootstrapPage(
 #    sliderInput(inputId = "bw_adjust", label = "Bandwidth adjustment:",
 #      min = 0.2, max = 2, value = 1, step = 0.2))
 )
-
 server <- function(input, output) {
   output$main_plot <- renderPlot({
   ...
@@ -94,6 +94,7 @@ server <- function(input, output) {
                   min = 0.2, max = 2, value = 1, step = 0.2)
   })
 }
+shiny::shinyApp(ui, server)
 ```
 
 Replace `conditionalPanel` in `ui` with `server` logic:
@@ -102,9 +103,9 @@ Replace `conditionalPanel` in `ui` with `server` logic:
 - Use `uiOutput` in `ui` and `renderUI` in `server`,
 - Check if `bw_adjust` has been set with `req` before using.
 
-## Modular Geyser Code {.scrollable}
+## Modular Geyser App
 
-```{.r filename="https://github.com/byandell/geyser/moduleServer/app.R" code-line-numbers="|1-6|8-10|12"}
+```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-6|8-10|12"}
 ui <- shiny::bootstrapPage(
   geyserInput(id = "geyser"), 
   geyserOutput(id = "geyser"),
@@ -123,9 +124,20 @@ shiny::shinyApp(ui, server)
 - Function `geyserServer()` returns a `server` function.
 - Explicit function assignment to create `server` is crucial.
 
+## Shiny Module in one File
+
+```{.r filename="inst/build_module/4_moduleServer/moduleServer.R"}
+geyserServer(id) # server logic steps
+geyserInput(id)  # user input
+geyserOutput(id) # user output
+geyserUI(id)     # user input/output
+geyserApp()      # app as test function
+```
+
+
 ## Modular Geyser `Input`, `Output`, `UI` Components {.scrollable .smaller}
 
-```{.r filename="https://github.com/byandell/geyser/oldfaithful/app.R" code-line-numbers="|1-2|3|16-17|20-21"}
+```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-2|3|16-17|20-21"}
 geyserInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
@@ -141,13 +153,13 @@ geyserInput <- function(id) {
                   label = shiny::strong("Show density estimate"),
                   value = FALSE))
 }
-geyserUI <- function(id) {
-  ns <- shiny::NS(id)
-  shiny::uiOutput(ns("bw_adjust"))
-}
 geyserOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::plotOutput(ns("main_plot"), height = "300px")
+}
+geyserUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("bw_adjust"))
 }
 ```
 
@@ -157,7 +169,7 @@ geyserOutput <- function(id) {
 
 ## Modular `geyserServer` {.scrollable .smaller}
 
-```{.r filename="https://github.com/byandell/geyser/oldfaithful/app.R" code-line-numbers="|2|3|27"}
+```{.r filename="inst/build_module/4_moduleServer/moduleServer.R" code-line-numbers="|2|3|27"}
 geyserServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -199,7 +211,7 @@ geyserServer <- function(id) {
 
 ## Self-contained `geyserApp()`
 
-```{.r filename="https://github.com/byandell/geyser/moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
+```{.r filename="inst/build_module/4_moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
 geyserApp <- function() {
   ui <- shiny::bootstrapPage(
     geyserInput("geyser"), 
@@ -213,37 +225,6 @@ geyserApp <- function() {
   shiny::shinyApp(ui, server)
 }
 ```
-
-## Shiny Module in one File {.scrollable .smaller}
-
-```{.r filename="https://github.com/byandell/geyser/moduleServer/moduleServer.R" code-line-numbers="|1-3|6-15|18-21|"}
-geyserServer <- function(id) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-  ...
-}
-geyserInput <- function(id) {
-  ns <- shiny::NS(id)
-  ...
-}
-geyserUI <- function(id) {
-  ns <- shiny::NS(id)
-  ...
-}
-geyserOutput <- function(id) {
-  ns <- shiny::NS(id)
-  ...
-}
-geyserApp <- function() {
-  ui <- ...
-  server <- function(input, output, session) ...
-  shiny::shinyApp(ui, server)
-}
-```
-
-- `Server` has logic steps
-- `Input`, `Output`, `UI` has user interface
-- `App` has testable applet
 
 ## Clone repo and run yourself
 

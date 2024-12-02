@@ -9,14 +9,13 @@ editor: visual
 ```{r}
 #| context: setup
 library(shiny)
-source("../newFaithful/newFaithful.R")
+source("../2_newFaithful/newFaithful.R")
 # Cannot use function `fakeServer()`
 ```
 
 ## 
 
 ```{r}
-# not quite working yet.
 fakeUI()
 ```
 
