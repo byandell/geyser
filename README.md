@@ -22,7 +22,7 @@ This repo is organized as an
 [R package](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html).
 You can explore this rep as is, mostly, but it is helpful to clone the repo
 <https://github.com/byandell/geyser>
-and then build the `geyser` package.
+and then install the `geyser` package.
 
 ```
 > library(devtools)
