@@ -1,5 +1,5 @@
 ---
-title: "Geyser with Sidebar in Quarto"
+title: "moduleServer Quarto"
 author: "Brian Yandell"
 format: dashboard
 server: shiny
@@ -9,23 +9,16 @@ editor: visual
 ```{r}
 #| context: setup
 library(shiny)
-source("../4_moduleServer/moduleServer.R")
+source("moduleServer.R")
 ```
-
-#  {.sidebar}
 
 ## 
 
 ```{r}
 geyserInput("geyser")
+geyserOutput("geyser")
 # Display this only if the density is shown
 geyserUI("geyser")
-```
-
-# 
-
-```{r}
-geyserOutput("geyser")
 ```
 
 ```{r}
