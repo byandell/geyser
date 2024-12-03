@@ -9,7 +9,7 @@ editor: visual
 ```{r}
 #| context: setup
 library(shiny)
-source("../3_callModule/callModule.R")
+source("callModule.R")
 ```
 
 ## 

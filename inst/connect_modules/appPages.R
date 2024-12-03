@@ -1,8 +1,9 @@
 # context: setup
-source("../R/hist.R")
-source("../R/gghist.R")
-source("../R/ggpoint.R")
+source("../../R/hist.R")
+source("../../R/gghist.R")
+source("../../R/ggpoint.R")
 
+# context: ui
 ui <- shiny::navbarPage(
   "Geyser Modules with NavBar, Brian Yandell",
   shiny::tabPanel("hist",
@@ -21,8 +22,9 @@ ui <- shiny::navbarPage(
                   ggpointUI("ggpoint")
   )
 )
+
+# context: server
 server <- function(input, output, session) {
-  # context: server
   histServer("hist")
   gghistServer("gghist")
   ggpointServer("ggpoint")

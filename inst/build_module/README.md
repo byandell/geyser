@@ -12,3 +12,5 @@ initial form of module calling
 current module server creation
 5. [quarto](https://github.com/byandell/geyser/tree/main/inst/build_module/5_quarto):
 Quarto versions
+6. [python](https://github.com/byandell/geyser/tree/main/inst/python):
+first (failed) attempt at python version

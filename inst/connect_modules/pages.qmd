@@ -8,9 +8,9 @@ editor: visual
 
 ```{r}
 #| context: setup
-source("../R/hist.R")
-source("../R/gghist.R")
-source("../R/ggpoint.R")
+source("../../R/hist.R")
+source("../../R/gghist.R")
+source("../../R/ggpoint.R")
 ```
 
 # hist

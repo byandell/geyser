@@ -1,5 +1,4 @@
-# context: setup
-source("../R/hist.R")
+source("../../R/hist.R")
 
 ui <- shiny::bootstrapPage(
   histInput("hist"), 

@@ -1,6 +1,7 @@
 # context: setup
 library(geyser)
 
+# context: ui
 ui <- shiny::fluidPage(
   # context: ui
   shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
@@ -29,8 +30,9 @@ ui <- shiny::fluidPage(
     ))
   )
 )
+
+# context: server
 server <- function(input, output, session) {
-  # context: server
   dataset <- datasetsServer("datasets")
   histServer("hist", dataset)
   gghistServer("gghist", dataset)
