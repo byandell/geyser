@@ -15,6 +15,21 @@ and run the `app.R` file using `shiny::runApp()`.
 To run the `quarto` versions, you will need to install
 [Quarto](https://quarto.org/) and some packages; perhaps, see
 [my quarto notes](https://github.com/byandell/quarto).
+You can learn something about connecting multiple modules from examples in
+[inst/connect_modules](https://github.com/byandell/geyser/tree/main/inst/connect_modules).
+
+This repo is organized as an 
+[R package](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html).
+You can explore this rep as is, mostly, but it is helpful to clone the repo
+<https://github.com/byandell/geyser>
+and then build the `geyser` package.
+
+```
+> library(devtools)
+> install_github("byandell/geyser")
+```
+
+### Study in building a Module
 
 1. [oldFaithful](https://github.com/byandell/geyser/tree/main/inst/build_module/1_oldFaithful)
 (original code in one file `app.R`)
