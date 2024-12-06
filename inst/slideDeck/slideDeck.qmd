@@ -388,5 +388,7 @@ or ...
 
 - <https://github.com/byandell/geyser>
 - <https://byandell.github.io>
+- <https://connect.doit.wisc.edu/geyserShinyModules>
+- <https://connect.doit.wisc.edu/geyserDemo>
 
 ![](images/adobe-express-qr-code.png)
