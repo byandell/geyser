@@ -21,8 +21,7 @@ ui <- shiny::navbarPage(
     shiny::titlePanel("Geyser Rows Modules"),
     geyser::rowsUI("rows")
   ),
-  shiny::tabPanel(
-    "Wrapper",
+  shiny::tabPanel("Switch",
     shiny::titlePanel("Geyser Switch Modules"),
     geyser::switchInput("switch"), 
     geyser::switchUI("switch"),
