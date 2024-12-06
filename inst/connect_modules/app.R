@@ -3,19 +3,19 @@ devtools::install_github("byandell/geyser")
 ui <- shiny::navbarPage(
   "Geyser Modules with NavBar, Brian Yandell",
   shiny::tabPanel("hist",
-                  histInput("hist"), 
-                  histOutput("hist"),
-                  histUI("hist")
+    geyser::histInput("hist"), 
+    geyser::histOutput("hist"),
+    geyser::histUI("hist")
   ),
   shiny::tabPanel("gghist",
-                  gghistInput("gghist"), 
-                  gghistOutput("gghist"),
-                  gghistUI("gghist")
+    geyser::gghistInput("gghist"), 
+    geyser::gghistOutput("gghist"),
+    geyser::gghistUI("gghist")
   ),
   shiny::tabPanel("ggpoint",
-                  ggpointInput("ggpoint"), 
-                  ggpointOutput("ggpoint"),
-                  ggpointUI("ggpoint")
+    geyser::ggpointInput("ggpoint"), 
+    geyser::ggpointOutput("ggpoint"),
+    geyser::ggpointUI("ggpoint")
   ),
   shiny::tabPanel("Rows",
     shiny::titlePanel("Geyser Rows Modules"),
@@ -30,9 +30,9 @@ ui <- shiny::navbarPage(
 )
 
 server <- function(input, output, session) {
-  histServer("hist")
-  gghistServer("gghist")
-  ggpointServer("ggpoint")
+  geyser::histServer("hist")
+  geyser::gghistServer("gghist")
+  geyser::ggpointServer("ggpoint")
   
   geyser::rowsServer("rows")
   
