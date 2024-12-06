@@ -10,7 +10,8 @@ For an overview, see the
 [slideDeck](https://github.com/byandell/geyser/tree/main/inst/slideDeck)
 available at
 
-<https://connect.doit.wisc.edu/geyserShinyModules>
+- <https://connect.doit.wisc.edu/geyserShinyModules>
+- <https://connect.doit.wisc.edu/geyserDemo>
 
 Go into one of the first four folders in
 [inst/build_module](https://github.com/byandell/geyser/tree/main/inst/build_module)
