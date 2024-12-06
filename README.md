@@ -7,7 +7,10 @@ and modularize it, either by putting `ui()` and `server()` as functions in a
 separate file from `app.R` or by using the Shiny module technology.
 Sometimes the modular stuff is tricky to figure out.
 For an overview, see the 
-[slideDeck](https://github.com/byandell/geyser/tree/main/inst/slideDeck).
+[slideDeck](https://github.com/byandell/geyser/tree/main/inst/slideDeck)
+available at
+
+<https://connect.doit.wisc.edu/geyserShinyModules>
 
 Go into one of the first four folders in
 [inst/build_module](https://github.com/byandell/geyser/tree/main/inst/build_module)

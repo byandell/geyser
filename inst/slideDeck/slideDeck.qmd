@@ -1,6 +1,9 @@
 ---
 title: "Geyser Shiny Modules<br>with Old Faithful"
-footer: "[quarto.org](https://quarto.org/)"
+author: "Brian S. Yandell"
+date: "11 December 2024"
+date-format: "D MMMM YYYY"
+footer: "[byandell.github.io](https://byandell.github.io)"
 format:
   revealjs:
     theme: slides.scss
@@ -22,7 +25,7 @@ format:
 :::
 
 ::: {.column width="40%"}
-![](faithful.png)
+![](images/faithful.png)
 :::
 ::::
 
@@ -226,6 +229,140 @@ geyserApp <- function() {
 }
 ```
 
+## Connecting Modules across Pages
+
+:::: {.columns}
+::: {.column width="50%"}
+![inst/connect-modules/appPages.R](images/appPages.png)
+:::
+
+::: {.column width="50%"}
+![inst/connect-modules/pages.qmd](images/pagesQmd.png)
+:::
+::::
+
+## Connecting Modules across Pages
+
+```{.r filename="inst/connect_modules/appPages.R" code-line-numbers="|2-3|4-5|6-7|9-11|"}
+ui <- shiny::navbarPage("Geyser Modules with NavBar, Brian Yandell",
+  shiny::tabPanel("hist",
+    histInput("hist"), histOutput("hist"), histUI("hist")),
+  shiny::tabPanel("gghist",
+    gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist")),
+  shiny::tabPanel("ggpoint",
+    ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))
+server <- function(input, output, session) {
+  histServer("hist")
+  gghistServer("gghist")
+  ggpointServer("ggpoint")
+}
+shiny::shinyApp(ui, server)
+```
+
+- [appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
+- [pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
+
+## Connecting Modules across Rows
+
+:::: {.columns}
+::: {.column width="50%"}
+![inst/connect-modules/appRows.R](images/appRows.png)
+:::
+
+::: {.column width="50%"}
+![inst/connect-modules/rows.qmd](images/rowsQmd.png)
+:::
+::::
+
+## Connecting Modules across Rows with Data {.scrollable }
+
+```{.r filename="inst/connect_modules/appRows.R" code-line-numbers="|3-5|6-12|14-17|"}
+ui <- shiny::fluidPage(
+  shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
+  shiny::fluidRow(
+    shiny::column(6, datasetsInput("datasets")),
+    shiny::column(6, datasetsUI("datasets"))),
+  shiny::fluidRow(
+    shiny::column(4, shiny::tagList(shiny::titlePanel("hist"),
+      histInput("hist"), histOutput("hist"), histUI("hist"))),
+    shiny::column(4, shiny::tagList(shiny::titlePanel("gghist"),
+      gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist"))),
+    shiny::column(4, shiny::tagList(shiny::titlePanel("ggpoint"),
+      ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))))
+server <- function(input, output, session) {
+  dataset <- datasetsServer("datasets")
+  histServer("hist", dataset)
+  gghistServer("gghist", dataset)
+  ggpointServer("ggpoint", dataset)
+}
+shiny::shinyApp(ui, server)
+```
+
+- [appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R)
+- [rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd)
+
+## Wrapper App for Multiple Modules
+
+![R/wrapperset.R](images/wrapperset.png)
+
+
+## Wrapper App for Multiple Modules {.scrollable}
+
+```{.r filename="R/wrapperset.R" code-line-numbers="|1-7|10-12|13-23|"}
+wrappersetServer <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    dataset <- datasetsServer("datasets")
+    histServer("hist", dataset)
+    gghistServer("gghist", dataset)
+    ggpointServer("ggpoint", dataset)
+...
+}
+wrappersetInput <- function(id) { ...
+wrappersetOutput <- function(id) { ...
+wrappersetUI <- function(id) { ...
+wrappersetApp <- function() {
+  ui <- shiny::bootstrapPage(
+    wrappersetInput("wrapperset"), 
+    wrappersetUI("wrapperset"),
+    wrappersetOutput("wrapperset")
+  )
+  server <- function(input, output, session) {
+    wrappersetServer("wrapperset")
+  }
+  shiny::shinyApp(ui, server)
+}
+```
+
+- [R/wrapperset.R](https://github.com/byandell/geyser/blob/main/R/wrapperset.R)
+
+## GitHub Repo Organization
+
+```{.bash filename="byandell/geyser"}
+- inst
+  - build_module
+    - 1_oldFaithful*
+    - 2_newFaithful
+    - 3_callModule
+    - 4_moduleServer*
+  - connect_modules
+    - app.R
+    - appPages.R*
+    - pages.qmd*
+    - appRows.R*
+    - rows.qmd*
+  - slideDeck
+    - images
+    - slideDeck.qmd*
+- R
+  - hist.R*
+  - gghist.R*
+  - ggpoint.R*
+  - datasets.R*
+  - wrapperset.R*
+  
+```
+
 ## Clone repo and run yourself
 
 ``` {.bash filename="Rstudio Console"}
@@ -250,3 +387,5 @@ or ...
 
 - <https://github.com/byandell/geyser>
 - <https://byandell.github.io>
+
+![](images/adobe-express-qr-code.png)
