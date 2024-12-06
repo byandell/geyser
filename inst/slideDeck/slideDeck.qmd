@@ -3,7 +3,7 @@ title: "Geyser Shiny Modules<br>with Old Faithful"
 author: "Brian S. Yandell"
 date: "11 December 2024"
 date-format: "D MMMM YYYY"
-footer: "[byandell.github.io](https://byandell.github.io)"
+footer: "[byandell/geyser](https://github.com/byandell/geyser)"
 format:
   revealjs:
     theme: slides.scss
