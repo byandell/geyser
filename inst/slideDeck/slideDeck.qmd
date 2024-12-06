@@ -334,7 +334,8 @@ wrappersetApp <- function() {
 }
 ```
 
-- [R/wrapperset.R](https://github.com/byandell/geyser/blob/main/R/wrapperset.R)
+- [geyserDemo](https://connect.doit.wisc.edu/geyserDemo)
+- [inst/connect-modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R)
 
 ## GitHub Repo Organization
 
@@ -346,7 +347,7 @@ wrappersetApp <- function() {
     - 3_callModule
     - 4_moduleServer*
   - connect_modules
-    - app.R
+    - app.R*
     - appPages.R*
     - pages.qmd*
     - appRows.R*
