@@ -6,7 +6,7 @@
 \alias{wrapperUI}
 \alias{wrapperOutput}
 \alias{wrapperApp}
-\title{Shiny Server for Geyser Wrapper}
+\title{Shiny Server for Geyser Data Wrapper}
 \usage{
 wrapperServer(id)
 
@@ -33,7 +33,7 @@ nothing returned
 nothing returned
 }
 \description{
-Shiny Server for Geyser Wrapper
+Shiny Server for Geyser Data Wrapper
 
 Shiny Module Input
 

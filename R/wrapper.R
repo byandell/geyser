@@ -1,4 +1,4 @@
-#' Shiny Server for Geyser Wrapper
+#' Shiny Server for Geyser Data Wrapper
 #'
 #' @param id shiny identifier
 

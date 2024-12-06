@@ -2,47 +2,41 @@ devtools::install_github("byandell/geyser")
 
 ui <- shiny::navbarPage(
   "Geyser Modules with NavBar, Brian Yandell",
-  shiny::tabPanel(
-    "Rows",
-    shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
-    shiny::fluidRow(
-      shiny::column(6, geyser::datasetsInput("datasets")),
-      shiny::column(6, geyser::datasetsUI("datasets"))
-    ),
-    shiny::fluidRow(
-      shiny::column(4, shiny::tagList(
-        shiny::titlePanel("hist"),
-        geyser::histInput("hist"), 
-        geyser::histOutput("hist"),
-        geyser::histUI("hist")
-      )),
-      shiny::column(4, shiny::tagList(
-        shiny::titlePanel("gghist"),
-        geyser::gghistInput("gghist"), 
-        geyser::gghistOutput("gghist"),
-        geyser::gghistUI("gghist")
-      )),
-      shiny::column(4, shiny::tagList(
-        shiny::titlePanel("ggpoint"),
-        geyser::ggpointInput("ggpoint"), 
-        geyser::ggpointOutput("ggpoint"),
-        geyser::ggpointUI("ggpoint")
-      ))
-    )),
+  shiny::tabPanel("hist",
+                  histInput("hist"), 
+                  histOutput("hist"),
+                  histUI("hist")
+  ),
+  shiny::tabPanel("gghist",
+                  gghistInput("gghist"), 
+                  gghistOutput("gghist"),
+                  gghistUI("gghist")
+  ),
+  shiny::tabPanel("ggpoint",
+                  ggpointInput("ggpoint"), 
+                  ggpointOutput("ggpoint"),
+                  ggpointUI("ggpoint")
+  ),
+  shiny::tabPanel("Rows",
+    shiny::titlePanel("Geyser Rows Modules"),
+    geyser::rowsUI("rows")
+  ),
   shiny::tabPanel(
     "Wrapper",
-    geyser::wrappersetInput("wrapperset"), 
-    geyser::wrappersetUI("wrapperset"),
-    geyser::wrappersetOutput("wrapperset")
+    shiny::titlePanel("Geyser Switch Modules"),
+    geyser::switchInput("switch"), 
+    geyser::switchUI("switch"),
+    geyser::switchOutput("switch")
   )
 )
 
 server <- function(input, output, session) {
-  dataset <- geyser::datasetsServer("datasets")
-  geyser::histServer("hist", dataset)
-  geyser::gghistServer("gghist", dataset)
-  geyser::ggpointServer("ggpoint", dataset)
-
-  geyser::wrappersetServer("wrapperset")
+  histServer("hist")
+  gghistServer("gghist")
+  ggpointServer("ggpoint")
+  
+  geyser::rowsServer("rows")
+  
+  geyser::switchServer("switch")
 }
 shiny::shinyApp(ui, server)

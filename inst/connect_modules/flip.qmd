@@ -1,0 +1,41 @@
+---
+title: "Geyser Flip Modules in Quarto"
+author: "Brian Yandell"
+format: 
+  dashboard:
+    orientation: rows
+server: shiny
+editor: visual
+---
+
+```{r}
+#| context: setup
+library(geyser)
+library(shiny)
+```
+
+## Row - Plots
+
+### Column - Hist
+
+```{r}
+#| title: Histogram
+histInput("hist1")
+histOutput("hist2")
+histUI("hist1")
+```
+
+### Column - Hist2
+
+```{r}
+#| title: Flip Histogram
+histInput("hist2")
+histOutput("hist1")
+histUI("hist2")
+```
+
+```{r}
+#| context: server
+histServer("hist1")
+histServer("hist2")
+```

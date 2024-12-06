@@ -274,7 +274,7 @@ shiny::shinyApp(ui, server)
 :::
 ::::
 
-## Connecting Modules across Rows with Data {.scrollable }
+## Connecting Modules across Rows with Data {.scrollable .smaller}
 
 ```{.r filename="inst/connect_modules/appRows.R" code-line-numbers="|3-5|6-12|14-17|"}
 ui <- shiny::fluidPage(
@@ -298,37 +298,74 @@ server <- function(input, output, session) {
 shiny::shinyApp(ui, server)
 ```
 
-- [appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R)
-- [rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd)
+- [inst/connect_modules/appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R):
+Shiny app version
+- [inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd):
+Quarto version
+- [R/rows.R](https://github.com/byandell/geyser/blob/main/R/rows.R):
+Shiny module version
+- [inst/connect_modules/appRowsModule.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRowsModule.R):
+Shiny app with `R/rows.R` functions
 
-## Wrapper App for Multiple Modules
+## Connecting Modules with Plot Switch
 
-![R/wrapperset.R](images/wrapperset.png)
+![R/switch.R](images/switch.png)
 
 
-## Wrapper App for Multiple Modules {.scrollable}
+## Connecting Modules with Plot Switch {.scrollable .smaller}
 
-```{.r filename="R/wrapperset.R" code-line-numbers="|1-7|10-12|13-23|"}
-wrappersetServer <- function(id) {
+```{.r filename="R/switch.R" code-line-numbers="|4-7|9-20|26-33|38|42|45-52|"}
+switchServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
     dataset <- datasetsServer("datasets")
     histServer("hist", dataset)
     gghistServer("gghist", dataset)
     ggpointServer("ggpoint", dataset)
-...
+    
+    output$inputSwitch <- shiny::renderUI({
+      shiny::req(input$plottype)
+      get(paste0(input$plottype, "Input"))(ns(input$plottype))
+    })
+    output$uiSwitch <- shiny::renderUI({
+      shiny::req(input$plottype)
+      get(paste0(input$plottype, "UI"))(ns(input$plottype))
+    })
+    output$outputSwitch <- shiny::renderUI({
+      shiny::req(input$plottype)
+      get(paste0(input$plottype, "Output"))(ns(input$plottype))
+    })
+  })
 }
-wrappersetInput <- function(id) { ...
-wrappersetOutput <- function(id) { ...
-wrappersetUI <- function(id) { ...
-wrappersetApp <- function() {
+switchInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::tagList(
+    shiny::fluidRow(
+      shiny::column(4,
+        shiny::selectInput(ns("plottype"), "Plot Type:",
+                           c("hist","gghist","ggpoint"))),
+      shiny::column(4, datasetsInput(ns("datasets"))),
+      shiny::column(4, datasetsUI(ns("datasets")))
+    ),
+    shiny::uiOutput(ns("inputSwitch"))
+  )
+}
+switchUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("uiSwitch"))
+}
+switchOutput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("outputSwitch"))
+}
+switchApp <- function() {
   ui <- shiny::bootstrapPage(
-    wrappersetInput("wrapperset"), 
-    wrappersetUI("wrapperset"),
-    wrappersetOutput("wrapperset")
+    switchInput("switch"), 
+    switchUI("switch"),
+    switchOutput("switch")
   )
   server <- function(input, output, session) {
-    wrappersetServer("wrapperset")
+    switchServer("switch")
   }
   shiny::shinyApp(ui, server)
 }
@@ -336,6 +373,17 @@ wrappersetApp <- function() {
 
 - [geyserDemo](https://connect.doit.wisc.edu/geyserDemo)
 - [inst/connect-modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R)
+
+## Goofing Around with Duplicate Modules
+
+- [appTwin.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appTwin.R):
+twin apps side by side
+- [appFlip.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appFlip.R):
+flip controls between cards
+- [appDupe.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appDupe.R)
+(**does not work--need unique `id`s!**)
+- [twin.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/twin.qmd)
+- [flip.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/flip.qmd)
 
 ## GitHub Repo Organization
 
@@ -360,8 +408,7 @@ wrappersetApp <- function() {
   - gghist.R*
   - ggpoint.R*
   - datasets.R*
-  - wrapperset.R*
-  
+  - switch.R*
 ```
 
 ## Clone repo and run yourself

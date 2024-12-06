@@ -1,13 +1,13 @@
-#' Shiny Server for Geyser Wrapper
+#' Shiny Server for Geyser Data Switch
 #'
 #' @param id shiny identifier
 
 #' @return reactive server
 #' @export
-#' @rdname wrappersetServer
+#' @rdname switchServer
 #' @importFrom shiny bootstrapPage column fluidRow moduleServer NS 
 #'             renderUI selectInput shinyApp uiOutput
-wrappersetServer <- function(id) {
+switchServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
@@ -36,9 +36,9 @@ wrappersetServer <- function(id) {
 }
 #' Shiny Module Input
 #' @return nothing returned
-#' @rdname wrappersetServer
+#' @rdname switchServer
 #' @export
-wrappersetInput <- function(id) {
+switchInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
     shiny::fluidRow(
@@ -53,32 +53,32 @@ wrappersetInput <- function(id) {
 }
 #' Shiny Module UI
 #' @return nothing returned
-#' @rdname wrappersetServer
+#' @rdname switchServer
 #' @export
-wrappersetUI <- function(id) {
+switchUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("uiSwitch"))
 }
 #' Shiny Module Output
 #' @return nothing returned
-#' @rdname wrappersetServer
+#' @rdname switchServer
 #' @export
-wrappersetOutput <- function(id) {
+switchOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("outputSwitch"))
 }
 #' Shiny Module App
 #' @return nothing returned
-#' @rdname wrappersetServer
+#' @rdname switchServer
 #' @export
-wrappersetApp <- function() {
+switchApp <- function() {
   ui <- shiny::bootstrapPage(
-    wrappersetInput("wrapperset"), 
-    wrappersetUI("wrapperset"),
-    wrappersetOutput("wrapperset")
+    switchInput("switch"), 
+    switchUI("switch"),
+    switchOutput("switch")
   )
   server <- function(input, output, session) {
-    wrappersetServer("wrapperset")
+    switchServer("switch")
   }
   shiny::shinyApp(ui, server)
 }
