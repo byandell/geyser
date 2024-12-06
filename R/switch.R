@@ -73,9 +73,9 @@ switchOutput <- function(id) {
 #' @export
 switchApp <- function() {
   ui <- shiny::bootstrapPage(
-    switchInput("switch"), 
-    switchUI("switch"),
-    switchOutput("switch")
+    switchInput("switch"),
+    switchOutput("switch"), 
+    switchUI("switch")
   )
   server <- function(input, output, session) {
     switchServer("switch")
