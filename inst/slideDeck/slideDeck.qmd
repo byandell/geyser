@@ -26,6 +26,7 @@ format:
 
 ::: {.column width="40%"}
 ![](images/faithful.png)
+![](images/adobe-express-qr-code.png)
 :::
 ::::
 
@@ -437,5 +438,6 @@ or ...
 - <https://byandell.github.io>
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/geyserDemo>
+- <https://connect.doit.wisc.edu/geyserQuartoDemo>
 
 ![](images/adobe-express-qr-code.png)
