@@ -8,6 +8,8 @@ editor: visual
 
 ```{r}
 #| context: setup
+#| include: false
+devtools::install_github("byandell/geyser")
 library(geyser)
 ```
 
