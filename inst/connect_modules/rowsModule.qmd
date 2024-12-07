@@ -1,0 +1,23 @@
+---
+title: "Rows: Mixing Shiny and Quarto Layout does not Work"
+author: "Brian Yandell"
+format: 
+  dashboard:
+    orientation: rows
+server: shiny
+editor: visual
+---
+
+```{r}
+#| context: setup
+library(geyser)
+```
+
+```{r}
+rowsUI("rows")
+```
+
+```{r}
+#| context: server
+rowsServer("rows")
+```
