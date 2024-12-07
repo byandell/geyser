@@ -1,0 +1,191 @@
+---
+title: "Geyser Demo in Quarto"
+author: "Brian Yandell"
+format: dashboard
+server: shiny
+editor: visual
+---
+
+```{r}
+#| context: setup
+library(geyser)
+```
+
+# hist
+
+##  {.sidebar}
+
+### 
+
+```{r}
+histInput("hist")
+# Display this only if the density is shown
+histUI("hist")
+```
+
+## 
+
+```{r}
+histOutput("hist")
+```
+
+```{r}
+#| context: server
+histServer("hist")
+```
+
+# geom_hist
+
+##  {.sidebar}
+
+### 
+
+```{r}
+gghistInput("gghist")
+# Display this only if the density is shown
+gghistUI("gghist")
+```
+
+## 
+
+```{r}
+gghistOutput("gghist")
+```
+
+```{r}
+#| context: server
+gghistServer("gghist")
+```
+
+# geom_point
+
+##  {.sidebar}
+
+### 
+
+```{r}
+ggpointInput("ggpoint")
+# Display this only if the density is shown
+ggpointUI("ggpoint")
+```
+
+## 
+
+```{r}
+ggpointOutput("ggpoint")
+```
+
+```{r}
+#| context: server
+ggpointServer("ggpoint")
+```
+
+# rows
+
+## Row - Datasets {height="20%"}
+
+### Column dataset
+
+```{r}
+datasetsInput("dataset")
+```
+
+### Column variable
+
+```{r}
+datasetsUI("dataset")
+```
+
+## Row - Plots {height="80%"}
+
+### Column - Hist
+
+```{r}
+#| title: Basic Histogram
+histInput("histr")
+histOutput("histr")
+histUI("histr")
+```
+
+### Column - GGhist
+
+```{r}
+#| title: GGplot2 Histogram
+gghistInput("gghistr")
+gghistOutput("gghistr")
+gghistUI("gghistr")
+```
+
+### Column - GGpoint
+
+```{r}
+#| title: GGplot2 Point Plot
+ggpointInput("ggpointr")
+ggpointOutput("ggpointr")
+ggpointUI("ggpointr")
+```
+
+```{r}
+#| context: server
+datasets <- datasetsServer("dataset")
+histServer("histr", datasets)
+gghistServer("gghistr", datasets)
+ggpointServer("ggpointr", datasets)
+```
+
+# switch
+
+##  {.sidebar}
+
+```{r}
+shiny::selectInput("plottype", "Plot Type:", c("hist","gghist","ggpoint"))
+```
+
+```{r}
+datasetsInput("datasets")
+```
+
+```{r}
+datasetsUI("datasets")
+```
+
+## 
+
+### Row - Inputs {height="30%"}
+
+```{r}
+shiny::uiOutput("inputSwitch")
+```
+
+### Row - Inputs {height="50%"}
+
+```{r}
+shiny::uiOutput("outputSwitch")
+```
+
+### Row - Inputs {height="20%"}
+
+```{r}
+shiny::uiOutput("uiSwitch")
+```
+
+```{r}
+#| context: server
+dataset <- datasetsServer("datasets")
+histServer("hists", dataset)
+gghistServer("gghists", dataset)
+ggpointServer("ggpoints", dataset)
+    
+output$inputSwitch <- shiny::renderUI({
+  shiny::req(input$plottype)
+    get(paste0(input$plottype, "Input"))(paste0(input$plottype, "s"))
+  })
+output$uiSwitch <- shiny::renderUI({
+  shiny::req(input$plottype)
+  get(paste0(input$plottype, "UI"))(paste0(input$plottype, "s"))
+})
+output$outputSwitch <- shiny::renderUI({
+  shiny::req(input$plottype)
+  get(paste0(input$plottype, "Output"))(paste0(input$plottype, "s"))
+})
+```
