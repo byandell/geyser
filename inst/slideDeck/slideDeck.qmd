@@ -13,15 +13,29 @@ format:
 # https://github.com/mine-cetinkaya-rundel/quarto-dashboards/blob/main/1-hello-dashboards/index.qmd
 ---
 
-## Old Faithful Shiny App
+## Plan of Study {.smaller}
 
 :::: {.columns}
 ::: {.column width="60%"}
--   user interface `ui` and `server`
--   combined with `shinyApp()` tool
 -   Shiny [FaithFul](https://shiny.posit.co/r/gallery/start-simple/faithful/) Demo
--   Old Faithful code in file
-[app.R](https://github.com/byandell/geyser/blob/main/oldFaithful/app.R)
+- Build
+[Geyser](https://shiny.posit.co/r/gallery/start-simple/faithful/)
+[Shiny Module](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer)
+[3-9]
+- Connect Modules [10-16]
+  - across [Pages](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R) [10-11]
+  - with [Rows and Columns](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R) [12-13]
+  - combined with [Switch](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R) [14-15]
+  - goofing around with twins [16]
+- [Organize your Repo](https://github.com/byandell/geyser/) [17]
+  - Clone my Repo [18]
+- Questions? Links to materials [19]
+
+#### Other Material
+
+- [Geyser Shiny Demo](https://connect.doit.wisc.edu/geyserDemo)
+- [Geyser Quarto Demo](https://connect.doit.wisc.edu/geyserQuartoDemo)
+  - Quarto Code in most repo folders
 :::
 
 ::: {.column width="40%"}
@@ -30,7 +44,9 @@ format:
 :::
 ::::
 
-## Original Old Faithful Code {.smaller}
+
+
+## Original Old Faithful Code
 
 ```{.r filename="inst/build_module/1_oldfaithful/app.R" code-line-numbers="|2-9|10|12-15|18-21|22-24|25-28"}
 ui <- bootstrapPage(
@@ -69,9 +85,9 @@ shiny::shinyApp(ui, server)
 - `ui` has input, output and conditional slider
 - `server` has `hist` and logic for optional `rug` and `density`
 
-## FaithFul code with Server Logic {.smaller}
+## FaithFul code with Server Logic
 
-```{.r filename="inst/build_module/1_oldfaithful/appLogic.R" code-line-numbers="|7|17|22-26"}
+```{.r filename="inst/build_module/1_oldfaithful/appLogic.R" code-line-numbers="|7-10|15-19|21-26|"}
 ui <- bootstrapPage(
   selectInput(inputId = "n_breaks",
   ...
@@ -101,32 +117,45 @@ server <- function(input, output) {
 shiny::shinyApp(ui, server)
 ```
 
-Replace `conditionalPanel` in `ui` with `server` logic:
-
-- Remove `conditionalPanel` from `ui`.
-- Use `uiOutput` in `ui` and `renderUI` in `server`,
-- Check if `bw_adjust` has been set with `req` before using.
+- Use `uiOutput` instead of `conditionalPanel`in `ui`.
+- Check `density` and `bw_adjust` in `server` before using.
+- Use `renderUI` in `server` to input `bw_adjust` if `density`.
 
 ## Modular Geyser App
 
-```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-6|8-10|12"}
+```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-6|8-10|12|"}
 ui <- shiny::bootstrapPage(
   geyserInput(id = "geyser"), 
   geyserOutput(id = "geyser"),
   # Display this only if the density is shown
   geyserUI(id = "geyser")
 )
-
 server <- function(input, output, session) {
   geyserServer(id = "geyser")
 }
-
 shiny::shinyApp(ui, server)
 ```
 
 - `id = "geyser"` connects UI and Server components.
 - Function `geyserServer()` returns a `server` function.
 - Explicit function assignment to create `server` is crucial.
+
+## Self-contained `geyserApp()` function
+
+```{.r filename="inst/build_module/4_moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
+geyserApp <- function() {
+  ui <- shiny::bootstrapPage(
+    geyserInput("geyser"), 
+    geyserOutput("geyser"),
+    # Display this only if the density is shown
+    geyserUI("geyser")
+  )
+  server <- function(input, output, session) {
+    geyserServer("geyser")
+  }
+  shiny::shinyApp(ui, server)
+}
+```
 
 ## Shiny Module in one File
 
@@ -138,10 +167,11 @@ geyserUI(id)     # user input/output
 geyserApp()      # app as test function
 ```
 
+[inst/build_module/4_moduleServer/moduleServer.R](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer/moduleServer.R)
 
 ## Modular Geyser `Input`, `Output`, `UI` Components {.scrollable .smaller}
 
-```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-2|3|16-17|20-21"}
+```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-2|16-17|20-21"}
 geyserInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
@@ -213,32 +243,15 @@ geyserServer <- function(id) {
 - `session$ns` sets up Shiny namespace.
 - `ns("by_adjust")` uses Shiny namespace.
 
-## Self-contained `geyserApp()`
-
-```{.r filename="inst/build_module/4_moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
-geyserApp <- function() {
-  ui <- shiny::bootstrapPage(
-    geyserInput("geyser"), 
-    geyserOutput("geyser"),
-    # Display this only if the density is shown
-    geyserUI("geyser")
-  )
-  server <- function(input, output, session) {
-    geyserServer("geyser")
-  }
-  shiny::shinyApp(ui, server)
-}
-```
-
 ## Connecting Modules across Pages
 
 :::: {.columns}
 ::: {.column width="50%"}
-![inst/connect-modules/appPages.R](images/appPages.png)
+![[inst/connect-modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)](images/appPages.png)
 :::
 
 ::: {.column width="50%"}
-![inst/connect-modules/pages.qmd](images/pagesQmd.png)
+![[inst/connect-modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)](images/pagesQmd.png)
 :::
 ::::
 
@@ -260,22 +273,22 @@ server <- function(input, output, session) {
 shiny::shinyApp(ui, server)
 ```
 
-- [appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
-- [pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
+- [inst/connect_modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
+- [inst/connect_modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
 
-## Connecting Modules across Rows
+## Connecting Modules with Rows and Columns
 
 :::: {.columns}
 ::: {.column width="50%"}
-![inst/connect-modules/appRows.R](images/appRows.png)
+![[inst/connect_modules/appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R)](images/appRows.png)
 :::
 
 ::: {.column width="50%"}
-![inst/connect-modules/rows.qmd](images/rowsQmd.png)
+![[inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd)](images/rowsQmd.png)
 :::
 ::::
 
-## Connecting Modules across Rows with Data {.scrollable .smaller}
+## Connecting Modules with Rows and Columns {.scrollable .smaller}
 
 ```{.r filename="inst/connect_modules/appRows.R" code-line-numbers="|3-5|6-12|14-17|"}
 ui <- shiny::fluidPage(
@@ -308,9 +321,9 @@ Shiny module version
 - [inst/connect_modules/appRowsModule.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRowsModule.R):
 Shiny app with `R/rows.R` functions
 
-## Connecting Modules with Plot Switch
+## Connecting Modules with Plot Type Switch
 
-![R/switch.R](images/switch.png)
+![[R/switch.R](https://github.com/byandell/geyser/blob/main/R/switch.R)](images/switch.png)
 
 
 ## Connecting Modules with Plot Switch {.scrollable .smaller}
@@ -372,19 +385,20 @@ switchApp <- function() {
 }
 ```
 
-- [geyserDemo](https://connect.doit.wisc.edu/geyserDemo)
+- [R/switch.R](https://github.com/byandell/geyser/blob/main/R/switch.R)
 - [inst/connect-modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R)
+- See [geyserDemo](https://connect.doit.wisc.edu/geyserDemo)
 
-## Goofing Around with Duplicate Modules
+## Goofing Around with Duplicate Modules {.smaller}
 
-- [appTwin.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appTwin.R):
+- [inst/connect_modules/appTwin.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appTwin.R):
 twin apps side by side
-- [appFlip.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appFlip.R):
+- [inst/connect_modules/appFlip.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appFlip.R):
 flip controls between cards
-- [appDupe.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appDupe.R)
+- [inst/connect_modules/appDupe.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appDupe.R)
 (**does not work--need unique `id`s!**)
-- [twin.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/twin.qmd)
-- [flip.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/flip.qmd)
+- [inst/connect_modules/twin.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/twin.qmd)
+- [inst/connect_modules/flip.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/flip.qmd)
 
 ## GitHub Repo Organization
 
@@ -414,20 +428,26 @@ flip controls between cards
 
 ## Clone repo and run yourself
 
-``` {.bash filename="Rstudio Console"}
+```{.bash filename="Clone this repo to your laptop"}
+<https://github.com/byandell/geyser.git>
+```
+
+...
+
+``` {.bash filename="Run the oldFaithful app"}
 > library(shiny)
 > runApp("oldFaithful")
 ```
 
 or ...
 
-``` {.bash filename="Rstudio Console"}
+``` {.bash filename="Run the Faithful Module app"}
 > shiny::runApp("moduleServer")
 ```
 
 or ...
 
-``` {.bash filename="Rstudio Console"}
+``` {.bash filename="Call the geyserApp() test function"}
 > source("moduleServer/moduleServer.R")
 > geyserApp()
 ```

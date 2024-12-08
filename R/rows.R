@@ -21,17 +21,24 @@ rowsServer <- function(id) {
     ggpointServer("ggpoint", dataset)
   })
 }
-#' Shiny Module UI
+#' Shiny Module Input
+#' @return nothing returned
+#' @rdname rowsServer
+#' @export
+rowsInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::fluidRow(
+    shiny::column(6, datasetsInput(ns("datasets"))),
+    shiny::column(6, datasetsUI(ns("datasets")))
+  )
+}
+  #' Shiny Module UI
 #' @return nothing returned
 #' @rdname rowsServer
 #' @export
 rowsUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::fluidRow(
-      shiny::column(6, datasetsInput(ns("datasets"))),
-      shiny::column(6, datasetsUI(ns("datasets")))
-    ),
     shiny::fluidRow(
       shiny::column(4, shiny::tagList(
         shiny::titlePanel(ns("hist")),
@@ -61,6 +68,7 @@ rowsUI <- function(id) {
 rowsApp <- function() {
   ui <- shiny::fluidPage(
     shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
+    rowsInput("rows")
     rowsUI("rows")
   )
   server <- function(input, output, session) {

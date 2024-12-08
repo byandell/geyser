@@ -1,5 +1,6 @@
-# geyser
-Shiny Geyser App with and without Modules
+# Shiny Geyser App with and without Modules
+
+Brian Yandell, [byandell.github.io](https://byandell.github.io)
 
 This demonstrates how to take the
 [Faithful Geyser Shiny example](https://shiny.rstudio.com/gallery/faithful.html)
