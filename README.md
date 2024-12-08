@@ -35,7 +35,12 @@ and then install the `geyser` package.
 > install_github("byandell/geyser")
 ```
 
-### Study in building a Module
+### Study in [Building a Module](https://github.com/byandell/geyser/tree/main/inst/build_module)
+
+Once we have code for an app as `ui` and `server`, we can turn that into a module.
+A module is a `Server` function and at least one `Input`, `Output`, and/or
+`UI` functions. In addition, an `App` function enables us to test module code.
+Attending to namespace conventions is important. 
 
 1. [oldFaithful](https://github.com/byandell/geyser/tree/main/inst/build_module/1_oldFaithful)
 (original code in one file `app.R`)
@@ -46,7 +51,18 @@ and then install the `geyser` package.
 4. [moduleServer](https://github.com/byandell/geyser/tree/main/inst/build_module/4_moduleServer)
 (full module approach using `moduleServer` and `NS` namespace)
 
-Useful references include the following:
+### Study in Connecting Multiple Modules
+
+We can connect multiple modules to develop more complicated dashboards.
+Again, care with namespaces is important.
+This both leads to
+[DRY](https://www.getdbt.com/blog/guide-to-dry)
+code and increases readability, clarifying logic and points to improve
+(or remedy broken) code.
+
+- []
+
+### References
 
 - [Mastering Shiny 19: Shiny modules](https://mastering-shiny.org/scaling-modules.html)
 - [Modularizing Shiny app code](https://shiny.rstudio.com/articles/modules.html)

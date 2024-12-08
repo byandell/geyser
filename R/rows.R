@@ -68,7 +68,7 @@ rowsUI <- function(id) {
 rowsApp <- function() {
   ui <- shiny::fluidPage(
     shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
-    rowsInput("rows")
+    rowsInput("rows"),
     rowsUI("rows")
   )
   server <- function(input, output, session) {
