@@ -2,11 +2,14 @@
 % Please edit documentation in R/rows.R
 \name{rowsServer}
 \alias{rowsServer}
+\alias{rowsInput}
 \alias{rowsUI}
 \alias{rowsApp}
 \title{Shiny Server for Geyser Rows}
 \usage{
 rowsServer(id)
+
+rowsInput(id)
 
 rowsUI(id)
 
@@ -21,9 +24,13 @@ reactive server
 nothing returned
 
 nothing returned
+
+nothing returned
 }
 \description{
 Shiny Server for Geyser Rows
+
+Shiny Module Input
 
 Shiny Module UI
 
