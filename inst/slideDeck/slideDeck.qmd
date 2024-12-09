@@ -25,20 +25,15 @@ format:
   - Faithful code [3-4]
   - Modular Geyser App [5-6]
   - Shiny module in one file [7-9]
-- Connect Modules [10-16]
-  - across [Pages](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R) [10-11]
-  - with [Rows and Columns](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R) [12-13]
-  - combined with [Switch](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R) [14-15]
-  - goofing around with twins [16]
-- [Organize your Repo](https://github.com/byandell/geyser/) [17]
-  - Clone my Repo [18]
-- Questions? Links to materials [19]
-
-#### Other Material
-
-- [Geyser Shiny Demo](https://connect.doit.wisc.edu/geyserDemo)
-- [Geyser Quarto Demo](https://connect.doit.wisc.edu/geyserQuartoDemo)
-  - Quarto Code in most repo folders
+  - Reactlog [10-11]
+- Connect Modules [12-18]
+  - across [Pages](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R) [12-13]
+  - with [Rows and Columns](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R) [14-15]
+  - combined with [Switch](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R) [16-17]
+  - goofing around with twins [18]
+- [Organize your Repo](https://github.com/byandell/geyser/) [19]
+  - Clone my Repo [20]
+- Questions? Links to materials [21]
 :::
 
 ::: {.column width="40%"}
@@ -245,6 +240,33 @@ geyserServer <- function(id) {
 - `shiny::moduleServer` returns `server` function.
 - `session$ns` sets up Shiny namespace.
 - `ns("by_adjust")` uses Shiny namespace.
+
+## ReactLog: Show App Reactivity
+
+![](images/reactlog.png)
+
+## ReactLog: Show App Reactivity
+
+```{.bash filename="inst/reactlog" code-line-numbers="|1-3|5-6|8-10|12-14|"}
+# Enable `reactlog` and run app.
+reactlog::reactlog_enable()
+shiny::runApp("inst/build_module/4_moduleServer")
+
+# Show `reactlog` in browser.
+shiny::reactlogShow()
+
+# Save log of reactive session.
+moduleServer_log <- shiny::reactlog()
+saveRDS(moduleServer_log, "moduleServer.rds")
+
+# Retrieve previously saved reactive session.
+moduleServer_log <- readRDS("moduleServer.rds")
+reactlog::reactlog_show(moduleServer_log)
+```
+
+- [Shiny Reactlog](https://rstudio.github.io/reactlog/articles/reactlog.html)
+- See [inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog) examples saved as `RDS`.
+- Re-open repo to reset `reactlog`.
 
 ## Connecting Modules across Pages
 
@@ -462,5 +484,6 @@ or ...
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/geyserDemo>
 - <https://connect.doit.wisc.edu/geyserQuartoDemo>
-
+  - See Quarto examples in various folders
+  
 ![](images/adobe-express-qr-code.png)
