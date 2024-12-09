@@ -22,6 +22,9 @@ format:
 [Geyser](https://shiny.posit.co/r/gallery/start-simple/faithful/)
 [Shiny Module](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer)
 [3-9]
+  - Faithful code [3-4]
+  - Modular Geyser App [5-6]
+  - Shiny module in one file [7-9]
 - Connect Modules [10-16]
   - across [Pages](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R) [10-11]
   - with [Rows and Columns](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R) [12-13]
