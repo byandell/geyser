@@ -241,11 +241,11 @@ geyserServer <- function(id) {
 - `session$ns` sets up Shiny namespace.
 - `ns("by_adjust")` uses Shiny namespace.
 
-## ReactLog: Show App Reactivity
+## Reactlog: Show App Reactivity
 
-![](images/reactlog.png)
+![[inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog)](images/reactlog.png)
 
-## ReactLog: Show App Reactivity
+## Reactlog: Show App Reactivity
 
 ```{.bash filename="inst/reactlog" code-line-numbers="|1-3|5-6|8-10|12-14|"}
 # Enable `reactlog` and run app.
@@ -256,17 +256,17 @@ shiny::runApp("inst/build_module/4_moduleServer")
 shiny::reactlogShow()
 
 # Save log of reactive session.
-moduleServer_log <- shiny::reactlog()
-saveRDS(moduleServer_log, "moduleServer.rds")
+geyser_log <- shiny::reactlog()
+saveRDS(geyser_log, "geyser.rds")
 
 # Retrieve previously saved reactive session.
-moduleServer_log <- readRDS("moduleServer.rds")
-reactlog::reactlog_show(moduleServer_log)
+geyser_log <- readRDS("geyser.rds")
+reactlog::reactlog_show(geyser_log)
 ```
 
-- [Shiny Reactlog](https://rstudio.github.io/reactlog/articles/reactlog.html)
-- See [inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog) examples saved as `RDS`.
-- Re-open repo to reset `reactlog`.
+- Read [Shiny Reactlog](https://rstudio.github.io/reactlog/articles/reactlog.html) article.
+- See [inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog) examples saved as `RDS` objects.
+- Re-open repo to reset `reactlog` before enabling.
 
 ## Connecting Modules across Pages
 
