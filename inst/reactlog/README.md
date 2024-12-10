@@ -12,6 +12,9 @@ modular version of old Faithful in
 - [inst/reactlog/pages.rds](https://github.com/byandell/geyser/blob/main/inst/reactlog/pages.rds):
 `navBar` pages with code
 [inst/connect_modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R).
+- [inst/reactlog/rows.rds](https://github.com/byandell/geyser/blob/main/inst/reactlog/rows.rds):
+rows and columns with code
+[inst/connect_modules/appRowsModule.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRowsModule.R).
 - [inst/reactlog/demo.rds](https://github.com/byandell/geyser/blob/main/inst/reactlog/demo.rds):
 [Geyser Shiny Demo](https://connect.doit.wisc.edu/geyserDemo) with code
 [inst/connect_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R).
