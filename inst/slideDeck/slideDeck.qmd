@@ -17,9 +17,9 @@ format:
 
 :::: {.columns}
 ::: {.column width="60%"}
--   Shiny [FaithFul](https://shiny.posit.co/r/gallery/start-simple/faithful/) Demo
 - Build
-[Geyser](https://shiny.posit.co/r/gallery/start-simple/faithful/)
+[Basic App](https://shiny.posit.co/r/gallery/start-simple/faithful/)
+&
 [Shiny Module](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer)
 [3-9]
   - Faithful code [3-4]
@@ -31,14 +31,16 @@ format:
   - with [Rows and Columns](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R) [14-15]
   - combined with [Switch](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R) [16-17]
   - goofing around with twins [18]
-- [Organize your Repo](https://github.com/byandell/geyser/) [19]
-  - Clone my Repo [20]
-- Questions? Links to materials [21]
+- [Quarto Examples](https://github.com/byandell/geyser/blob/main/inst/slideDeck) [19]
+- [Organize your Repo](https://github.com/byandell/geyser/) [20]
+  - Clone my Repo [21]
+- Questions? Links to materials [22]
 :::
 
 ::: {.column width="40%"}
-![](images/faithful.png)
-![](images/adobe-express-qr-code.png)
+![[Shiny FaithFul App Example](https://shiny.posit.co/r/gallery/start-simple/faithful/)](images/faithful.png)
+
+![[byandell.github.io](https://byandell.github.io)](images/adobe-express-qr-code.png)
 :::
 ::::
 
@@ -425,6 +427,18 @@ flip controls between cards
 - [inst/connect_modules/twin.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/twin.qmd)
 - [inst/connect_modules/flip.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/flip.qmd)
 
+## Quarto Examples
+
+- View [slideDeck.qmd](https://github.com/byandell/geyser/blob/main/inst/slideDeck/slideDeck.qmd)
+written in Quarto.
+- Run Quarto examples in
+[build_module](https://github.com/byandell/geyser/blob/main/inst/build_module)
+&
+[connect_modules](https://github.com/byandell/geyser/blob/main/inst/connect_modules).
+- See <https://connect.doit.wisc.edu/geyserQuartoDemo>.
+- Learn about [Quarto](https://quarto.org/docs/gallery/) through examples.
+- See my notes at <https://github.com/byandell/quarto>.
+
 ## GitHub Repo Organization
 
 ```{.bash filename="byandell/geyser"}
@@ -480,10 +494,8 @@ or ...
 ## Questions?
 
 - <https://github.com/byandell/geyser>
-- <https://byandell.github.io>
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/geyserDemo>
 - <https://connect.doit.wisc.edu/geyserQuartoDemo>
-  - See Quarto examples in various folders
-  
-![](images/adobe-express-qr-code.png)
+
+![[byandell.github.io](https://byandell.github.io)](images/adobe-express-qr-code.png)

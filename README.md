@@ -51,16 +51,14 @@ Attending to namespace conventions is important.
 4. [moduleServer](https://github.com/byandell/geyser/tree/main/inst/build_module/4_moduleServer)
 (full module approach using `moduleServer` and `NS` namespace)
 
-### Study in Connecting Multiple Modules
+### Study in [Connecting Multiple Modules](https://github.com/byandell/geyser/tree/main/inst/connect_modules)
 
 We can connect multiple modules to develop more complicated dashboards.
 Again, care with namespaces is important.
 This both leads to
 [DRY](https://www.getdbt.com/blog/guide-to-dry)
-code and increases readability, clarifying logic and points to improve
+code and increases readability, clarifying logic and pointing to ways to improve
 (or remedy broken) code.
-
-- []
 
 ### References
 
