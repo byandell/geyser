@@ -261,10 +261,10 @@ shiny::reactlogShow()
 
 # Save log of reactive session.
 geyser_log <- shiny::reactlog()
-saveRDS(geyser_log, "geyser.rds")
+saveRDS(geyser_log, "inst/reactlog/geyser.rds")
 
 # Retrieve previously saved reactive session.
-geyser_log <- readRDS("geyser.rds")
+geyser_log <- readRDS("inst/reactlog/geyser.rds")
 reactlog::reactlog_show(geyser_log)
 ```
 
