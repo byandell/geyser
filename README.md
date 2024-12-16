@@ -15,7 +15,8 @@ available at
 - <https://connect.doit.wisc.edu/geyserDemo>
 - <https://connect.doit.wisc.edu/geyserQuartoDemo>
 - [11 Dec 2024 Presentation](https://uwprod-my.sharepoint.com/personal/ruotti_wisc_edu/_layouts/15/stream.aspx?id=%2Fpersonal%2Fruotti%5Fwisc%5Fedu%2FDocuments%2FRecordings%2FR%20shiny%20club%2D20241211%5F161111%2DMeeting%20Recording%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E2fb781c5%2D027d%2D447e%2Db383%2Da27dc53f008d)
-(need `wisc.edu` netID)
+(for now, need
+[wisc.edu NetID](https://it.wisc.edu/services/netid-login-service/))
 
 Go into one of the first four folders in
 [inst/build_module](https://github.com/byandell/geyser/tree/main/inst/build_module)
