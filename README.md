@@ -68,3 +68,6 @@ code and increases readability, clarifying logic and pointing to ways to improve
 - [Mastering Shiny 19: Shiny modules](https://mastering-shiny.org/scaling-modules.html)
 - [Modularizing Shiny app code](https://shiny.rstudio.com/articles/modules.html)
 - [My early experiments on shiny modules](https://github.com/byandell/shiny_module)
+- [Python Shiny Modules](https://shiny.posit.co/py/docs/modules.html)
+- [Shiny for Python 0.6.0](https://shiny.posit.co/blog/posts/shiny-python-0.6.0/)
+- [Shiny for Python Cheatsheet](https://rstudio.github.io/cheatsheets/html/shiny-python.html)
