@@ -69,5 +69,7 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
+# Can run with other name via `python inst/build_module/5_python/appHist.py`
+# But need to find an unused port.
 if __name__ == "__main__":
-    app.run()
+    app.run(host='127.0.0.1', port=54020)
