@@ -63,6 +63,23 @@ This both leads to
 code and increases readability, clarifying logic and pointing to ways to improve
 (or remedy broken) code.
 
+### Python Modules
+
+I am at an early stage with python shiny modules.
+There are parts of a package here, but the `python` folder
+is not properly set, and `setup.py` needs to be updated.
+
+- [inst/build_module/5_python/app.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app.py)
+functioning python app without module (open and run app)
+- [inst/build_module/5_python/appHist.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/appHist.py)
+functioning python app with module (see first lines to use reticulate package)
+- [python/penguins_restart.qmd](https://github.com/byandell/geyser/blob/main/python/penguins_restart.qmd)
+working Quarto example with python
+- [python/hist.py](https://github.com/byandell/geyser/blob/main/python/hist.py)
+histogram module
+- [python/app_port_run.py](https://github.com/byandell/geyser/blob/main/python/app_port_run.py)
+app run kludge to find open port and display on web brower
+
 ### References
 
 - Shiny R

@@ -45,8 +45,8 @@ def hist_server(input, output, session):
 # hist_server("hist")
 
 @module.ui
-def hist_ui():
-    """Geyser Input."""
+def hist_input():
+    """Hist Input."""
     return ui.card(
         ui.input_select(
             "n_breaks",
@@ -63,26 +63,37 @@ def hist_ui():
             "density",
             "Show density estimate",
             value=False
-        ),
-        ui.output_plot("main_plot"),
-        ui.output_ui("output_bw_adjust")
+        )
     )
 
-# hist_ui("hist")
+# hist_input("hist")
+
+@module.ui
+def hist_output():
+    """Hist Output."""
+    return ui.output_plot("main_plot")
+
+# hist_output("hist")
+
+
+@module.ui
+def hist_ui():
+    """Hist UI."""
+    return ui.output_ui("output_bw_adjust")
 
 def hist_app():
     """Hist App."""
     app_ui = ui.page_fluid(
-        hist_ui("hist"),
-        hist_ui("hist2")
+        hist_input("hist"),
+        hist_output("hist"),
+        hist_ui("hist")
     )
     def app_server(input, output, session):
         hist_server("hist")
-        hist_server("hist2")
 
     app = App(app_ui, app_server)
 
     #if __name__ == '__main__':
     app.run()
 
-# geyserApp()
+# hist_app()
