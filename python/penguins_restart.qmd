@@ -1,0 +1,55 @@
+---
+title: "Penguins Data Analysis with Shiny"
+author: "Your Name"
+date: "2024-12-27"
+format: html
+editor: visual
+---
+
+```{python}
+from import app_port_run import app_port_run 
+
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+from shiny import App, render, ui
+
+# Load the penguins dataset
+penguins = sns.load_dataset("penguins")
+
+# Define the UI
+app_ui = ui.page_fluid(
+    ui.input_slider("bill_length", "Bill Length (mm)", min(penguins['bill_length_mm']), max(penguins['bill_length_mm']), 40),
+    ui.output_plot("scatter_plot"),
+    ui.output_table("data_table")
+)
+
+# Define the server logic
+def server(input, output, session):
+    @output
+    @render.plot
+    def scatter_plot():
+        filtered_data = penguins[penguins['bill_length_mm'] >= input.bill_length()]
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(data=filtered_data, x='bill_length_mm', y='bill_depth_mm', hue='species')
+        plt.title('Bill Length vs. Bill Depth')
+        plt.xlabel('Bill Length (mm)')
+        plt.ylabel('Bill Depth (mm)')
+        plt.legend(title='Species')
+        return plt.gcf()
+
+    @output
+    @render.table
+    def data_table():
+        return penguins.head()
+
+# Create the app
+app = App(app_ui, server)
+
+# Run the app
+app_port_run(app)
+```
