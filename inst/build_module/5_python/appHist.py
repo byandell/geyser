@@ -6,6 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 from rpy2 import robjects
+import socket
+import webbrowser
 
 # `faithful$eruptions` from R
 eruptions = robjects.r['faithful'][0]
@@ -72,4 +74,16 @@ app = App(app_ui, server)
 # Can run with other name via `python inst/build_module/5_python/appHist.py`
 # But need to find an unused port.
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=54020)
+    def find_free_port():
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(('', 0))
+            return s.getsockname()[1]
+
+    free_port = find_free_port()
+    url = f"http://127.0.0.1:{free_port}"
+    print(f"Running on {url}")
+    
+    # Open the app in the default web browser
+    webbrowser.open(url)
+    print(f"Running on port: {free_port}")
+    app.run(host="127.0.0.1", port=free_port)
