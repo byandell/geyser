@@ -65,9 +65,13 @@ code and increases readability, clarifying logic and pointing to ways to improve
 
 ### References
 
-- [Mastering Shiny 19: Shiny modules](https://mastering-shiny.org/scaling-modules.html)
-- [Modularizing Shiny app code](https://shiny.rstudio.com/articles/modules.html)
-- [My early experiments on shiny modules](https://github.com/byandell/shiny_module)
-- [Python Shiny Modules](https://shiny.posit.co/py/docs/modules.html)
-- [Shiny for Python 0.6.0](https://shiny.posit.co/blog/posts/shiny-python-0.6.0/)
-- [Shiny for Python Cheatsheet](https://rstudio.github.io/cheatsheets/html/shiny-python.html)
+- Shiny R
+  - [Mastering Shiny 19: Shiny modules](https://mastering-shiny.org/scaling-modules.html)
+  - [Modularizing Shiny app code](https://shiny.rstudio.com/articles/modules.html)
+  - [My early experiments on shiny modules](https://github.com/byandell/shiny_module)
+- Shiny Python
+  - [Python Shiny Modules](https://shiny.posit.co/py/docs/modules.html)
+  - [Shiny for Python 0.6.0](https://shiny.posit.co/blog/posts/shiny-python-0.6.0/)
+  - [Shiny for Python Cheatsheet](https://rstudio.github.io/cheatsheets/html/shiny-python.html)
+  - [Intro to Shiny for Python by Ryan Johnson, Posit](https://it.wisc.edu/wp-content/uploads/Intro-to-Shiny-for-Python.pdf)
+([Video](https://mediaspace.wisc.edu/media/Shiny+App+with+Python+-+Posit+Day+2/1_q6p65pfh))
