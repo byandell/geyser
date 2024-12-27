@@ -7,7 +7,7 @@ editor: visual
 ---
 
 ```{python}
-from import app_port_run import app_port_run 
+from app_port_run import app_port_run 
 
 import nest_asyncio
 nest_asyncio.apply()
