@@ -1,0 +1,53 @@
+---
+title: "Python Shiny Example with Module"
+format: html
+server: shiny
+---
+
+```{python}
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
+import seaborn as sns
+penguins = sns.load_dataset("penguins")
+```
+
+## Sidebar {.sidebar}
+
+```{python}
+from shiny import ui
+
+ui.input_select("x", "Variable:", choices=["bill_length_mm", "bill_depth_mm"])
+ui.input_select("dist", "Distribution:", choices=["hist", "kde"])
+ui.input_checkbox("rug", "Show rug marks", value=False)
+```
+
+## Main Content
+
+```{python}
+from shiny import ui
+
+ui.output_plot("displot")
+```
+
+## App Server
+
+```{python}
+from shiny import render
+
+@render.plot
+def displot():
+    sns.displot(
+        data=penguins, hue="species", multiple="stack",
+        x=input.x(), rug=input.rug(), kind=input.dist()
+    )
+```
+
+## Run the App
+
+```{python}
+if __name__ == "__main__":
+    app.run()
+```

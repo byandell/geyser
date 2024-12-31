@@ -1,0 +1,80 @@
+---
+title: "Python Shiny Example with Module"
+format: html
+server: shiny
+---
+
+```{python}
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
+import seaborn as sns
+penguins = sns.load_dataset("penguins")
+```
+
+## Sidebar {.sidebar}
+
+```{python}
+from penguin_module import penguin_input_ui
+
+penguin_input_ui("penguin")
+
+#from shiny import ui
+
+#ui.input_select("x", "Variable:", choices=["bill_length_mm", "bill_depth_mm"])
+#ui.input_select("dist", "Distribution:", choices=["hist", "kde"])
+#ui.input_checkbox("rug", "Show rug marks", value=False)
+```
+
+## Main Content
+
+```{python}
+from shiny import ui
+
+ui.output_plot("displot")
+```
+
+## App UI
+
+
+```{python}
+from shiny import ui
+from penguin_module import penguin_input_ui
+
+app_ui = ui.page_fluid(
+    ui.layout_sidebar(
+        ui.sidebar(penguin_input_ui("penguin")),
+        ui.output_plot("displot")
+    )
+)
+```
+
+## App Server
+
+```{python}
+from shiny import App
+from penguin_module import penguin_server
+
+def app_server(input, output, session):
+    penguin_server("penguin")
+
+app = App(app_ui, app_server)
+
+#from shiny import render
+
+#@render.plot
+#def displot():
+#    sns.displot(
+#        data=penguins, hue="species", multiple="stack",
+#        x=input.x(), rug=input.rug(), kind=input.dist()
+#    )
+```
+
+## Run the App
+
+```{python}
+if __name__ == "__main__":
+    app.run()
+```
