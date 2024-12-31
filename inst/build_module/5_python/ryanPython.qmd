@@ -1,0 +1,27 @@
+---
+title: "ryanPython"
+format: html
+editor: visual
+---
+
+```{python}
+from shiny import *
+
+# UI ------
+app_ui = ui.page_fluid(
+    ui.input_slider(id = "n",
+                    label = "Multiply by 2:",
+                    min = 1, 
+                    max = 10,
+                    value = 5)
+)
+
+# Server ------
+def server (input, output, session):
+    @render.text
+    def result():
+      return input.n() * 2
+
+# Run app ----
+app = App(app_ui, server)
+```

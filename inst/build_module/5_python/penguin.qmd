@@ -5,9 +5,19 @@ server: shiny
 ---
 
 ```{python}
+from geyser import app_run
+```
+
+```{python}
 import seaborn as sns
 from shiny import App, render, ui
+import nest_asyncio
+from geyser import app_run
 
+nest_asyncio.apply()
+```
+
+```{python}
 # Load the penguins dataset
 penguins = sns.load_dataset("penguins")
 
@@ -21,7 +31,8 @@ app_ui = ui.page_fluid(
 
 # Define the server logic
 def server(input, output, session):
-    @output
+    import seaborn as sns
+
     @render.plot
     def displot():
         sns.displot(
@@ -31,4 +42,7 @@ def server(input, output, session):
 
 # Create the Shiny app
 app = App(app_ui, server)
+
+app_run(app)
+```
 

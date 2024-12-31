@@ -1,14 +1,15 @@
-# app_path <- "inst/build_module/5_python/appHist.py"
+# app_path <- "inst/build_module/5_python/app_gghist.py"
 # reticulate::py_run_file(app_path)
 
-from shiny import App, render, ui
+from shiny import App, module, reactive, render, ui
 import numpy as np
 import matplotlib.pyplot as plt
+from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
+from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
 from geyser import retrieveR, app_run
 
 faithful_df = retrieveR('faithful')
-eruptions = faithful_df.iloc[:,0].to_numpy()
 
 app_ui = ui.page_fluid(
     ui.input_select(
@@ -32,26 +33,28 @@ app_ui = ui.page_fluid(
 )
 
 def server(input, output, session):
+
     @render.plot
     def main_plot():
-        fig, ax = plt.subplots()
         n_breaks = int(input.n_breaks())
-        hist_data = np.histogram(eruptions, bins=n_breaks, density=True)
-        ax.bar(hist_data[1][:-1], hist_data[0], width=np.diff(hist_data[1]), edgecolor='black', align='edge')
+        p = (ggplot(faithful_df) +
+            aes(x = eruptions) +
+            geom_histogram(aes(y=after_stat("density")), # density
+              bins = n_breaks))
 
         if input.individual_obs():
-            ax.plot(eruptions, np.zeros_like(eruptions), 'r|', markersize=10)
+            p = p + geom_rug()
 
         if input.density():
             bw_adjust = input.bw_adjust()
-            kde = gaussian_kde(eruptions, bw_method=bw_adjust)
-            x_grid = np.linspace(min(eruptions), max(eruptions), 1000)
-            ax.plot(x_grid, kde(x_grid), color='blue')
+            p = p + stat_density(adjust = bw_adjust, color = "blue")
 
-        ax.set_xlabel("Duration (minutes)")
-        ax.set_title("Geyser eruption duration")
-        return fig
-
+        p = (p +
+            xlab("Duration (minutes)") +
+            ggtitle("Geyser eruption duration"))
+        
+        return p
+        
     @render.ui
     def output_bw_adjust():
         if input.density():
@@ -63,7 +66,7 @@ def server(input, output, session):
                 value=1.0,
                 step=0.2
             )
-
+            
     return None
 
 app = App(app_ui, server)
@@ -71,4 +74,4 @@ app = App(app_ui, server)
 # Can run with other name via `python inst/build_module/5_python/appHist.py`
 # But need to find an unused port.
 if __name__ == "__main__":
-  app_run(app)
+    app_run(app)

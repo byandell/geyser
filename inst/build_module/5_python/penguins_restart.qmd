@@ -7,7 +7,7 @@ editor: visual
 ---
 
 ```{python}
-from app_port_run import app_port_run 
+from geyser import app_run 
 
 import nest_asyncio
 nest_asyncio.apply()
@@ -30,7 +30,6 @@ app_ui = ui.page_fluid(
 
 # Define the server logic
 def server(input, output, session):
-    @output
     @render.plot
     def scatter_plot():
         filtered_data = penguins[penguins['bill_length_mm'] >= input.bill_length()]
@@ -42,7 +41,6 @@ def server(input, output, session):
         plt.legend(title='Species')
         return plt.gcf()
 
-    @output
     @render.table
     def data_table():
         return penguins.head()
@@ -51,5 +49,5 @@ def server(input, output, session):
 app = App(app_ui, server)
 
 # Run the app
-app_port_run(app)
+app_run(app)
 ```

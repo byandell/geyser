@@ -6,7 +6,7 @@ editor: visual
 
 ```{python}
 #| context: setup
-from hist2 import hist_input, hist_output, hist_ui, hist_server
+from hist import hist_input, hist_output, hist_ui, hist_server
 ```
 
 ## 

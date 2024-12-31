@@ -1,0 +1,149 @@
+---
+title: "testretrieve"
+format: html
+editor: visual
+---
+
+```{python}
+from retrieveR import retrieveR
+
+faithful_df = retrieveR('faithful')
+print(type(faithful_df))
+print(faithful_df.shape)
+```
+```{python}
+import sys
+sys.version
+```
+
+```{python}
+from retrieveR import retrieveR
+
+faithful_df = retrieveR('faithful')
+```
+
+```{python}
+eruptions = faithful_df.iloc[:, 0].to_numpy()
+```
+
+```{python message=False, warning=False}
+from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug, stat_density
+
+n_breaks = 20
+p = (ggplot(faithful_df) +
+    aes(x = eruptions) + 
+    geom_histogram(aes(y=after_stat("density")), bins = n_breaks))
+p = (p +
+    geom_rug())
+bw_adjust = 1
+p = (p + 
+    stat_density(adjust = bw_adjust, color = "blue"))
+```
+
+```{python}
+p.show()
+```
+
+```{python}
+from shiny import App, render, ui
+from plotnine import ggplot, aes, geom_line
+import pandas as pd
+
+from geyser import app_run
+from geyser import gghist_server, gghist_input, gghist_output, gghist_ui
+
+app_ui = ui.page_fluid(
+    gghist_input("gghist"),
+    gghist_output("gghist"),
+    gghist_ui("gghist")
+)
+
+def server(input, output, session):
+    gghist_server("gghist")
+
+app = App(app_ui, server)
+```
+
+```{python}
+gghist_app()
+```
+
+```{python}
+app_run(app)
+```
+
+```{python}
+# Sample data
+data = pd.DataFrame({
+    'x': range(10),
+    'y': [x**2 for x in range(10)]
+})
+
+# Define the UI
+app_ui = ui.page_fluid(
+    ui.h2("Plotnine Example"),
+    ui.output_plot("plot")
+)
+
+# Define the server logic
+def server(input, output, session):
+    @output
+    @render.plot
+    def plot():
+        p = (ggplot(data, aes(x='x', y='y')) +
+             geom_line())
+        return p
+
+# Create the app
+app = App(app_ui, server)
+```
+
+```{python}
+if __name__ == "__main__":
+    app_run(app)
+```
+
+```{python}
+    def main_plot(faithful_df, n_breaks = 30, ind_obs = False, show_density = False):
+        p = (ggplot(faithful_df) +
+            aes(x = eruptions) + # density
+            geom_histogram(aes(y=after_stat("density")), bins = n_breaks))
+
+        if ind_obs:
+            p = p + geom_rug()
+
+        if show_density:
+            bw_adjust = 1
+            p = p + stat_density(adjust = bw_adjust, color = "blue")
+
+        p = (p +
+            xlab("Duration (minutes)") +
+            ggtitle("Geyser eruption duration"))
+        
+        return p
+
+```
+
+```{python}
+p = main_plot(faithful_df, 20, False, True)
+```
+
+```{python}
+p.show()
+```
+
+```{python}
+p = (ggplot(faithful_df) +
+            aes(x = eruptions) +
+            geom_histogram(bins = n_breaks))
+```
+
+```{python}
+p.show()
+```
+
+```{python}
+p1 = p + geom_rug(sides = "b")
+p1.show()
+```
+

@@ -88,6 +88,7 @@ app run kludge to find open port and display on web brower
   - [My early experiments on shiny modules](https://github.com/byandell/shiny_module)
 - Shiny Python
   - [Python Shiny Modules](https://shiny.posit.co/py/docs/modules.html)
+  - [Comparison of Shiny for Python and R](https://shiny.posit.co/py/docs/comp-r-shiny.html)
   - [Shiny for Python 0.6.0](https://shiny.posit.co/blog/posts/shiny-python-0.6.0/)
   - [Shiny for Python Cheatsheet](https://rstudio.github.io/cheatsheets/html/shiny-python.html)
   - [Intro to Shiny for Python by Ryan Johnson, Posit](https://it.wisc.edu/wp-content/uploads/Intro-to-Shiny-for-Python.pdf)

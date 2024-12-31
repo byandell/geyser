@@ -7,9 +7,12 @@ from scipy.stats import gaussian_kde
 def hist_server(input, output, session):
     """Hist Server."""
     from rpy2 import robjects
+    from retrieveR import retrieveR
 
     # `faithful$eruptions` from R
-    eruptions = robjects.r['faithful'][0]
+    # eruptions = robjects.r['faithful'][0]
+    faithful_df = retrieveR('faithful')
+    eruptions = faithful_df.iloc[:, 0].to_numpy()
     
     @render.plot
     def main_plot():
@@ -75,11 +78,12 @@ def hist_output():
 
 # hist_output("hist")
 
-
 @module.ui
 def hist_ui():
     """Hist UI."""
     return ui.output_ui("output_bw_adjust")
+
+# hist_ui("hist")
 
 def hist_app():
     """Hist App."""

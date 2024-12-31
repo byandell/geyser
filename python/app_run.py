@@ -1,4 +1,4 @@
-def app_port_run(app):
+def app_run(app):
     """Run app finding free port."""
     import socket
     import webbrowser

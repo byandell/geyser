@@ -1,9 +1,5 @@
 from shiny import App, render, ui
-
-# run_hist.py
-with open('/Users/brianyandell/Documents/Research/geyser/python/hist.py', 'r') as file:
-    code = file.read()
-exec(code)
+from geyser import hist_server, hist_input, hist_output, hist_ui
 
 app_ui = ui.page_fluid(
     hist_input("geyser"),

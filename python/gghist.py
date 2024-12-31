@@ -4,34 +4,37 @@
 from shiny import App, module, reactive, render, ui
 import numpy as np
 import matplotlib.pyplot as plt
+from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
+from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
+from retrieveR import retrieveR
     
 @module.server
-def hist_server(input, output, session):
-    """Hist Server."""
-    from rpy2 import robjects
-
-    # `faithful$eruptions` from R
-    eruptions = robjects.r['faithful'][0]
+def gghist_server(input, output, session):
+    """GGHist Server."""
     
+    faithful_df = retrieveR('faithful')
+
     @render.plot
     def main_plot():
-        fig, ax = plt.subplots()
         n_breaks = int(input.n_breaks())
-        hist_data = np.histogram(eruptions, bins=n_breaks, density=True)
-        ax.bar(hist_data[1][:-1], hist_data[0], width=np.diff(hist_data[1]), edgecolor='black', align='edge')
+        p = (ggplot(faithful_df) +
+            aes(x = eruptions) +
+            geom_histogram(aes(y=after_stat("density")), # density
+              bins = n_breaks))
 
         if input.individual_obs():
-            ax.plot(eruptions, np.zeros_like(eruptions), 'r|', markersize=10)
+            p = p + geom_rug()
 
         if input.density():
             bw_adjust = input.bw_adjust()
-            kde = gaussian_kde(eruptions, bw_method=bw_adjust)
-            x_grid = np.linspace(min(eruptions), max(eruptions), 1000)
-            ax.plot(x_grid, kde(x_grid), color='blue')
+            p = p + stat_density(adjust = bw_adjust, color = "blue")
 
-        ax.set_xlabel("Duration (minutes)")
-        ax.set_title("Geyser eruption duration")
+        p = (p +
+            xlab("Duration (minutes)") +
+            ggtitle("Geyser eruption duration"))
+        
+        return p
         
     @render.ui
     def output_bw_adjust():
@@ -45,11 +48,11 @@ def hist_server(input, output, session):
                 step=0.2
             )
     
-# hist_server("hist")
+# gghist_server("gghist")
 
 @module.ui
-def hist_ui():
-    """Geyser Input."""
+def gghist_input():
+    """GGHist Input."""
     return ui.card(
         ui.input_select(
             "n_breaks",
@@ -66,26 +69,39 @@ def hist_ui():
             "density",
             "Show density estimate",
             value=False
-        ),
-        ui.output_plot("main_plot"),
-        ui.output_ui("output_bw_adjust")
+        )
     )
 
-# hist_ui("hist")
+# gghist_input("gghist")
 
-def hist_app():
-    """Hist App."""
+@module.ui
+def gghist_output():
+    """GGHist Output."""
+    return ui.output_plot("main_plot")
+
+# gghist_output("gghist")
+
+
+@module.ui
+def gghist_ui():
+    """GGHist UI."""
+    return ui.output_ui("output_bw_adjust")
+
+# gghist_ui("gghist")
+
+def gghist_app():
+    """GGHist App."""
     app_ui = ui.page_fluid(
-        hist_ui("hist"),
-        hist_ui("hist2")
+        gghist_input("gghist"),
+        gghist_output("gghist"),
+        gghist_ui("gghist")
     )
     def app_server(input, output, session):
-        hist_server("hist")
-        hist_server("hist2")
+        gghist_server("gghist")
 
     app = App(app_ui, app_server)
 
     #if __name__ == '__main__':
-    app.run()
+    app_plot_run(app)
 
-# geyserApp()
+# gghist_app()
