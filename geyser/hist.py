@@ -2,16 +2,16 @@ from shiny import App, module, reactive, render, ui
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
+import geyser.io as io
     
 @module.server
 def hist_server(input, output, session):
     """Hist Server."""
     from rpy2 import robjects
-    from retrieveR import retrieveR
 
     # `faithful$eruptions` from R
     # eruptions = robjects.r['faithful'][0]
-    faithful_df = retrieveR('faithful')
+    faithful_df = io.retrieveR('faithful')
     eruptions = faithful_df.iloc[:, 0].to_numpy()
     
     @render.plot
@@ -98,6 +98,6 @@ def hist_app():
     app = App(app_ui, app_server)
 
     #if __name__ == '__main__':
-    app.run()
+    io.app_run(app)
 
 # hist_app()

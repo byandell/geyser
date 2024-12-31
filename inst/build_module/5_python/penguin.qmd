@@ -5,14 +5,10 @@ server: shiny
 ---
 
 ```{python}
-from geyser import app_run
-```
-
-```{python}
 import seaborn as sns
 from shiny import App, render, ui
 import nest_asyncio
-from geyser import app_run
+from geyser.app_run import app_run
 
 nest_asyncio.apply()
 ```

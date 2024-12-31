@@ -2,12 +2,8 @@
 # reticulate::py_run_file(app_path)
 
 from shiny import App, render, ui
-from geyser import app_run
-
-# run_hist.py
-with open('/Users/brianyandell/Documents/Research/geyser/python/gghist.py', 'r') as file:
-    code = file.read()
-exec(code)
+import geyser.io as io
+from geyser.gghist import gghist_server, gghist_input, gghist_output, gghist_ui
 
 app_ui = ui.page_fluid(
     gghist_input("gghist"),
@@ -23,4 +19,4 @@ app = App(app_ui, server)
 # Can run with other name via `python inst/build_module/5_python/appHist.py`
 # But need to find an unused port.
 if __name__ == "__main__":
-  app_run(app)
+  io.app_run(app)

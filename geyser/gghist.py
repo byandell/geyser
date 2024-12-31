@@ -7,19 +7,19 @@ import matplotlib.pyplot as plt
 from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
 from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
-from retrieveR import retrieveR
+import geyser.io as io
     
 @module.server
 def gghist_server(input, output, session):
     """GGHist Server."""
     
-    faithful_df = retrieveR('faithful')
+    faithful_df = io.retrieveR('faithful')
 
     @render.plot
     def main_plot():
         n_breaks = int(input.n_breaks())
         p = (ggplot(faithful_df) +
-            aes(x = eruptions) +
+            aes(x = "eruptions") +
             geom_histogram(aes(y=after_stat("density")), # density
               bins = n_breaks))
 
@@ -102,6 +102,6 @@ def gghist_app():
     app = App(app_ui, app_server)
 
     #if __name__ == '__main__':
-    app_plot_run(app)
+    io.app_run(app)
 
 # gghist_app()

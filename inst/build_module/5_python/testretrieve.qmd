@@ -5,21 +5,14 @@ editor: visual
 ---
 
 ```{python}
-from retrieveR import retrieveR
+from shiny import App, render, ui
+from plotnine import ggplot, aes, geom_line
+import pandas as pd
+import geyser.io as io
 
-faithful_df = retrieveR('faithful')
+faithful_df = io.retrieveR('faithful')
 print(type(faithful_df))
 print(faithful_df.shape)
-```
-```{python}
-import sys
-sys.version
-```
-
-```{python}
-from retrieveR import retrieveR
-
-faithful_df = retrieveR('faithful')
 ```
 
 ```{python}
@@ -45,12 +38,26 @@ p.show()
 ```
 
 ```{python}
+from geyser.hist import hist_server, hist_input, hist_output, hist_ui, hist_app
+
+app_ui = ui.page_fluid(
+    hist_input("hist"),
+    hist_output("hist"),
+    hist_ui("hist")
+)
+
+def server(input, output, session):
+    hist_server("hist")
+
+app = App(app_ui, server)
+```
+
+```{python}
 from shiny import App, render, ui
 from plotnine import ggplot, aes, geom_line
 import pandas as pd
 
-from geyser import app_run
-from geyser import gghist_server, gghist_input, gghist_output, gghist_ui
+from geyser.gghist import gghist_server, gghist_input, gghist_output, gghist_ui, gghist_app
 
 app_ui = ui.page_fluid(
     gghist_input("gghist"),
@@ -65,11 +72,11 @@ app = App(app_ui, server)
 ```
 
 ```{python}
-gghist_app()
+io.app_run(app)
 ```
 
 ```{python}
-app_run(app)
+gghist_app()
 ```
 
 ```{python}
@@ -146,4 +153,3 @@ p.show()
 p1 = p + geom_rug(sides = "b")
 p1.show()
 ```
-

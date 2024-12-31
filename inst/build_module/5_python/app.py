@@ -1,5 +1,5 @@
 from shiny import App, render, ui
-from geyser import hist_server, hist_input, hist_output, hist_ui
+from geyser.hist import hist_server, hist_input, hist_output, hist_ui
 
 app_ui = ui.page_fluid(
     hist_input("geyser"),

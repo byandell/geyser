@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
 from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
-from geyser import retrieveR, app_run
+import geyser.io as io
 
-faithful_df = retrieveR('faithful')
+faithful_df = io.retrieveR('faithful')
 
 app_ui = ui.page_fluid(
     ui.input_select(
@@ -38,7 +38,7 @@ def server(input, output, session):
     def main_plot():
         n_breaks = int(input.n_breaks())
         p = (ggplot(faithful_df) +
-            aes(x = eruptions) +
+            aes(x = "eruptions") +
             geom_histogram(aes(y=after_stat("density")), # density
               bins = n_breaks))
 
@@ -74,4 +74,4 @@ app = App(app_ui, server)
 # Can run with other name via `python inst/build_module/5_python/appHist.py`
 # But need to find an unused port.
 if __name__ == "__main__":
-    app_run(app)
+    io.app_run(app)
