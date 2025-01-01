@@ -171,3 +171,36 @@ io.app_run(app)
 ```{python}
 gghist_app()
 ```
+
+## Test reactive argument with hello python module
+
+```{python}
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
+with open("hello.py") as file:
+  exec(file.read())
+```
+
+```{python}
+hello_app()
+```
+
+## Test reactive dataset with geyser.hist
+
+```{python}
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
+with open("testhist.py") as file:
+  exec(file.read())
+```
+
+```{python}
+hist_app()
+```
+
