@@ -4,26 +4,30 @@ import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 import geyser.io as io
 
-def create_dataset(input):
+def create_dataset():
     @reactive.calc
     def default_dataset():
         return io.r_object('faithful')
     return default_dataset
-  
+
 @module.server
-def hist_server(input, output, session, dataset=None):
+def thist_server(input, output, session, data_set=None):
     """Hist Server."""
     
-    if dataset is None:
-        dataset = create_dataset(input)
+    if data_set is None:
+        data_set = create_dataset()
 
     @reactive.calc
     def xval():
-        dataset().columns[0]
+        return data_set().columns[0]
         
     @reactive.calc
     def datacol():
-        dataset()[xval()]
+        return data_set()[xval()]
+        
+    @render.text
+    def data_col():
+        return datacol()#data_set().columns[0]
 
     @render.plot
     def main_plot():
@@ -33,12 +37,12 @@ def hist_server(input, output, session, dataset=None):
         ax.bar(hist_data[1][:-1], hist_data[0], width=np.diff(hist_data[1]), edgecolor='black', align='edge')
 
         if input.individual_obs():
-            ax.plot(eruptions, np.zeros_like(eruptions), 'r|', markersize=10)
+            ax.plot(datacol(), np.zeros_like(datacol()), 'r|', markersize=10)
 
         if input.density():
             bw_adjust = input.bw_adjust()
-            kde = gaussian_kde(eruptions, bw_method=bw_adjust)
-            x_grid = np.linspace(min(eruptions), max(eruptions), 1000)
+            kde = gaussian_kde(datacol(), bw_method=bw_adjust)
+            x_grid = np.linspace(min(datacol()), max(datacol()), 1000)
             ax.plot(x_grid, kde(x_grid), color='blue')
 
         ax.set_xlabel(xval())
@@ -56,10 +60,10 @@ def hist_server(input, output, session, dataset=None):
                 step=0.2
             )
     
-# hist_server("hist")
+# thist_server("hist")
 
 @module.ui
-def hist_input():
+def thist_input():
     """Hist Input."""
     return ui.card(
         ui.input_select(
@@ -80,35 +84,40 @@ def hist_input():
         )
     )
 
-# hist_input("hist")
+# thist_input("hist")
 
 @module.ui
-def hist_output():
+def thist_output():
     """Hist Output."""
+#    return ui.output_text("data_col")
     return ui.output_plot("main_plot")
 
-# hist_output("hist")
+# thist_output("hist")
 
 @module.ui
-def hist_ui():
+def thist_ui():
     """Hist UI."""
     return ui.output_ui("output_bw_adjust")
 
-# hist_ui("hist")
+# thist_ui("hist")
 
-def hist_app():
+def thist_app():
     """Hist App."""
     app_ui = ui.page_fluid(
-        hist_input("hist"),
-        hist_output("hist"),
-        hist_ui("hist")
+        thist_input("hist"),
+        thist_output("hist"),
+        thist_ui("hist")
     )
     def app_server(input, output, session):
-        hist_server("hist")
+        @reactive.calc
+        def my_dataset():
+            return io.r_object('faithful')
+
+        thist_server("hist", data_set = my_dataset)
 
     app = App(app_ui, app_server)
 
     #if __name__ == '__main__':
     io.app_run(app)
 
-# hist_app()
+# thist_app()

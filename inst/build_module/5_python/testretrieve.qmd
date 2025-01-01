@@ -201,6 +201,12 @@ with open("testhist.py") as file:
 ```
 
 ```{python}
-hist_app()
+thist_app()
+```
+
+```{python}
+import geyser.io as io
+faithful_df = io.r_object('faithful')
+faithful_df
 ```
 

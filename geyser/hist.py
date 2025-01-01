@@ -3,34 +3,45 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 import geyser.io as io
-    
+
+# Create reactive for dataset.
+def create_dataset():
+    @reactive.calc
+    def default_dataset():
+        return io.r_object('faithful')
+    return default_dataset
+
 @module.server
-def hist_server(input, output, session):
+def hist_server(input, output, session, data_set=None):
     """Hist Server."""
-    
-    # `faithful$eruptions` from R
-    # eruptions = robjects.r['faithful'][0]
-    faithful_df = io.r_object('faithful')
-    eruptions = faithful_df[faithful_df.columns[0]]
+
+    if data_set is None:
+        data_set = create_dataset()
+    @reactive.calc
+    def xval():
+        return data_set().columns[0]
+    @reactive.calc
+    def datacol():
+        return data_set()[xval()]
     
     @render.plot
     def main_plot():
         fig, ax = plt.subplots()
         n_breaks = int(input.n_breaks())
-        hist_data = np.histogram(eruptions, bins=n_breaks, density=True)
+        hist_data = np.histogram(datacol(), bins=n_breaks, density=True)
         ax.bar(hist_data[1][:-1], hist_data[0], width=np.diff(hist_data[1]), edgecolor='black', align='edge')
 
         if input.individual_obs():
-            ax.plot(eruptions, np.zeros_like(eruptions), 'r|', markersize=10)
+            ax.plot(datacol(), np.zeros_like(datacol()), 'r|', markersize=10)
 
         if input.density():
             bw_adjust = input.bw_adjust()
-            kde = gaussian_kde(eruptions, bw_method=bw_adjust)
-            x_grid = np.linspace(min(eruptions), max(eruptions), 1000)
+            kde = gaussian_kde(datacol(), bw_method=bw_adjust)
+            x_grid = np.linspace(min(datacol()), max(datacol()), 1000)
             ax.plot(x_grid, kde(x_grid), color='blue')
 
-        ax.set_xlabel("Duration (minutes)")
-        ax.set_title("Geyser eruption duration")
+        ax.set_xlabel(xval())
+        ax.set_title(xval())
         
     @render.ui
     def output_bw_adjust():

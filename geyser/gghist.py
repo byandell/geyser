@@ -8,18 +8,29 @@ from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
 from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
 import geyser.io as io
-    
+
+# Create reactive for dataset.
+def create_dataset():
+    @reactive.calc
+    def default_dataset():
+        return io.r_object('faithful')
+    return default_dataset
+
 @module.server
-def gghist_server(input, output, session):
+def gghist_server(input, output, session, data_set=None):
     """GGHist Server."""
-    
-    faithful_df = io.r_object('faithful')
+
+    if data_set is None:
+        data_set = create_dataset()
+    @reactive.calc
+    def xval():
+        return data_set().columns[0]
 
     @render.plot
     def main_plot():
         n_breaks = int(input.n_breaks())
-        p = (ggplot(faithful_df) +
-            aes(x = "eruptions") +
+        p = (ggplot(data_set()) +
+            aes(x = xval()) +
             geom_histogram(aes(y=after_stat("density")), # density
               bins = n_breaks))
 
@@ -31,8 +42,8 @@ def gghist_server(input, output, session):
             p = p + stat_density(adjust = bw_adjust, color = "blue")
 
         p = (p +
-            xlab("Duration (minutes)") +
-            ggtitle("Geyser eruption duration"))
+            xlab(xval()) +
+            ggtitle(xval()))
         
         return p
         
