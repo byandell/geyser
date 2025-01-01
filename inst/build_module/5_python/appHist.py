@@ -5,10 +5,13 @@ from shiny import App, render, ui
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
-from geyser import retrieveR, app_run
+import geyser.io as io
+import nest_asyncio
 
-faithful_df = retrieveR('faithful')
-eruptions = faithful_df.iloc[:,0].to_numpy()
+nest_asyncio.apply()
+
+faithful_df = io.r_object('faithful')
+eruptions = faithful_df[faithful_df.columns[0]]
 
 app_ui = ui.page_fluid(
     ui.input_select(
@@ -71,4 +74,4 @@ app = App(app_ui, server)
 # Can run with other name via `python inst/build_module/5_python/appHist.py`
 # But need to find an unused port.
 if __name__ == "__main__":
-  app_run(app)
+  io.app_run(app)

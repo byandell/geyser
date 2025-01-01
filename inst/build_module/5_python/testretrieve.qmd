@@ -4,19 +4,103 @@ format: html
 editor: visual
 ---
 
+## Successful Python App
+
+```{python}
+import shiny
+from shiny import ui, reactive, render
+
+# Create the default reactive expression
+def create_default_reactive_greeting(input):
+    @reactive.Calc
+    def default_greeting():
+        return f"Hello, {input.name()}!"
+    return default_greeting
+
+# Define the server logic with reactive_greeting as a parameter with a default reactive value
+def server(input, output, session, reactive_greeting=None):
+    if reactive_greeting is None:
+        reactive_greeting = create_default_reactive_greeting(input)
+    
+    @render.text
+    def greeting():
+      return reactive_greeting()
+    
+# Initialize the app with the server function
+app = shiny.App(
+    ui=ui.page_fluid(
+        ui.input_text("name", "Enter your name:", ""),
+        ui.output_text("greeting")
+    ),
+    server=lambda input, output, session: server(input, output, session, reactive_greeting=None)
+)
+```
+
+```{python}
+# Run the app
+import geyser.io as io
+
+if __name__ == "__main__":
+    io.app_run(app)
+```
+
+## Get R object from package datasets
+
+```{python}
+import geyser.io as io
+
+type(io.r_object('faithful'))
+```
+
+
+```{python}
+# See https://rpy2.github.io/doc/latest/html/introduction.html#r-packages
+# This code is in geyser.io.r_object
+import rpy2.robjects as ro
+from rpy2.robjects import pandas2ri
+from rpy2.robjects.packages import importr, data
+
+pandas2ri.activate()
+
+object = 'faithful'
+
+# Import dataset from R package datasets.
+datasets = importr('datasets')
+object_env = data(datasets).fetch(object)
+object_rdf = object_env[object]
+object_df = ro.conversion.rpy2py(object_rdf)
+type(object_df)
+```
+
+```{python}
+import geyser.io as io
+faithful_df = io.r_object('faithful')
+eruptions = faithful_df[faithful_df.columns[0]]
+eruptions
+```
+
+```{python}
+mtcars = io.r_object('mtcars')
+a = mtcars.columns[:2]
+print(a)
+mtcars[a]
+```
+
+## Simplified Geyser Histogram
+
 ```{python}
 from shiny import App, render, ui
 from plotnine import ggplot, aes, geom_line
 import pandas as pd
 import geyser.io as io
-
-faithful_df = io.retrieveR('faithful')
-print(type(faithful_df))
-print(faithful_df.shape)
 ```
 
 ```{python}
-eruptions = faithful_df.iloc[:, 0].to_numpy()
+faithful_df = io.r_object('faithful')
+```
+
+```{python}
+eruptions = faithful_df.columns[0]
 ```
 
 ```{python message=False, warning=False}
@@ -37,7 +121,11 @@ p = (p +
 p.show()
 ```
 
+## Working geyser.hist
+
 ```{python}
+from shiny import App, render, ui
+import geyser.io as io
 from geyser.hist import hist_server, hist_input, hist_output, hist_ui, hist_app
 
 app_ui = ui.page_fluid(
@@ -53,9 +141,14 @@ app = App(app_ui, server)
 ```
 
 ```{python}
+if __name__ == "__main__":
+    io.app_run(app)
+```
+
+## Working geyser.gghist
+
+```{python}
 from shiny import App, render, ui
-from plotnine import ggplot, aes, geom_line
-import pandas as pd
 
 from geyser.gghist import gghist_server, gghist_input, gghist_output, gghist_ui, gghist_app
 
@@ -77,79 +170,4 @@ io.app_run(app)
 
 ```{python}
 gghist_app()
-```
-
-```{python}
-# Sample data
-data = pd.DataFrame({
-    'x': range(10),
-    'y': [x**2 for x in range(10)]
-})
-
-# Define the UI
-app_ui = ui.page_fluid(
-    ui.h2("Plotnine Example"),
-    ui.output_plot("plot")
-)
-
-# Define the server logic
-def server(input, output, session):
-    @output
-    @render.plot
-    def plot():
-        p = (ggplot(data, aes(x='x', y='y')) +
-             geom_line())
-        return p
-
-# Create the app
-app = App(app_ui, server)
-```
-
-```{python}
-if __name__ == "__main__":
-    app_run(app)
-```
-
-```{python}
-    def main_plot(faithful_df, n_breaks = 30, ind_obs = False, show_density = False):
-        p = (ggplot(faithful_df) +
-            aes(x = eruptions) + # density
-            geom_histogram(aes(y=after_stat("density")), bins = n_breaks))
-
-        if ind_obs:
-            p = p + geom_rug()
-
-        if show_density:
-            bw_adjust = 1
-            p = p + stat_density(adjust = bw_adjust, color = "blue")
-
-        p = (p +
-            xlab("Duration (minutes)") +
-            ggtitle("Geyser eruption duration"))
-        
-        return p
-
-```
-
-```{python}
-p = main_plot(faithful_df, 20, False, True)
-```
-
-```{python}
-p.show()
-```
-
-```{python}
-p = (ggplot(faithful_df) +
-            aes(x = eruptions) +
-            geom_histogram(bins = n_breaks))
-```
-
-```{python}
-p.show()
-```
-
-```{python}
-p1 = p + geom_rug(sides = "b")
-p1.show()
 ```

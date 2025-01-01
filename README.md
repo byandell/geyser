@@ -104,3 +104,6 @@ io kludges to retrieve R data `retrieveR()` and find open port and display on we
   - [Shiny for Python Cheatsheet](https://rstudio.github.io/cheatsheets/html/shiny-python.html)
   - [Intro to Shiny for Python by Ryan Johnson, Posit](https://it.wisc.edu/wp-content/uploads/Intro-to-Shiny-for-Python.pdf)
 ([Video](https://mediaspace.wisc.edu/media/Shiny+App+with+Python+-+Posit+Day+2/1_q6p65pfh))
+  - [R Interface to Python: reticulate](https://rstudio.github.io/reticulate/)
+  - [Python Interface to R: rpy2](https://rpy2.github.io/)
+  

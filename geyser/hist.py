@@ -7,12 +7,11 @@ import geyser.io as io
 @module.server
 def hist_server(input, output, session):
     """Hist Server."""
-    from rpy2 import robjects
-
+    
     # `faithful$eruptions` from R
     # eruptions = robjects.r['faithful'][0]
-    faithful_df = io.retrieveR('faithful')
-    eruptions = faithful_df.iloc[:, 0].to_numpy()
+    faithful_df = io.r_object('faithful')
+    eruptions = faithful_df[faithful_df.columns[0]]
     
     @render.plot
     def main_plot():

@@ -13,7 +13,7 @@ import geyser.io as io
 def gghist_server(input, output, session):
     """GGHist Server."""
     
-    faithful_df = io.retrieveR('faithful')
+    faithful_df = io.r_object('faithful')
 
     @render.plot
     def main_plot():

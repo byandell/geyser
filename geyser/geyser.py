@@ -2,15 +2,17 @@ from shiny import App, module, reactive, render, ui
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
+from geyser import io
     
 @module.server
 def geyserServer(input, output, session):
     """Geyser Server."""
-    from rpy2 import robjects
-
+        
     # `faithful$eruptions` from R
-    eruptions = robjects.r['faithful'][0]
-    
+    # eruptions = robjects.r['faithful'][0]
+    faithful_df = io.r_object('faithful')
+    eruptions = faithful_df[faithful_df.columns[0]]
+
     @render.plot
     def main_plot():
         fig, ax = plt.subplots()

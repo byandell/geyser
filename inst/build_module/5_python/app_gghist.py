@@ -8,8 +8,11 @@ from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
 from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
 import geyser.io as io
+import nest_asyncio
 
-faithful_df = io.retrieveR('faithful')
+nest_asyncio.apply()
+
+faithful_df = io.r_object('faithful')
 
 app_ui = ui.page_fluid(
     ui.input_select(
