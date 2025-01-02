@@ -9,8 +9,8 @@ def geyserServer(input, output, session):
     """Geyser Server."""
         
     # `faithful$eruptions` from R
-    # eruptions = robjects.r['faithful'][0]
-    faithful_df = io.r_object('faithful')
+    import seaborn as sns
+    faithful_df = sns.load_dataset("geyser")
     eruptions = faithful_df[faithful_df.columns[0]]
 
     @render.plot

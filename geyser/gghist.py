@@ -10,7 +10,8 @@ import geyser.io as io
 # Create default reactive for dataset.
 @reactive.calc
 def default_dataset():
-    return io.r_object('faithful')
+    import seaborn as sns
+    return sns.load_dataset("geyser")
 
 @module.server
 def gghist_server(input, output, session, data_set=default_dataset):

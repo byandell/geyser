@@ -54,7 +54,6 @@ import geyser.io as io
 type(io.r_object('faithful'))
 ```
 
-
 ```{python}
 # See https://rpy2.github.io/doc/latest/html/introduction.html#r-packages
 # This code is in geyser.io.r_object
@@ -132,6 +131,17 @@ p.show()
 ```{python}
 import nest_asyncio
 nest_asyncio.apply()
+```
+
+```{python}
+import seaborn as sns
+print(sns.get_data_home()) 
+my_list = ['geyser'] + sns.get_dataset_names()
+dataname = []
+for item in my_list:
+    if item not in dataname:
+        dataname.append(item)
+print(dataname)
 ```
 
 ```{python}
@@ -226,6 +236,29 @@ with open("hello.py") as file:
 hello_app()
 ```
 
+## Test datasets.py
+
+```{python}
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
+data = sns.load_dataset('geyser')
+a = data.columns.tolist()
+print(a)
+data[list(list(tuple(a)))]
+```
+
+```{python}
+with open("../../../geyser/datasets.py") as file:
+  exec(file.read())
+```
+
+```{python}
+datasets_app()
+```
+
 ## Test reactive dataset with geyser.hist
 
 ```{python}
@@ -249,4 +282,3 @@ import geyser.io as io
 faithful_df = io.r_object('faithful')
 faithful_df
 ```
-

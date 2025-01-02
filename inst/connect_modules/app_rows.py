@@ -13,10 +13,10 @@ nest_asyncio.apply()
 
 # context: ui
 app_ui = ui.page_fluid(
-#  ui.row(
-#    ui.column(6, datasetsInput("datasets")),
-#    ui.column(6, datasetsUI("datasets"))
-#  ),
+  ui.row(
+    ui.column(6, datasets_input("datasets")),
+    ui.column(6, datasets_ui("datasets"))
+  ),
   ui.row(
     ui.column(4, ui.card(
       ui.panel_title("hist"),
@@ -42,10 +42,10 @@ app_ui = ui.page_fluid(
 
 # context: server
 def app_server(input, output, session):
-#  dataset <- datasets_server("datasets")
-    hist_server("hist")#, dataset)
-    gghist_server("gghist")#, dataset)
-    ggpoint_server("ggpoint")#, dataset)
+    dataset = datasets_server("datasets")
+    hist_server("hist", dataset)
+    gghist_server("gghist", dataset)
+    ggpoint_server("ggpoint", dataset)
 
 app = App(app_ui, app_server)
 
