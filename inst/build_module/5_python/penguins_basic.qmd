@@ -44,10 +44,3 @@ def displot():
         x=input.x(), rug=input.rug(), kind=input.dist()
     )
 ```
-
-## Run the App
-
-```{python}
-if __name__ == "__main__":
-    app.run()
-```
