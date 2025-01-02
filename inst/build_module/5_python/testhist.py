@@ -1,21 +1,20 @@
 from shiny import App, module, reactive, render, ui
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 import geyser.io as io
 
-def create_dataset():
-    @reactive.calc
-    def default_dataset():
-        return io.r_object('faithful')
-    return default_dataset
+@reactive.calc
+def default_dataset():
+    return io.r_object('faithful')
 
 @module.server
-def thist_server(input, output, session, data_set=None):
+def thist_server(input, output, session, data_set=default_dataset):
     """Hist Server."""
-    
+
     if data_set is None:
-        data_set = create_dataset()
+        return None
 
     @reactive.calc
     def xval():
@@ -27,10 +26,14 @@ def thist_server(input, output, session, data_set=None):
         
     @render.text
     def data_col():
+        if not isinstance(data_set(), pd.DataFrame):
+            return 'none'
         return datacol()#data_set().columns[0]
 
     @render.plot
     def main_plot():
+        if not isinstance(data_set(), pd.DataFrame):
+            return None
         fig, ax = plt.subplots()
         n_breaks = int(input.n_breaks())
         hist_data = np.histogram(datacol(), bins=n_breaks, density=True)
@@ -89,8 +92,8 @@ def thist_input():
 @module.ui
 def thist_output():
     """Hist Output."""
-#    return ui.output_text("data_col")
-    return ui.output_plot("main_plot")
+    return ui.output_text("data_col")
+#    return ui.output_plot("main_plot")
 
 # thist_output("hist")
 
@@ -111,7 +114,8 @@ def thist_app():
     def app_server(input, output, session):
         @reactive.calc
         def my_dataset():
-            return io.r_object('faithful')
+            return 'faithful'
+#            return io.r_object('faithful')
 
         thist_server("hist", data_set = my_dataset)
 

@@ -21,6 +21,8 @@ def create_default_reactive_greeting(input):
 def server(input, output, session, reactive_greeting=None):
     if reactive_greeting is None:
         reactive_greeting = create_default_reactive_greeting(input)
+    if reactive_greeting is None:
+        return None
     
     @render.text
     def greeting():
@@ -80,6 +82,10 @@ eruptions
 ```
 
 ```{python}
+faithful_df.shape[1]
+```
+
+```{python}
 mtcars = io.r_object('mtcars')
 a = mtcars.columns[:2]
 print(a)
@@ -124,6 +130,11 @@ p.show()
 ## Working geyser.hist
 
 ```{python}
+import nest_asyncio
+nest_asyncio.apply()
+```
+
+```{python}
 from shiny import App, render, ui
 import geyser.io as io
 from geyser.hist import hist_server, hist_input, hist_output, hist_ui, hist_app
@@ -149,7 +160,7 @@ if __name__ == "__main__":
 
 ```{python}
 from shiny import App, render, ui
-
+import geyser.io as io
 from geyser.gghist import gghist_server, gghist_input, gghist_output, gghist_ui, gghist_app
 
 app_ui = ui.page_fluid(
@@ -170,6 +181,33 @@ io.app_run(app)
 
 ```{python}
 gghist_app()
+```
+
+## Working geyser.ggpoint
+
+```{python}
+from shiny import App, render, ui
+import geyser.io as io
+from geyser.ggpoint import ggpoint_server, ggpoint_input, ggpoint_output, ggpoint_ui, ggpoint_app
+
+app_ui = ui.page_fluid(
+    ggpoint_input("ggpoint"),
+    ggpoint_output("ggpoint"),
+    ggpoint_ui("ggpoint")
+)
+
+def server(input, output, session):
+    ggpoint_server("ggpoint")
+
+app = App(app_ui, server)
+```
+
+```{python}
+io.app_run(app)
+```
+
+```{python}
+ggpoint_app()
 ```
 
 ## Test reactive argument with hello python module
@@ -201,6 +239,8 @@ with open("testhist.py") as file:
 ```
 
 ```{python}
+#| warning: false
+#| message: false
 thist_app()
 ```
 
