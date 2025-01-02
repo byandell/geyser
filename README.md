@@ -106,4 +106,6 @@ io kludges to retrieve R data `retrieveR()` and find open port and display on we
 ([Video](https://mediaspace.wisc.edu/media/Shiny+App+with+Python+-+Posit+Day+2/1_q6p65pfh))
   - [R Interface to Python: reticulate](https://rstudio.github.io/reticulate/)
   - [Python Interface to R: rpy2](https://rpy2.github.io/)
+  - [Carpentries: Interactive Data Visualizations in Python (Streamlit)](https://carpentries-incubator.github.io/python-interactive-data-visualizations/)
+  - [Carpentries: Interactive Applications in Python (Shiny)](https://wvuhpc.github.io/Interactive-Applications-Python/)
   
