@@ -50,7 +50,7 @@ ggpointServer <- function(id, df = shiny::reactive(faithful)) {
       if(input$smooth) {
         shiny::sliderInput(inputId = ns("bw_adjust"),
                            label = "Span adjustment:",
-                           min = 0, max = 2, value = 0.75, step = 0.05)
+                           min = 0, max = 1, value = 0.75, step = 0.05)
       }
     })
   })

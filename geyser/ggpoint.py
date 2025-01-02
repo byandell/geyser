@@ -2,6 +2,8 @@ from shiny import App, module, reactive, render, ui
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from plotnine import ggplot, aes, after_stat, geom_point, geom_rug
+from plotnine import geom_smooth, xlab, ylab, ggtitle
 from scipy.stats import gaussian_kde
 import geyser.io as io
 
@@ -11,39 +13,40 @@ def default_dataset():
     return io.r_object('faithful')
 
 @module.server
-def hist_server(input, output, session, data_set=default_dataset):
-    """Hist Server."""
+def ggpoint_server(input, output, session, data_set=default_dataset):
+    """GGPoint Server."""
 
     if data_set is None:
         return None
-
+    
     @reactive.calc
     def xval():
         return data_set().columns[0]
-    @reactive.calc
-    def datacol():
-        return data_set()[xval()]
-    
+    def yval():
+        return data_set().columns[1]
+
     @render.plot
     def main_plot():
         if not isinstance(data_set(), pd.DataFrame):
             return None
-        fig, ax = plt.subplots()
-        n_breaks = int(input.n_breaks())
-        hist_data = np.histogram(datacol(), bins=n_breaks, density=True)
-        ax.bar(hist_data[1][:-1], hist_data[0], width=np.diff(hist_data[1]), edgecolor='black', align='edge')
+        if data_set().shape[1] < 2:
+            return None
+        p = (ggplot(data_set()) +
+            aes(x = xval(), y = yval()) +
+            geom_point(color = "black", fill = "white"))
 
         if input.individual_obs():
-            ax.plot(datacol(), np.zeros_like(datacol()), 'r|', markersize=10)
+            p = p + geom_rug()
 
         if input.density():
             bw_adjust = input.bw_adjust()
-            kde = gaussian_kde(datacol(), bw_method=bw_adjust)
-            x_grid = np.linspace(min(datacol()), max(datacol()), 1000)
-            ax.plot(x_grid, kde(x_grid), color='blue')
+            p = p + geom_smooth(color = "blue", span = bw_adjust)
 
-        ax.set_xlabel(xval())
-        ax.set_title(xval())
+        p = (p +
+            xlab(xval()) + ylab(yval()) +
+            ggtitle(xval()))
+        
+        return p
         
     @render.ui
     def output_bw_adjust():
@@ -51,24 +54,18 @@ def hist_server(input, output, session, data_set=default_dataset):
             return ui.input_slider(
                 "bw_adjust",
                 "Bandwidth adjustment:",
-                min=0.2,
-                max=2.0,
-                value=1.0,
-                step=0.2
+                min=0,
+                max=1.0,
+                value=0.5,
+                step=0.05
             )
     
-# hist_server("hist")
+# ggpoint_server("ggpoint")
 
 @module.ui
-def hist_input():
-    """Hist Input."""
+def ggpoint_input():
+    """ggpoint Input."""
     return ui.card(
-        ui.input_select(
-            "n_breaks",
-            "Number of bins in histogram (approximate):",
-            choices=[10, 20, 35, 50],
-            selected=20
-        ),
         ui.input_checkbox(
             "individual_obs",
             "Show individual observations",
@@ -81,35 +78,36 @@ def hist_input():
         )
     )
 
-# hist_input("hist")
+# ggpoint_input("ggpoint")
 
 @module.ui
-def hist_output():
-    """Hist Output."""
+def ggpoint_output():
+    """ggpoint Output."""
     return ui.output_plot("main_plot")
 
-# hist_output("hist")
+# ggpoint_output("ggpoint")
+
 
 @module.ui
-def hist_ui():
-    """Hist UI."""
+def ggpoint_ui():
+    """ggpoint UI."""
     return ui.output_ui("output_bw_adjust")
 
-# hist_ui("hist")
+# ggpoint_ui("ggpoint")
 
-def hist_app():
-    """Hist App."""
+def ggpoint_app():
+    """ggpoint App."""
     app_ui = ui.page_fluid(
-        hist_input("hist"),
-        hist_output("hist"),
-        hist_ui("hist")
+        ggpoint_input("ggpoint"),
+        ggpoint_output("ggpoint"),
+        ggpoint_ui("ggpoint")
     )
     def app_server(input, output, session):
-        hist_server("hist")
+        ggpoint_server("ggpoint")
 
     app = App(app_ui, app_server)
 
     #if __name__ == '__main__':
     io.app_run(app)
 
-# hist_app()
+# ggpoint_app()

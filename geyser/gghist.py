@@ -1,33 +1,32 @@
-# This will be remade following hist.py using `plotnine` package
-# to implement geom_hist version. Placeholder for now.
-
 from shiny import App, module, reactive, render, ui
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from plotnine import ggplot, aes, after_stat, geom_histogram, geom_rug
 from plotnine import stat_density, xlab, ggtitle
 from scipy.stats import gaussian_kde
 import geyser.io as io
 
-# Create reactive for dataset.
-def create_dataset():
-    @reactive.calc
-    def default_dataset():
-        return io.r_object('faithful')
-    return default_dataset
+# Create default reactive for dataset.
+@reactive.calc
+def default_dataset():
+    return io.r_object('faithful')
 
 @module.server
-def gghist_server(input, output, session, data_set=None):
+def gghist_server(input, output, session, data_set=default_dataset):
     """GGHist Server."""
 
     if data_set is None:
-        data_set = create_dataset()
+        return None
+
     @reactive.calc
     def xval():
         return data_set().columns[0]
 
     @render.plot
     def main_plot():
+        if not isinstance(data_set(), pd.DataFrame):
+            return None
         n_breaks = int(input.n_breaks())
         p = (ggplot(data_set()) +
             aes(x = xval()) +
