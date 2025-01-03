@@ -7,7 +7,11 @@ def datanames():
     dataname = []
     for item in my_list:
         if item not in dataname:
-            dataname.append(item)
+            # Check if at least one column is not `object`.
+            data = sns.load_dataset(item)
+            dt = (data.dtypes.values != 'object')
+            if sum(dt) > 1:
+                dataname.append(item)
     
     return dataname
   

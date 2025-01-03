@@ -12,6 +12,8 @@ def datasets_server(input, output, session):
         """Put selected in order chosen; reset if new dataset."""
         data = sns.load_dataset(input.dataset())
         my_choices = data.columns.to_list()
+        dt = (data.dtypes.values != 'object')
+        my_choices = [x for x, y in zip(my_choices, dt) if y]
         choices = my_choices
         selected = []
         for item in input.columns():
@@ -64,11 +66,8 @@ def datasets_server(input, output, session):
     def output_columns():
         data = sns.load_dataset(input.dataset())
         my_choices = data.columns.to_list()
-        choices = my_choices
-        #selected = input.columns()
-        # Code not working to get unique order as selected.
-        #if not selected is None:
-        #    choices = [x for x in my_choices if x not in selected]
+        dt = (data.dtypes.values != 'object')
+        choices = [x for x, y in zip(my_choices, dt) if y]
         return ui.input_select("columns", "Variables:", choices = choices, selected = None, multiple = True)
     
     return dataset

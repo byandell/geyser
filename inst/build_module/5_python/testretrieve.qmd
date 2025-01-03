@@ -4,6 +4,28 @@ format: html
 editor: visual
 ---
 
+```{python}
+from geyser.datanames import datanames
+dn = datanames()
+dn
+```
+
+```{python}
+import seaborn as sns
+dn = sns.get_dataset_names()
+dnames = []
+for item in dn:
+  data = sns.load_dataset(item)
+  my_choices = data.columns.to_list()
+  dt = (data.dtypes.values != 'object')
+  print(item)
+  print([x for x, y in zip(my_choices, dt) if y])
+  print(item, dt.any(), sum(dt))
+  if sum(dt) > 1:
+      dnames.append(item)
+dnames
+```
+
 ## Successful Python App
 
 ```{python}
