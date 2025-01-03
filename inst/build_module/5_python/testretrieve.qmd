@@ -294,6 +294,7 @@ with open("../../../geyser/switch.py") as file:
 ```
 
 ```{python}
+from geyser.switch import switch_app
 switch_app()
 ```
 

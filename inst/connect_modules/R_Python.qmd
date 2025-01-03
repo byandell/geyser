@@ -1,0 +1,43 @@
+---
+title: "Mixed Python and R Code Example"
+format: 
+  dashboard:
+    orientation: columns
+    cold-fold: true
+---
+
+## Column {width=40%}
+
+```{python}
+import seaborn as sns
+penguins = sns.load_dataset("penguins")
+penguins.head()
+```
+
+```{r}
+library(ggplot2)
+penguins <- read.csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
+head(penguins)
+```
+
+## Column {width="60%"}
+
+### Row -- Python Plot {height="50%"}
+
+```{python}
+import matplotlib.pyplot as plt
+sns.set(style="whitegrid")
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=penguins, x="bill_length_mm", y="bill_depth_mm", hue="species")
+plt.title("Penguin Bill Dimensions (Python)")
+plt.show()
+```
+
+### Row -- R Plot {height="50%"}
+
+```{r}
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  ggtitle("Penguin Bill Dimensions (R)") +
+  theme_minimal()
+```
