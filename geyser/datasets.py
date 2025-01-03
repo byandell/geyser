@@ -7,17 +7,53 @@ import geyser.io as io
 def datasets_server(input, output, session):
     """Datasets Server."""
 
-    @reactive.event(input.dataset)
-    def update_columns():
-        choices <- input.columns()
-        return ui.update_select("columns", choices = choices, selected = None)
-
+    @reactive.effect
+    def _():
+        """Put selected in order chosen; reset if new dataset."""
+        data = sns.load_dataset(input.dataset())
+        my_choices = data.columns.to_list()
+        choices = my_choices
+        selected = []
+        for item in input.columns():
+            if item in my_choices:
+                selected.append(item)
+        if not selected is None:
+            choices = list(selected)
+            for item in my_choices:
+                if item not in selected:
+                    choices.append(item)
+        return ui.update_select("columns", choices = choices, selected = selected)
+        
+#    @reactive.event(input.dataset)
+#    def _():
+#        """Reset choices for new dataset."""
+#        data = sns.load_dataset(input.dataset())
+#        choices = data.columns.to_list()
+#        selected = None
+#        return ui.update_select("columns", choices = choices, selected = selected)
+        
     @reactive.calc
     def dataset():
         data = sns.load_dataset(input.dataset())
         return data[list(input.columns())]
     
-    # *** this is not working.
+    @render.text
+    def datalist():
+#        selected = list(input.columns())
+#        return selected
+        data = sns.load_dataset(input.dataset())
+        my_choices = data.columns.to_list()
+        choices = my_choices
+        selected = []
+        for item in input.columns():
+            if item in my_choices:
+                selected.append(item)
+        if not selected is None:
+            choices = list(selected)
+            for item in my_choices:
+                if item not in selected:
+                    choices.append(item)
+        return selected, choices
     @render.data_frame
     def datatbl():
         height = 350
@@ -29,11 +65,11 @@ def datasets_server(input, output, session):
         data = sns.load_dataset(input.dataset())
         my_choices = data.columns.to_list()
         choices = my_choices
-        selected = None
+        #selected = input.columns()
         # Code not working to get unique order as selected.
-        if not selected is None:
-            choices = [x for x in my_choices if x not in selected]
-        return ui.input_select("columns", "Variables:", choices = choices, selected = selected, multiple = True)
+        #if not selected is None:
+        #    choices = [x for x in my_choices if x not in selected]
+        return ui.input_select("columns", "Variables:", choices = choices, selected = None, multiple = True)
     
     return dataset
 
@@ -48,7 +84,8 @@ def datasets_ui():
 
 @module.ui
 def datasets_output():
-  return ui.output_text("datatbl")
+#    return ui.output_text("datalist")
+    return ui.output_data_frame("datatbl")
 
 def datasets_app():
   app_ui = ui.page_fluid(

@@ -29,6 +29,8 @@ def hist_server(input, output, session, data_set=default_dataset):
     def main_plot():
         if not isinstance(data_set(), pd.DataFrame):
             return None
+        if data_set().shape[1] < 1:
+            return None
         fig, ax = plt.subplots()
         n_breaks = int(input.n_breaks())
         hist_data = np.histogram(datacol(), bins=n_breaks, density=True)

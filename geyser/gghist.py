@@ -28,6 +28,8 @@ def gghist_server(input, output, session, data_set=default_dataset):
     def main_plot():
         if not isinstance(data_set(), pd.DataFrame):
             return None
+        if data_set().shape[1] < 1:
+            return None
         n_breaks = int(input.n_breaks())
         p = (ggplot(data_set()) +
             aes(x = xval()) +

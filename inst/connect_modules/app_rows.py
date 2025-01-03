@@ -7,6 +7,7 @@ import geyser.io as io
 from geyser.hist import *
 from geyser.gghist import *
 from geyser.ggpoint import *
+from geyser.datasets import *
 import nest_asyncio
 
 nest_asyncio.apply()
