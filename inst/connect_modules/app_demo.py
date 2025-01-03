@@ -1,4 +1,4 @@
-# app_path <- "inst/connect_modules/app_pages.py"
+# app_path <- "inst/connect_modules/app_demo.py"
 # reticulate::py_run_file(app_path)
 
 # context: setup
@@ -7,6 +7,8 @@ import geyser.io as io
 from geyser.hist import *
 from geyser.gghist import *
 from geyser.ggpoint import *
+from geyser.rows import *
+from geyser.switch import *
 import nest_asyncio
 
 nest_asyncio.apply()
@@ -28,14 +30,26 @@ app_ui = ui.page_navbar(
                ggpoint_output("ggpoint"),
                ggpoint_ui("ggpoint")
   ),
-  title = "Geyser Python Modules with NavBar"
+  ui.nav_panel("rows",
+               rows_input("rows"), 
+               rows_ui("rows")
+  ),
+  ui.nav_panel("switch",
+               switch_input("switch"), 
+               switch_output("switch"),
+               switch_ui("switch")
+  ),
+  title = "Geyser Python Demo"
 )
+
 
 # context: server
 def app_server(input, output, session):
     hist_server("hist")
     gghist_server("gghist")
     ggpoint_server("ggpoint")
+    rows_server("rows")
+    switch_server("switch")
 
 app = App(app_ui, app_server)
 

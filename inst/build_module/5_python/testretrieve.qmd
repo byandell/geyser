@@ -273,12 +273,28 @@ data[list(list(tuple(a)))]
 ```
 
 ```{python}
-with open("../../../geyser/datasets.py") as file:
+module_dict = {
+    "hist_input":     hist_input,
+    "hist_output":    hist_output,
+    "hist_ui":        hist_ui,
+    "gghist_input":   gghist_input,
+    "gghist_output":  gghist_output,
+    "gghist_ui":      gghist_ui,
+    "ggpoint_input":  ggpoint_input,
+    "ggpoint_output": ggpoint_output,
+    "ggpoint_ui":     ggpoint_ui
+}
+print(hist_input.__name__)
+print(module_dict["hist_input"].__name__)
+```
+
+```{python}
+with open("../../../geyser/switch.py") as file:
   exec(file.read())
 ```
 
 ```{python}
-datasets_app()
+switch_app()
 ```
 
 ## Test reactive dataset with geyser.hist
