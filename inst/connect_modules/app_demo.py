@@ -2,6 +2,7 @@
 # reticulate::py_run_file(app_path)
 
 # context: setup
+#pip install pip@git+https://github.com/byandell/geyser
 from shiny import App, module, reactive, render, ui
 import geyser.io as io
 from geyser.hist import *
