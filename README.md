@@ -66,12 +66,90 @@ code and increases readability, clarifying logic and pointing to ways to improve
 
 I am at an early stage with python shiny modules.
 There are parts of a package here in the `geyser` folder.
-See example code (some not working yet) in
-[inst/build_module/5_python](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python).
-You will have to do `pip install geyser` in the proper place.
-Some `app*.R` file have commented first lines to use
+Shiny python is a bit different from Shiny R in a number of ways.
+See references as well as my notes below.
+
+- Simple shiny app: compare
+[R](https://github.com/byandell/geyser/tree/main/inst/build_module/1_oldFaithful/appLogic.R)
+to 
+[Python](https://github.com/byandell/geyser/tree/main/inst/build_module/5_Python/appHist.py)
+- Shiny module app
+  - app calling module: compare
+[R](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer/app_hist.R)
+to 
+[Python](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app_hist.py)
+  - code module: compare
+[R](https://github.com/byandell/geyser/blob/main/R/hist.R)
+to 
+[Python](https://github.com/byandell/geyser/blob/main/geyser/hist.py)
+
+A variety of Python apps can be found in
+[build_module/5_python](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python)
+and
+[connect_modules](https://github.com/byandell/geyser/blob/main/inst/connect_modules).
+Compare the `app*.R* and app_*.py` code.
+
+#### Issues with Python:
+
+You will have to do install the `geyser` Python repo.
+The following is supposed to work, but I have not been able to try it yet.
+
+```
+pip install pip@git+https://github.com/byandell/geyser
+```
+
+Otherwise you should download the repo to your machine to install by, say
+
+```
+pip install ~/Documents/GitHub/geyser
+```
+
+The Python library code is in folder
+[github.com/byandell/geyser/geyser](https://github.com/byandell/geyser/blob/main/geyser)
+with setup file
+[github.com/byandell/setup.py](https://github.com/byandell/geyser/blob/main/setup.py)
+in the main package folder.
+This way, the same repo is used for both R and Python code,
+and Python `import` lines refer to `geyser`.
+
+- The file `app.py` has a confusing role.
+Such a file can be run directly to deploy an app locally.
+However, Quarto Python apps (see below) reserve this name.
+- Issues arise quickly when trying several apps within a session,
+especially if done using `reticulate` from within `Rstudio`.
+- You can use other names than `app.py`, such as `app_hist.py`,
+but you may have to deploy an app in a different way.
+- Python shiny modules appear to work similarly to R shiny modules.
+See examples above as well as the more complicated (6-module) `app_demo`:
+  - [inst/compare_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R)
+  - [inst/compare_modules/app_demo.py](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app_demo.py)
+
+- Python apps from Rstudio: 
+  - I created a Python function in the `io` module,
+[r_object()](https://github.com/byandell/geyser/blob/main/geyser/io.py)
+which finds a free port.
+  - Some files have commented first lines to use
 [reticulate](https://rstudio.github.io/reticulate/)
 package to run.
+
+#### Python and Quarto and Shiny
+
+- It is possible to combine R and Python with Quarto:
+  - [inst/connect_modules/R_Python.qmd](https://github.com/byandell/geyser/blob/inst/connect_modules/R_Python.qmd)
+- Often best to have `Quarto` and Python shiny apps in different folders.
+- Be aware that the file `app.py` is reserved by Quarto when deploying
+Python Quarto apps from any folder.
+- I could not get shiny Python modules to function fully with their
+server function in Quarto. Further, I could not find any working example.
+Essentially, all I could do was wrap the `app*.py` code in a `python` chunk
+Thus, I see no way at this time to build complicated Python-based apps
+via Quarto that take advantage of Quarto's layout features, 
+in a way that was readily done with R-based apps.
+See for example
+  - [inst/build_module/5_python/hist.qmd](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/hist.qmd)
+  - [inst/connect_modules/python_demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/python_demo.qmd)
+
+#### More Python examples
 
 - [inst/build_module/5_python/app.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app.py)
 functioning python app without `hist` module (open and run app)
