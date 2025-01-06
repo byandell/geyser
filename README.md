@@ -14,9 +14,8 @@ available at
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/geyserDemo>
 - <https://connect.doit.wisc.edu/geyserQuartoDemo>
-- [11 Dec 2024 Presentation](https://uwprod-my.sharepoint.com/personal/ruotti_wisc_edu/_layouts/15/stream.aspx?id=%2Fpersonal%2Fruotti%5Fwisc%5Fedu%2FDocuments%2FRecordings%2FR%20shiny%20club%2D20241211%5F161111%2DMeeting%20Recording%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E2fb781c5%2D027d%2D447e%2Db383%2Da27dc53f008d)
-(for now, need
-[wisc.edu NetID](https://it.wisc.edu/services/netid-login-service/))
+- [11 Dec 2024 Presentation](https://drive.google.com/file/d/1BGSIhihpBc-2TfRza5RGeXBCB55EC6-l)
+([Transcript](https://docs.google.com/document/d/1x15G20Mj8EBFJTAit8-LP-9DlystM6TR9TQf8-tBpjs))
 
 Go into one of the first four folders in
 [inst/build_module](https://github.com/byandell/geyser/tree/main/inst/build_module)
@@ -106,6 +105,7 @@ io kludges to retrieve R data `retrieveR()` and find open port and display on we
 ([Video](https://mediaspace.wisc.edu/media/Shiny+App+with+Python+-+Posit+Day+2/1_q6p65pfh))
   - [R Interface to Python: reticulate](https://rstudio.github.io/reticulate/)
   - [Python Interface to R: rpy2](https://rpy2.github.io/)
+  - [Deploying a Shiny for Python application with Posit Connect](https://posit.co/blog/deploying-a-shiny-for-python-application-with-posit-connect/)
   - [Carpentries: Interactive Data Visualizations in Python (Streamlit)](https://carpentries-incubator.github.io/python-interactive-data-visualizations/)
   - [Carpentries: Interactive Applications in Python (Shiny)](https://wvuhpc.github.io/Interactive-Applications-Python/)
   
