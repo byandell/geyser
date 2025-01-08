@@ -7,10 +7,10 @@ app_ui = ui.page_fluid(
     hist_ui("hist")
 )
 
-def server(input, output, session):
+def app_server(input, output, session):
     hist_server("hist")
 
-app = App(app_ui, server)
+app = App(app_ui, app_server)
 
 if __name__ == "__main__":
     app.run()

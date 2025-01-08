@@ -169,7 +169,7 @@ geyserServer <- function(id) {
 
 ## Reactlog: Show App Reactivity
 
-```{.bash filename="inst/reactlog" code-line-numbers="|1-3|5-6|8-10|12-14|"}
+```{.bash filename="inst/reactlog"}
 # Enable `reactlog` and run app.
 reactlog::reactlog_enable()
 runApp("inst/build_module/4_moduleServer")
@@ -277,21 +277,21 @@ app_ui = ui.page_fluid(
     hist_input("hist"),
     hist_output("hist"),
     hist_ui("hist"))
-def server(input, output, session):
+def app_server(input, output, session):
     hist_server("hist")
-app = App(app_ui, server)
+app = App(app_ui, app_server)
 ```
 
 ```{.r filename="inst/build_module/4_moduleServer/app_hist.R"}
 library(shiny)
 library(geyser)
-ui <- bootstrapPage(
+app_ui <- bootstrapPage(
   histInput("hist"), 
   histOutput("hist"),
   histUI("hist"))
-server <- function(input, output, session) {
+app_server <- function(input, output, session) {
   histServer("hist")}
-shinyApp(ui, server)
+shinyApp(app_ui, app_server)
 ```
 
 ## Shiny Python Module Detail
@@ -342,6 +342,12 @@ def app_server(input, output, session):
     ggpoint_server("ggpoint")
 app = App(app_ui, app_server)
 ```
+
+## Challenges with Python
+
+- See notes on
+[README.md](https://github.com/byandell/geyser/blob/main/README.md#python-modules)
+
 # Quarto Examples
 
 - View [slideDeck.qmd](https://github.com/byandell/geyser/blob/main/inst/slideDeck/slideDeck.qmd)
