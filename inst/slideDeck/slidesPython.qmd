@@ -345,7 +345,15 @@ app = App(app_ui, app_server)
 
 ## Challenges with Python
 
-- See notes on
+- Need to install `geyser` package from GitHub or local
+  - `pip install pip@git+https://github.com/byandell/geyser`
+  - `pip install ~/Documents/GitHub/geyser`
+- From `bash`, the `shiny run app_hist.py` may not work
+- Running shiny python from within Rstudio with `reticulate`
+can fail due to multithreading.
+- Partial workaround with
+[io.r_object()](https://github.com/byandell/geyser/blob/main/geyser/io.py)
+- See more notes on
 [README.md](https://github.com/byandell/geyser/blob/main/README.md#python-modules)
 
 # Quarto Examples
