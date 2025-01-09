@@ -4,9 +4,6 @@ from geyser.hist import *
 from geyser.gghist import *
 from geyser.ggpoint import *
 from geyser.datasets import *
-import nest_asyncio
-
-nest_asyncio.apply()
 
 module_dict = {
     "hist_input":     hist_input,

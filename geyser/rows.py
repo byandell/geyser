@@ -4,9 +4,6 @@ from geyser.hist import *
 from geyser.gghist import *
 from geyser.ggpoint import *
 from geyser.datasets import *
-import nest_asyncio
-
-nest_asyncio.apply()
 
 @module.server
 def rows_server(input, output, session):

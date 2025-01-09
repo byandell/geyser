@@ -12,5 +12,6 @@ def app_server(input, output, session):
 
 app = App(app_ui, app_server)
 
+import geyser.io as io
 if __name__ == "__main__":
-    app.run()
+    io.app_run(app)

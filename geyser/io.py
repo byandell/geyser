@@ -39,6 +39,9 @@ def r_object(object='faithful'):
     import rpy2.robjects as ro
     from rpy2.robjects import pandas2ri
     from rpy2.robjects.packages import importr, data
+    import nest_asyncio
+
+    nest_asyncio.apply()
     
     # Activate rpy2.
     pandas2ri.activate()
