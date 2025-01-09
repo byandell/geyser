@@ -1,0 +1,46 @@
+---
+title: "Mixed Python and R Code Example"
+format: 
+  dashboard:
+    orientation: columns
+server: shiny
+---
+
+## Column -- R {width="50%"}
+
+```{r}
+#| context: setup
+#| title: R Example
+library(ggplot2)
+geyser <- faithful |>
+  dplyr::rename(duration = "eruptions") |>
+  dplyr::mutate(kind = c("short","long")[1 + (waiting > 67)])
+```
+
+### Row -- R Input {height="40%"}
+
+```{r}
+library(shiny)
+selectInput("x", "Variable:", choices=c("duration", "waiting"))
+selectInput("dist", "Distribution:", choices=c("hist", "kde"))
+checkboxInput("rug", "Show rug marks", value = FALSE)
+```
+
+### Row -- R Output {height="60%"}
+
+```{r}
+plotOutput('plot')
+```
+
+```{r}
+#| context: server
+output$plot <- renderPlot({
+  p <- ggplot(geyser) +
+    aes_string(x=input$x, color="kind")
+  p <- p + switch(input$dist,
+    hist = geom_histogram(),
+    kde = geom_density())
+  if(input$rug) p <- p + geom_rug()
+  p
+})
+```

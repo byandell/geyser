@@ -6,38 +6,47 @@ format:
     cold-fold: true
 ---
 
-## Column {width=40%}
+## Column -- Python {width=50%}
+
+### Row -- Python Data {height="30%"}
 
 ```{python}
+#| title: Python Example
 import seaborn as sns
-penguins = sns.load_dataset("penguins")
-penguins.head()
+geyser = sns.load_dataset("geyser")
+geyser.head()
 ```
 
-```{r}
-library(ggplot2)
-penguins <- read.csv("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
-head(penguins)
-```
-
-## Column {width="60%"}
-
-### Row -- Python Plot {height="50%"}
+### Row -- Python Plot {height="70%"}
 
 ```{python}
 import matplotlib.pyplot as plt
 sns.set(style="whitegrid")
 plt.figure(figsize=(10, 6))
-sns.scatterplot(data=penguins, x="bill_length_mm", y="bill_depth_mm", hue="species")
-plt.title("Penguin Bill Dimensions (Python)")
+sns.scatterplot(data=geyser, x="duration", y="waiting", hue="kind",
+                s=200, alpha=0.75)
+plt.title("Geyser Eruptions (Python)")
 plt.show()
 ```
 
-### Row -- R Plot {height="50%"}
+## Column -- R {width="50%"}
+
+### Row -- R Data {height="30%"}
 
 ```{r}
-ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
-  geom_point() +
-  ggtitle("Penguin Bill Dimensions (R)") +
+#| title: R Example
+library(ggplot2)
+geyser <- faithful |>
+  dplyr::rename(duration = "eruptions") |>
+  dplyr::mutate(kind = c("short","long")[1 + (waiting > 67)])
+head(geyser, n = 5)
+```
+
+### Row -- R Plot {height="70%"}
+
+```{r}
+ggplot(geyser, aes(x = duration, y = waiting, fill = kind)) +
+  geom_point(size=5, alpha=0.75, color = "white", shape=21) +
+  ggtitle("Geyser Eruptions (R)") +
   theme_minimal()
 ```

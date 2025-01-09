@@ -368,6 +368,24 @@ written in Quarto.
 - Learn about [Quarto](https://quarto.org/docs/gallery/) through examples.
 - See my notes at <https://github.com/byandell/quarto>.
 
+## [Quarto with R & Python](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Python.qmd)
+
+![](images/R_Python.png)
+
+## Quarto with R & Python Details
+
+- use Quarto `## Column` and `### Row` layout
+- works well with non-shiny code (see
+[inst/connect_modules/R_Python.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Python.qmd))
+- does not work with shiny R and Python code together (see
+[inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Python_Module.qmd))
+  - R and Python code from this example work fine separately (see
+[inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Module.qmd)
+and
+[inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/Python_Module.qmd))
+
+
+
 # GitHub Repo Organization
 
 ```{.bash filename="byandell/geyser"}

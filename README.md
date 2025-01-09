@@ -14,6 +14,8 @@ available at
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/geyserDemo>
 - <https://connect.doit.wisc.edu/geyserQuartoDemo>
+- <https://connect.doit.wisc.edu/slidesPythonModules>
+
 - [11 Dec 2024 Presentation](https://drive.google.com/file/d/1BGSIhihpBc-2TfRza5RGeXBCB55EC6-l)
 ([Transcript](https://docs.google.com/document/d/1x15G20Mj8EBFJTAit8-LP-9DlystM6TR9TQf8-tBpjs))
 
@@ -69,6 +71,7 @@ There are parts of a package here in the `geyser` folder.
 Shiny python is a bit different from Shiny R in a number of ways.
 See references as well as my notes below.
 
+- [slidesPythonModules](https://connect.doit.wisc.edu/slidesPythonModules)
 - Simple shiny app: compare
 [R](https://github.com/byandell/geyser/tree/main/inst/build_module/1_oldFaithful/appLogic.R)
 to 
@@ -88,6 +91,10 @@ A variety of Python apps can be found in
 and
 [connect_modules](https://github.com/byandell/geyser/blob/main/inst/connect_modules).
 Compare the `app*.R* and app_*.py` code.
+
+While you can generally run `shiny run my_app.R` or
+`shiny run my_app.py` from the system command line,
+it sometimes acts wierdly for `app.py` or `app.R` files.
 
 #### Issues with Python:
 
