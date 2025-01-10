@@ -16,8 +16,7 @@ format:
 
 :::: {.columns}
 ::: {.column width="60%"}
-- [Build a Shiny R Module](https://github.com/byandell/geyser/blob/main/inst/build_module)
-- Reactlog
+- [Build a Shiny Module](https://github.com/byandell/geyser/blob/main/inst/build_module)
 - [Connect Multiple R Shiny Modules](https://github.com/byandell/geyser/blob/main/inst/connect_modules)
 - [Shiny Python Modules](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python)
 - [Quarto Examples](https://github.com/byandell/geyser/blob/main/inst/slideDeck)
@@ -32,243 +31,9 @@ format:
 :::
 ::::
 
-# Build a Shiny R Module
+# Build a Shiny Module
 
-```{.r filename="inst/build_module/1_oldfaithful/appLogic.R"}
-ui <- bootstrapPage(
-  selectInput("n_breaks", ...),
-  checkboxInput("individual_obs", ...),
-  checkboxInput("density", ...),
-  plotOutput("main_plot", ...),
-  uiOutput("bw_adjust")
-)
-server <- function(input, output) {
-  output$main_plot <- renderPlot(...)
-  output$bw_adjust <- renderUI(...)
-}
-shinyApp(ui, server)
-```
-
-- `ui` is (HTML) object with inputs & outputs
-- `server` is function with logic for plot & density `bw`
-- `renderPlot` serves to `plotOutput`
-- `renderUI` serves to `uiOutput`
-
-## Modular Geyser App
-
-```{.r filename="inst/build_module/4_moduleServer/app.R"}
-ui <- bootstrapPage(
-  geyserInput("geyser"), 
-  geyserOutput("geyser"),
-  geyserUI("geyser")
-)
-server <- function(input, output, session) {
-  geyserServer("geyser")
-}
-shinyApp(ui, server)
-```
-
-- `id` "geyser" connects `ui` and `server` components
-- `ui` uses `Input`, `Output` and `UI` module functions
-- Function `geyserServer()` returns a `server` function
-
-## Self-contained `geyserApp()` function
-
-```{.r filename="inst/build_module/4_moduleServer/moduleServer.R"}
-geyserApp <- function() {
-  ui <- bootstrapPage(
-    geyserInput("geyser"), 
-    geyserOutput("geyser"),
-    geyserUI("geyser")
-  )
-  server <- function(input, output, session) {
-    geyserServer("geyser")
-  }
-  shinyApp(ui, server)
-}
-```
-
-app function wraps around app components
-
-## Shiny Module in one File
-
-```{.r filename="inst/build_module/4_moduleServer/moduleServer.R"}
-geyserServer(id) # server logic steps
-geyserInput(id)  # user input
-geyserOutput(id) # user output
-geyserUI(id)     # user input/output
-geyserApp()      # app as test function
-```
-
-[inst/build_module/4_moduleServer/moduleServer.R](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer/moduleServer.R)
-
-## Modular Geyser Components {.scrollable}
-
-```{.r filename="inst/build_module/4_moduleServer/app.R"}
-geyserInput <- function(id) {
-  ns <- NS(id)
-  tagList(selectInput(ns("n_breaks"), ...),
-          checkboxInput(ns("individual_obs"), ...),
-          checkboxInput(ns("density"), ...))}
-geyserOutput <- function(id) {
-  ns <- NS(id)
-  plotOutput(ns("main_plot"), ...)}
-geyserUI <- function(id) {
-  ns <- NS(id)
-  uiOutput(ns("bw_adjust"))}
-geyserServer <- function(id) {
-  moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-    output$main_plot <- renderPlot(...)
-    output$bw_adjust <- renderUI(...)}}
-```
-
-## App Server Detail
-
-```{.r filename="inst/build_module/1_oldfaithful/appLogic.R"}
-server <- function(input, output) {
-  output$main_plot <- renderPlot({
-    hist(eruptions, ...
-         breaks = as.numeric(input$n_breaks))
-    if (input$individual_obs) {
-      rug(eruptions)}
-    if (input$density) {
-      dens <- density(eruptions, adjust = input$bw_adjust)
-      lines(dens, col = "blue")}})
-  output$bw_adjust <- renderUI({
-    if(input$density)
-      sliderInput("bw_adjust", ...)})
-}
-```
-
-- inputs `individual_obs`, `n_breaks`, `density`, `bw_adjust`
-- outputs `main_plot`, `bw_adjust`
-
-## Modular Server Detail
-
-```{.r filename="inst/build_module/4_moduleServer/moduleServer.R"}
-geyserServer <- function(id) {
-  moduleServer(id, function(input, output, session) {
-    ns <- session$ns
-    output$main_plot <- renderPlot(...)
-    output$bw_adjust <- renderUI({
-      if(input$density) {
-        sliderInput(ns("bw_adjust"), ...)}})
-  })
-}
-```
-
-- `moduleServer()` creates `server` function
-- `ns("by_adjust")` uses shiny namespace
-- `ns <- NS(id)` sets namespace in `ui`
-- `ns <- session$ns` sets namespace in `server`
-
-# Reactlog: Show App Reactivity
-
-![[inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog)](images/reactlog.png)
-
-## Reactlog: Show App Reactivity
-
-```{.bash filename="inst/reactlog"}
-# Enable `reactlog` and run app.
-reactlog::reactlog_enable()
-runApp("inst/build_module/4_moduleServer")
-
-# Show `reactlog` in browser.
-reactlogShow()
-
-# Save log of reactive session.
-geyser_log <- reactlog()
-saveRDS(geyser_log, "inst/reactlog/geyser.rds")
-
-# Retrieve previously saved reactive session.
-geyser_log <- readRDS("inst/reactlog/geyser.rds")
-reactlog::reactlog_show(geyser_log)
-```
-
-- Read [Shiny Reactlog](https://rstudio.github.io/reactlog/articles/reactlog.html) article.
-- See [inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog) examples saved as `RDS` objects.
-- Re-open repo to reset `reactlog` before enabling.
-
-# Connecting Modules
-
-:::: {.columns}
-::: {.column width="50%"}
-![[inst/connect-modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)](images/appPages.png)
-:::
-
-::: {.column width="50%"}
-![[inst/connect-modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)](images/pagesQmd.png)
-:::
-::::
-
-## Connecting Modules across Pages
-
-```{.r filename="inst/connect_modules/appPages.R" code-line-numbers="|2-7|9-11|"}
-ui <- navbarPage("Geyser Modules with NavBar, Brian Yandell",
-  tabPanel("hist",
-    histInput("hist"), histOutput("hist"), histUI("hist")),
-  tabPanel("gghist",
-    gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist")),
-  tabPanel("ggpoint",
-    ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))
-server <- function(input, output, session) {
-  histServer("hist")
-  gghistServer("gghist")
-  ggpointServer("ggpoint")
-}
-shinyApp(ui, server)
-```
-
-- [inst/connect_modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
-- [inst/connect_modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
-
-## Connecting with Rows and Columns
-
-:::: {.columns}
-::: {.column width="50%"}
-![[inst/connect_modules/appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R)](images/appRows.png)
-:::
-
-::: {.column width="50%"}
-![[inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd)](images/rowsQmd.png)
-:::
-::::
-
-## Connecting with Rows and Columns {.smaller}
-
-```{.r filename="inst/connect_modules/appRows.R"}
-ui <- fluidPage(
-  titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
-  fluidRow(
-    column(6, datasetsInput("datasets")),
-    column(6, datasetsUI("datasets"))),
-  fluidRow(
-    column(4, tagList(titlePanel("hist"),
-      histInput("hist"), histOutput("hist"), histUI("hist"))),
-    column(4, tagList(titlePanel("gghist"),
-      gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist"))),
-    column(4, tagList(titlePanel("ggpoint"),
-      ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))))
-server <- function(input, output, session) {
-  dataset <- datasetsServer("datasets")
-  histServer("hist", dataset)
-  gghistServer("gghist", dataset)
-  ggpointServer("ggpoint", dataset)
-}
-shinyApp(ui, server)
-```
-
-- [inst/connect_modules/appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R):
-Shiny app version
-- [inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd):
-Quarto version
-- [R/rows.R](https://github.com/byandell/geyser/blob/main/R/rows.R):
-Shiny module version
-- [inst/connect_modules/appRowsModule.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRowsModule.R):
-Shiny app with `R/rows.R` functions
-
-# Shiny Python Modules
+## Python vs R Module App {.smaller}
 
 ```{.python filename="inst/build_module/5_python/app_hist.py"}
 from shiny import App, ui
@@ -279,10 +44,10 @@ app_ui = ui.page_fluid(
     hist_ui("hist"))
 def app_server(input, output, session):
     hist_server("hist")
-app = App(app_ui, app_server)
+App(app_ui, app_server).run()
 ```
 
-```{.r filename="inst/build_module/4_moduleServer/app_hist.R"}
+```{.r filename="inst/build_module/4_moduleServer/appHist.R"}
 library(shiny)
 library(geyser)
 app_ui <- bootstrapPage(
@@ -294,10 +59,84 @@ app_server <- function(input, output, session) {
 shinyApp(app_ui, app_server)
 ```
 
-## Shiny Python Module Detail
+- id `"hist"` connects `app_ui` and `app_server` components
+- R camelCase vs Python under_score conventions
+- R `bootstrapPage` vs Python `ui.page_fluid`
+- R `shinyApp()` vs Python `App().run()`
+- R `library` & `function` vs Python `import` & `def`
+
+## Self-contained App Function {.smaller}
+
+```{.python filename="geyser/hist.py"}
+from shiny import App, ui
+from geyser.hist import *
+import geyser.io as io
+def hist_app():
+  app_ui = ui.page_fluid(
+    hist_input("hist"),
+    hist_output("hist"),
+    hist_ui("hist"))
+  def app_server(input, output, session):
+    hist_server("hist")
+
+  app = App(app_ui, app_server)
+  io.app_run(app) # replaces app.run()
+```
+
+```{.r filename="R/hist.R"}
+library(shiny)
+library(geyser)
+histApp <- function() {
+  ui <- bootstrapPage(
+    histInput("hist"), 
+    histOutput("hist"),
+    histUI("hist"))
+  server <- function(input, output, session) {
+    histServer("hist")}
+  shinyApp(ui, server)
+}
+```
+
+Shiny kludge:
+
+- `app.run()` may fail due to busy port
+- replace with `io.app_run(app)` to find free port
+
+## Python app.run() kludge {.smaller}
+
+```{.r filename="R/io.py"}
+def app_run(app, host = "127.0.0.1", port = free_port):
+    import socket
+    import webbrowser
+    import nest_asyncio
+
+    nest_asyncio.apply()
+    def find_free_port():
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(('', 0))
+            return s.getsockname()[1]
+    free_port = find_free_port()
+    
+    url = f"{host}:{port}"
+    webbrowser.open(url)
+    app.run(host=host, port=port)
+```
+
+Web interfaces are tricky, and can lead to collisions from multiple runs.
+
+- [nest_asyncio](https://github.com/erdewit/nest_asyncio)
+solves `RuntimeError: This event loop is already running`
+- [socket](https://docs.python.org/3/library/socket.html)
+solves busy port problem
+- [webbrowser](https://docs.python.org/3/library/webbrowser.html)
+controls URL for display
+- `app.run()` runs the app
+
+## Modular Geyser Components {.scrollable .smaller}
 
 ```{.python filename="geyser/hist.py"}
 from shiny import module, render, ui
+@module.server
 def hist_server(input, output, session):
   @render.plot
   def main_plot():
@@ -316,7 +155,122 @@ def hist_ui():
   return ui.output_ui("output_bw_adjust")
 ```
 
-## Shiny Python Modules for Pages {.smaller}
+```{.r filename="R/hist.R"}
+histServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    output$main_plot <- renderPlot(...)
+    output$bw_adjust <- renderUI(...)}}
+histInput <- function(id) {
+  ns <- NS(id)
+  tagList(selectInput(ns("n_breaks"), ...),
+          checkboxInput(ns("individual_obs"), ...),
+          checkboxInput(ns("density"), ...))}
+histOutput <- function(id) {
+  ns <- NS(id)
+  plotOutput(ns("main_plot"), ...)}
+histUI <- function(id) {
+  ns <- NS(id)
+  uiOutput(ns("bw_adjust"))}
+```
+
+## App Server Detail {.smaller}
+
+```{.python filename="geyser/hist.py"}
+@module.server
+def hist_server(input, output, session):
+    @render.plot
+    def main_plot():
+        fig, ax = plt.subplots()
+        hist_data = np.histogram(duration, bins=int(input.n_breaks()), ...)
+        if input.individual_obs():
+            ax.plot(duration, np.zeros_like(duration), 'r|', markersize=10)
+        if input.density():
+            kde = gaussian_kde(duration, bw_method=input.bw_adjust())
+            ax.plot(x_grid, kde(x_grid), color='blue')
+    @render.ui
+    def output_bw_adjust():
+        if input.density():
+            return ui.input_slider("bw_adjust", ...)
+```
+
+```{.r filename="R/hist.R"}
+histServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    output$main_plot <- renderPlot({
+      hist(duration, breaks = as.numeric(input$n_breaks), ...)
+      if (input$individual_obs)
+        rug(duration)
+      if (input$density)
+        lines(density(duration, adjust = input$bw_adjust), col = "blue")})
+    output$bw_adjust <- renderUI({
+      if(input$density) 
+        sliderInput(ns("bw_adjust"), ...)})
+}
+```
+
+- inputs `individual_obs`, `n_breaks`, `density`, `bw_adjust`
+- outputs `main_plot`, `bw_adjust`
+
+## Module Namespace Handling {.smaller}
+
+```{.python filename="geyser/hist.py"}
+from shiny import module, render, ui
+@module.server
+def hist_server(input, output, session):
+  @render.plot
+  def main_plot():
+  @render.ui
+  def output_bw_adjust():
+@module.ui
+def hist_input():
+@module.ui
+def hist_output():
+@module.ui
+def hist_ui():
+```
+
+```{.r filename="R/hist.R"}
+histServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    sliderInput(ns("bw_adjust"), ...)})}
+histInput <- function(id) {
+  ns <- NS(id)
+  tagList(selectInput(ns("n_breaks"), ...),
+          checkboxInput(ns("individual_obs"), ...),
+          checkboxInput(ns("density"), ...))}
+histOutput <- function(id) {
+  ns <- NS(id)
+  plotOutput(ns("main_plot"), ...)}
+histUI <- function(id) {
+  ns <- NS(id)
+  uiOutput(ns("bw_adjust"))}
+```
+
+- `@module.server` and `@module.ui` set up python module namespace
+- `id`, `NS(id)` and `session$ns` set up R module namespace
+- `ns("xxx")` uses shiny namespace in R
+
+# Connecting Modules {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+![](images/appPages.png)
+
+- [inst/connect-modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
+- [inst/connect-modules/app_pages.py](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app_pages.py)
+:::
+
+::: {.column width="50%"}
+![](images/pagesQmd.png)
+
+- [inst/connect-modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
+:::
+::::
+
+## Connecting Modules across Pages {.smaller}
 
 ```{.python filename="inst/connect_modules/app_pages.py"}
 from shiny import App, ui
@@ -325,25 +279,92 @@ from geyser.gghist import *
 from geyser.ggpoint import *
 app_ui = ui.page_navbar(
   ui.nav_panel("hist",
-               hist_input("hist"), 
-               hist_output("hist"),
-               hist_ui("hist")),
+    hist_input("hist"), hist_output("hist"), hist_ui("hist")),
   ui.nav_panel("gghist",
-               gghist_input("gghist"), 
-               gghist_output("gghist"),
-               gghist_ui("gghist")),
+    gghist_input("gghist"), gghist_output("gghist"), gghist_ui("gghist")),
   ui.nav_panel("ggpoint",
-               ggpoint_input("ggpoint"), 
-               ggpoint_output("ggpoint"),
-               ggpoint_ui("ggpoint")))
+    ggpoint_input("ggpoint"), ggpoint_output("ggpoint"), ggpoint_ui("ggpoint")))
 def app_server(input, output, session):
-    hist_server("hist")
-    gghist_server("gghist")
-    ggpoint_server("ggpoint")
-app = App(app_ui, app_server)
+  hist_server("hist")
+  gghist_server("gghist")
+  ggpoint_server("ggpoint")
+App(app_ui, app_server).run()
 ```
 
-## Challenges with Python
+```{.r filename="inst/connect_modules/appPages.R"}
+library(shiny)
+library(geyser)
+ui <- navbarPage("Geyser Modules with NavBar, Brian Yandell",
+  tabPanel("hist",
+    histInput("hist"), histOutput("hist"), histUI("hist")),
+  tabPanel("gghist",
+    gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist")),
+  tabPanel("ggpoint",
+    ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))
+server <- function(input, output, session) {
+  histServer("hist")
+  gghistServer("gghist")
+  ggpointServer("ggpoint")}
+shinyApp(ui, server)
+```
+
+- [inst/connect_modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
+- [inst/connect_modules/app_pages.py](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app_pages.py)
+- [inst/connect_modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
+
+## Connecting with Rows and Columns {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+![](images/appRows.png)
+
+- [inst/connect_modules/appRows.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R)
+- [inst/connect_modules/app_rows.py](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app_rows.py)
+:::
+
+::: {.column width="50%"}
+![](images/rowsQmd.png)
+
+- [inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd)
+:::
+::::
+
+## Connecting with Rows and Columns {.smaller}
+
+```{.python filename="geyser/rows.py"}
+from shiny import App
+from geyser.rows import *
+app_ui = ui.page_fluid(
+  rows_input("rows"),
+  rows_ui("rows"),
+  title = "Geyser Python Rows Modules")
+def app_server(input, output, session):
+  rows_server("rows")
+App(app_ui, app_server).run()
+```
+
+```{.r filename="R/rows.R"}
+library(shiny)
+library(geyser)
+ui <- fluidPage(
+  titlePanel("Geyser Rows Modules in Shiny"),
+  rowsInput("rows"),
+  rowsUI("rows")
+)
+server <- function(input, output, session) {
+  rowsServer("rows")
+}
+shinyApp(ui, server)
+```
+
+- [R/rows.R](https://github.com/byandell/geyser/blob/main/R/rows.R):
+R Shiny app 
+- [geyser/rows.py](https://github.com/byandell/geyser/blob/main/geyser/rows.py):
+Python Shiny app
+- [inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd):
+Quarto version
+
+# Challenges with Python
 
 - Need to install `geyser` package from GitHub or local
   - `pip install pip@git+https://github.com/byandell/geyser`
@@ -379,10 +400,9 @@ written in Quarto.
 [inst/connect_modules/R_Python.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Python.qmd))
 - does not work with shiny R and Python code together (see
 [inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Python_Module.qmd))
-  - R and Python code from this example work fine separately (see
-[inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Module.qmd)
-and
-[inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/Python_Module.qmd))
+- R and Python code from this example work fine separately
+  - [inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/R_Module.qmd)
+  - [inst/connect_modules/R_Python_Module.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/Python_Module.qmd)
 
 
 
@@ -391,56 +411,23 @@ and
 ```{.bash filename="byandell/geyser"}
 - inst
   - build_module
-    - 1_oldFaithful*
+    - 1_oldFaithful
     - 2_newFaithful
     - 3_callModule
     - 4_moduleServer*
-  - connect_modules
-    - app.R*
-    - appPages.R*
-    - pages.qmd*
-    - appRows.R*
-    - rows.qmd*
+    - 5_python*
+  - connect_modules*
   - slideDeck
     - images
-    - slideDeck.qmd*
-- R
-  - hist.R*
-  - gghist.R*
-  - ggpoint.R*
-  - datasets.R*
-  - switch.R*
-```
-
-## Clone repo and run yourself
-
-```{.bash filename="Clone this repo to your laptop"}
-https://github.com/byandell/geyser.git
-```
-
-...
-
-``` {.bash filename="Run the oldFaithful app"}
-> library(shiny)
-> runApp("oldFaithful")
-```
-
-or ...
-
-``` {.bash filename="Run the Faithful Module app"}
-> runApp("moduleServer")
-```
-
-or ...
-
-``` {.bash filename="Call the geyserApp() test function"}
-> source("moduleServer/moduleServer.R")
-> geyserApp()
+    - slidePython.qmd*
+- R*: R package code
+- geyser*: Python package code
 ```
 
 # Questions?
 
 - <https://github.com/byandell/geyser>
+- <https://connect.doit.wisc.edu/slidesPythonModules>
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/geyserDemo>
 - <https://connect.doit.wisc.edu/geyserQuartoDemo>

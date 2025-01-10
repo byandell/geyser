@@ -8,9 +8,6 @@ from geyser.hist import *
 from geyser.gghist import *
 from geyser.ggpoint import *
 from geyser.datasets import *
-import nest_asyncio
-
-nest_asyncio.apply()
 
 # context: ui
 app_ui = ui.page_fluid(

@@ -20,13 +20,12 @@ geyser.head()
 ### Row -- Python Plot {height="70%"}
 
 ```{python}
-import matplotlib.pyplot as plt
-sns.set(style="whitegrid")
-plt.figure(figsize=(10, 6))
-sns.scatterplot(data=geyser, x="duration", y="waiting", hue="kind",
-                s=200, alpha=0.75)
-plt.title("Geyser Eruptions (Python)")
-plt.show()
+from plotnine import ggplot, aes, geom_point, ggtitle
+p = (ggplot(geyser) +
+    aes(x = "duration", y = "waiting") +
+    geom_point(aes(color = "kind"), size = 5, alpha = 0.75) +
+    ggtitle("Geyser Eruptions (Python)"))
+p.show()
 ```
 
 ## Column -- R {width="50%"}
@@ -45,8 +44,8 @@ head(geyser, n = 5)
 ### Row -- R Plot {height="70%"}
 
 ```{r}
-ggplot(geyser, aes(x = duration, y = waiting, fill = kind)) +
-  geom_point(size=5, alpha=0.75, color = "white", shape=21) +
+ggplot(geyser, aes(x = duration, y = waiting, color = kind)) +
+  geom_point(size=5, alpha=0.75) +
   ggtitle("Geyser Eruptions (R)") +
   theme_minimal()
 ```

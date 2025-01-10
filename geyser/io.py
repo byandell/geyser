@@ -1,7 +1,10 @@
-def app_run(app):
+def app_run(app, host = "127.0.0.1", port = free_port):
     """Run app finding free port."""
     import socket
     import webbrowser
+    import nest_asyncio
+
+    nest_asyncio.apply()
 
     def find_free_port():
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -9,17 +12,15 @@ def app_run(app):
             return s.getsockname()[1]
 
     free_port = find_free_port()
-    url = f"http://127.0.0.1:{free_port}"
+
+    # Open the app in the default web browser
+    url = f"{host}:{port}"
+    webbrowser.open(url)
     print(f"Running on {url}")
     
-    # Open the app in the default web browser
-    webbrowser.open(url)
-    print(f"Running on port: {free_port}")
-    app.run(host="127.0.0.1", port=free_port)
+    app.run(host=host, port=port)
 
-    return None
-
-# app_port_run(app)
+# app_run(app)
 
 def r_object(object='faithful'):
     """"
@@ -39,9 +40,6 @@ def r_object(object='faithful'):
     import rpy2.robjects as ro
     from rpy2.robjects import pandas2ri
     from rpy2.robjects.packages import importr, data
-    import nest_asyncio
-
-    nest_asyncio.apply()
     
     # Activate rpy2.
     pandas2ri.activate()

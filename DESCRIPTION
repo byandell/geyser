@@ -1,6 +1,6 @@
 Package: geyser
-Version: 0.6.0
-Date: 2025-01-09
+Version: 0.6.1
+Date: 2025-01-10
 Title: Geyser Shiny Module Examples
 Description: Examples to study shiny modules.
 Authors@R: c(person("Brian S Yandell",
