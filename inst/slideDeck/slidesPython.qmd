@@ -56,13 +56,13 @@ App(app_ui, app_server).run()
 ```{.r filename="inst/build_module/4_moduleServer/appHist.R"}
 library(shiny)
 library(geyser)
-app_ui <- bootstrapPage(
+appUI <- bootstrapPage(
   histInput("hist"), 
   histOutput("hist"),
   histUI("hist"))
-app_server <- function(input, output, session) {
+appServer <- function(input, output, session) {
   histServer("hist")}
-shinyApp(app_ui, app_server)
+shinyApp(appUI, appServer)
 ```
 
 - id `"hist"` connects `app_ui` and `app_server` components
