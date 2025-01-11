@@ -38,27 +38,25 @@ rowsInput <- function(id) {
 #' @export
 rowsUI <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::fluidRow(
-      shiny::column(4, shiny::tagList(
-        shiny::titlePanel(ns("hist")),
-        histInput(ns("hist")), 
-        histOutput(ns("hist")),
-        histUI(ns("hist"))
-      )),
-      shiny::column(4, shiny::tagList(
-        shiny::titlePanel(ns("gghist")),
-        gghistInput(ns("gghist")), 
-        gghistOutput(ns("gghist")),
-        gghistUI(ns("gghist"))
-      )),
-      shiny::column(4, shiny::tagList(
-        shiny::titlePanel(ns("ggpoint")),
-        ggpointInput(ns("ggpoint")), 
-        ggpointOutput(ns("ggpoint")),
-        ggpointUI(ns("ggpoint"))
-      ))
-    )
+  shiny::fluidRow(
+    shiny::column(4, shiny::tagList(
+      shiny::titlePanel(ns("hist")),
+      histInput(ns("hist")), 
+      histOutput(ns("hist")),
+      histUI(ns("hist"))
+    )),
+    shiny::column(4, shiny::tagList(
+      shiny::titlePanel(ns("gghist")),
+      gghistInput(ns("gghist")), 
+      gghistOutput(ns("gghist")),
+      gghistUI(ns("gghist"))
+    )),
+    shiny::column(4, shiny::tagList(
+      shiny::titlePanel(ns("ggpoint")),
+      ggpointInput(ns("ggpoint")), 
+      ggpointOutput(ns("ggpoint")),
+      ggpointUI(ns("ggpoint"))
+    ))
   )
 }
 #' Shiny Module App

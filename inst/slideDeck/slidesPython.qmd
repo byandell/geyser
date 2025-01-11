@@ -17,21 +17,27 @@ format:
 :::: {.columns}
 ::: {.column width="60%"}
 - [Build a Shiny Module](https://github.com/byandell/geyser/blob/main/inst/build_module)
-- [Connect Multiple R Shiny Modules](https://github.com/byandell/geyser/blob/main/inst/connect_modules)
-- [Shiny Python Modules](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python)
-- [Quarto Examples](https://github.com/byandell/geyser/blob/main/inst/slideDeck)
-- [Organize your Repo](https://github.com/byandell/geyser/)
-- Questions? Links to materials
+- [Connect Modules](https://github.com/byandell/geyser/blob/main/inst/connect_modules)
+- Challenges with Python
+- Challenges with Quarto
+- [Organize GitHub Repo](https://github.com/byandell/geyser/)
+- Questions?
 :::
 
 ::: {.column width="40%"}
-![[Shiny FaithFul App Example](https://shiny.posit.co/r/gallery/start-simple/faithful/)](images/faithful.png)
-
 ![[byandell.github.io](https://byandell.github.io)](images/adobe-express-qr-code.png)
+
+[Geyser Shiny R Modules SlideDeck](https://connect.doit.wisc.edu/geyserShinyModules)
 :::
 ::::
 
 # Build a Shiny Module
+
+<center>
+![](images/faithful.png)
+
+[Shiny FaithFul App Example](https://shiny.posit.co/r/gallery/start-simple/faithful/)
+</center>
 
 ## Python vs R Module App {.smaller}
 
@@ -60,7 +66,7 @@ shinyApp(app_ui, app_server)
 ```
 
 - id `"hist"` connects `app_ui` and `app_server` components
-- R camelCase vs Python under_score conventions
+- R `camelCase` vs Python `under_score` conventions
 - R `bootstrapPage` vs Python `ui.page_fluid`
 - R `shinyApp()` vs Python `App().run()`
 - R `library` & `function` vs Python `import` & `def`
@@ -132,7 +138,7 @@ solves busy port problem
 controls URL for display
 - `app.run()` runs the app
 
-## Modular Geyser Components {.scrollable .smaller}
+## Module Components {.smaller}
 
 ```{.python filename="geyser/hist.py"}
 from shiny import module, render, ui
@@ -294,23 +300,22 @@ App(app_ui, app_server).run()
 ```{.r filename="inst/connect_modules/appPages.R"}
 library(shiny)
 library(geyser)
-ui <- navbarPage("Geyser Modules with NavBar, Brian Yandell",
+appUI <- navbarPage("Geyser Modules with NavBar, Brian Yandell",
   tabPanel("hist",
     histInput("hist"), histOutput("hist"), histUI("hist")),
   tabPanel("gghist",
     gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist")),
   tabPanel("ggpoint",
     ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))
-server <- function(input, output, session) {
+appServer <- function(input, output, session) {
   histServer("hist")
   gghistServer("gghist")
   ggpointServer("ggpoint")}
-shinyApp(ui, server)
+shinyApp(appUI, appServer)
 ```
 
-- [inst/connect_modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
-- [inst/connect_modules/app_pages.py](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app_pages.py)
-- [inst/connect_modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
+- UIs organize `hist`, `gghist`, `ggpoint` UIs across `nav` pages
+- Servers connect 3 servers
 
 ## Connecting with Rows and Columns {.smaller}
 
@@ -346,23 +351,95 @@ App(app_ui, app_server).run()
 ```{.r filename="R/rows.R"}
 library(shiny)
 library(geyser)
-ui <- fluidPage(
+appUI <- fluidPage(
   titlePanel("Geyser Rows Modules in Shiny"),
   rowsInput("rows"),
   rowsUI("rows")
 )
-server <- function(input, output, session) {
+appServer <- function(input, output, session) {
   rowsServer("rows")
 }
-shinyApp(ui, server)
+shinyApp(appUI, appServer)
 ```
 
-- [R/rows.R](https://github.com/byandell/geyser/blob/main/R/rows.R):
-R Shiny app 
-- [geyser/rows.py](https://github.com/byandell/geyser/blob/main/geyser/rows.py):
-Python Shiny app
-- [inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd):
-Quarto version
+- `rows` shiny modules organize details across modules
+- Input functions set up `datasets` (top row)
+- UI functions have `hist`, `gghist`, `ggpoint` columns
+- Server functions connect all 4 modules
+
+## Rows & Columns Layout  {.smaller}
+
+```{.python filename="geyser/rows.py"}
+from shiny import ui, module
+from geyser.datasets import *
+from geyser.hist import *
+from geyser.gghist import *
+from geyser.ggpoint import *
+@module.ui
+def rows_input():
+  return ui.row(
+    ui.column(6, datasets_input("datasets")),
+    ui.column(6, datasets_ui("datasets")))
+@module.ui
+def rows_ui():
+  return ui.row(
+    ui.column(4, ui.card(ui.panel_title("hist"),
+      hist_input("hist"), hist_output("hist"), hist_ui("hist"))),
+    ui.column(4, ui.card(ui.panel_title("gghist"),
+      gghist_input("gghist"), gghist_output("gghist"), gghist_ui("gghist"))),
+    ui.column(4, ui.card(ui.panel_title("ggpoint"),
+      ggpoint_input("ggpoint"), ggpoint_output("ggpoint"), ggpoint_ui("ggpoint"))))
+```
+
+```{.r filename="R/rows.R"}
+library(shiny)
+library(geyser)
+rowsInput <- function(id) {
+  ns <- NS(id)
+  fluidRow(column(6, datasetsInput(ns("datasets"))),
+           column(6, datasetsUI(ns("datasets"))))}
+rowsUI <- function(id) {
+  ns <- NS(id)
+  fluidRow(
+    column(4, tagList(titlePanel(ns("hist")),
+      histInput(ns("hist")), histOutput(ns("hist")), histUI(ns("hist")))),
+    column(4, tagList(titlePanel(ns("gghist")),
+      gghistInput(ns("gghist")), gghistOutput(ns("gghist")), gghistUI(ns("gghist")))),
+    column(4, tagList(titlePanel(ns("ggpoint")),
+      ggpointInput(ns("ggpoint")), ggpointOutput(ns("ggpoint")), ggpointUI(ns("ggpoint")))))}
+```
+
+## Rows Servers Connect Modules {.smaller}
+
+```{.python filename="geyser/rows.py"}
+from geyser.datasets import *
+from geyser.hist import *
+from geyser.gghist import *
+from geyser.ggpoint import *
+@module.server
+def rows_server(input, output, session):
+    dataset = datasets_server("datasets")
+    hist_server("hist", dataset)
+    gghist_server("gghist", dataset)
+    ggpoint_server("ggpoint", dataset)
+```
+
+```{.r filename="R/rows.R"}
+library(shiny)
+library(geyser)
+rowsServer <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    dataset <- datasetsServer("datasets")
+    histServer("hist", dataset)
+    gghistServer("gghist", dataset)
+    ggpointServer("ggpoint", dataset)
+  })
+}
+```
+
+- `rows` module calls 4 other modules
+- `datasets` module determines `dataset` and columns
+- `dataset` data frame is input to other 3 modules
 
 # Challenges with Python
 
@@ -377,7 +454,7 @@ can fail due to multithreading.
 - See more notes on
 [README.md](https://github.com/byandell/geyser/blob/main/README.md#python-modules)
 
-# Quarto Examples
+# Challenges with Quarto
 
 - View [slideDeck.qmd](https://github.com/byandell/geyser/blob/main/inst/slideDeck/slideDeck.qmd)
 written in Quarto.
