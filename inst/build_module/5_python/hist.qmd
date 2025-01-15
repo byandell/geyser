@@ -21,12 +21,12 @@ app_ui = ui.page_fluid(
 ```
 
 ```{python}
+#| context: server  
 def app_server(input,output,session):
   hist_server("geyser")
 ```
 
 ```{python}
-#| context: server  
 app = App(app_ui, app_server)
 
 io.app_run(app)

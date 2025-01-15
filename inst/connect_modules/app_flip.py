@@ -5,9 +5,6 @@
 from shiny import App, module, reactive, render, ui
 import geyser.io as io
 from geyser.hist import *
-import nest_asyncio
-
-nest_asyncio.apply()
 
 # context: ui
 app_ui = ui.page_fluid(

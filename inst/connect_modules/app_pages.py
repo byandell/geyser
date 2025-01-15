@@ -7,9 +7,6 @@ import geyser.io as io
 from geyser.hist import *
 from geyser.gghist import *
 from geyser.ggpoint import *
-import nest_asyncio
-
-nest_asyncio.apply()
 
 # context: ui
 app_ui = ui.page_navbar(
