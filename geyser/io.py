@@ -1,4 +1,4 @@
-def app_run(app, host = "127.0.0.1", port = free_port):
+def app_run(app, host = "127.0.0.1", port = None):
     """Run app finding free port."""
     import socket
     import webbrowser
@@ -11,7 +11,8 @@ def app_run(app, host = "127.0.0.1", port = free_port):
             s.bind(('', 0))
             return s.getsockname()[1]
 
-    free_port = find_free_port()
+    if port is None:
+        port = find_free_port()
 
     # Open the app in the default web browser
     url = f"{host}:{port}"

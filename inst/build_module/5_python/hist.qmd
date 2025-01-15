@@ -1,26 +1,32 @@
 ---
 title: "hist"
-format: html
+format: dashboard
 server: shiny
 ---
 
 ```{python}
+#| context: setup
 from geyser.hist import hist_input, hist_output, hist_ui, hist_server
 from shiny import ui, App
-import nest_asyncio
 import geyser.io as io
+```
 
-nest_asyncio.apply()
-
+```{python}
 app_ui = ui.page_fluid(
   hist_input("geyser"),
   hist_output("geyser"),
   # Display this only if the density is shown
   hist_ui("geyser")
 )
+```
+
+```{python}
 def app_server(input,output,session):
   hist_server("geyser")
-  
+```
+
+```{python}
+#| context: server  
 app = App(app_ui, app_server)
 
 io.app_run(app)
