@@ -111,18 +111,21 @@ Shiny kludge:
 ## Python app.run() kludge {.smaller}
 
 ```{.r filename="R/io.py"}
-def app_run(app, host = "127.0.0.1", port = free_port):
+def app_run(app, host = "127.0.0.1", port = None):
     import socket
     import webbrowser
     import nest_asyncio
 
+    # Fix runtime event issue.
     nest_asyncio.apply()
-    def find_free_port():
+
+    # Find free port.    
+    if port is None:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind(('', 0))
-            return s.getsockname()[1]
-    free_port = find_free_port()
-    
+            port = s.getsockname()[1]
+
+    # Open URL and run app.
     url = f"{host}:{port}"
     webbrowser.open(url)
     app.run(host=host, port=port)

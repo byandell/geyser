@@ -6,13 +6,11 @@ def app_run(app, host = "127.0.0.1", port = None):
 
     nest_asyncio.apply()
 
-    def find_free_port():
+    # Find free port.
+    if port is None:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind(('', 0))
-            return s.getsockname()[1]
-
-    if port is None:
-        port = find_free_port()
+            port = s.getsockname()[1]
 
     # Open the app in the default web browser
     url = f"{host}:{port}"

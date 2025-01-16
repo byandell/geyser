@@ -98,17 +98,22 @@ it sometimes acts wierdly for `app.py` or `app.R` files.
 
 #### Issues with Python:
 
+Be sure you have the latest Python (say 3.12),
+and that you have installed
+[shiny](https://pypi.org/project/shiny/)
+and
+[shinywidgets](https://pypi.org/project/shinywidgets/).
 You will have to do install the `geyser` Python repo.
 The following is supposed to work, but I have not been able to try it yet.
 
 ```
-pip install pip@git+https://github.com/byandell/geyser
+python -m pip install pip@git+https://github.com/byandell/geyser
 ```
 
 Otherwise you should download the repo to your machine to install by, say
 
 ```
-pip install ~/Documents/GitHub/geyser
+python -m pip install ~/Documents/GitHub/geyser
 ```
 
 The Python library code is in folder
