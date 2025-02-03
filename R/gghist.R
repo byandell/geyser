@@ -6,8 +6,9 @@
 #' @return reactive server
 #' @export
 #' @rdname gghistServer
-#' @importFrom shiny bootstrapPage checkboxInput moduleServer NS plotOutput
-#'             renderPlot renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot
+#'             renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom bslib page
 #' @importFrom ggplot2 aes after_stat geom_histogram geom_rug ggplot ggtitle
 #'             stat_density xlab
 #' @importFrom rlang .data
@@ -96,7 +97,7 @@ gghistOutput <- function(id) {
 #' @rdname gghistServer
 #' @export
 gghistApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     gghistInput("gghist"), 
     gghistOutput("gghist"),
     # Display this only if the density is shown

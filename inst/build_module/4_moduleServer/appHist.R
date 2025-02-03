@@ -1,6 +1,6 @@
 library(geyser)
 
-appUI <- shiny::bootstrapPage(
+appUI <- bslib::page(
   histInput(id = "hist"), 
   histOutput(id = "hist"),
   histUI(id = "hist")

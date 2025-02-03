@@ -30,7 +30,7 @@ fakeServer <- function(input, output, session) {
 }
 
 fakeUI <- function() {
-  bootstrapPage(
+  bslib::page(
     # Input
     selectInput(inputId = "n_breaks",
                 label = "Number of bins in histogram (approximate):",

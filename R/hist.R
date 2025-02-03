@@ -6,8 +6,9 @@
 #' @return reactive server
 #' @export
 #' @rdname histServer
-#' @importFrom shiny bootstrapPage checkboxInput moduleServer NS plotOutput
-#'             renderPlot renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot 
+#'             renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom bslib page
 #' @importFrom graphics hist lines rug
 #' @importFrom stats density
 #' @importFrom stringr str_to_title
@@ -92,7 +93,7 @@ histOutput <- function(id) {
 #' @rdname histServer
 #' @export
 histApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     histInput("hist"), 
     histOutput("hist"),
     # Display this only if the density is shown

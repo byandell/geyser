@@ -5,8 +5,9 @@
 #' @return reactive server
 #' @export
 #' @rdname datasetsServer
-#' @importFrom shiny bootstrapPage moduleServer NS
-#'             reactive renderUI req selectInput shinyApp uiOutput
+#' @importFrom shiny moduleServer NS reactive renderUI req selectInput shinyApp
+#'             uiOutput
+#' @importFrom bslib page
 #' @importFrom dplyr select where
 datasetsServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
@@ -84,7 +85,7 @@ datasetsOutput <- function(id) {
 #' @rdname datasetsServer
 #' @export
 datasetsApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     datasetsInput("datasets"), 
     datasetsUI("datasets"), 
     datasetsOutput("datasets")

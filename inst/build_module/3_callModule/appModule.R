@@ -8,7 +8,7 @@
 
 source("callModule.R")
 
-ui <- shiny::bootstrapPage(
+ui <- bslib::page(
   geyserInput(id = "geyser"), 
   geyserOutput(id = "geyser"),
   # Display this only if the density is shown

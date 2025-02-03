@@ -4,19 +4,19 @@ source("../../R/gghist.R")
 source("../../R/ggpoint.R")
 
 # context: ui
-ui <- shiny::navbarPage(
-  "Geyser Modules with NavBar, Brian Yandell",
-  shiny::tabPanel("hist",
+ui <- bslib::page_navbar(
+  title = "Geyser Modules with NavBar",
+  bslib::nav_panel("hist",
                   histInput("hist"), 
                   histOutput("hist"),
                   histUI("hist")
   ),
-  shiny::tabPanel("gghist",
+  bslib::nav_panel("gghist",
                   gghistInput("gghist"), 
                   gghistOutput("gghist"),
                   gghistUI("gghist")
   ),
-  shiny::tabPanel("ggpoint",
+  bslib::nav_panel("ggpoint",
                   ggpointInput("ggpoint"), 
                   ggpointOutput("ggpoint"),
                   ggpointUI("ggpoint")

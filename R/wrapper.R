@@ -5,20 +5,19 @@
 #' @return reactive server
 #' @export
 #' @rdname wrapperServer
-#' @importFrom shiny bootstrapPage moduleServer NS 
-#'             renderUI selectInput shinyApp uiOutput
+#' @importFrom shiny moduleServer NS renderUI selectInput shinyApp uiOutput
+#' @importFrom bslib page
 wrapperServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     # Module to select `dataset()`.
     dataset <- dataServer("data")
-    
     # Modules to plot data.
     histServer("hist", dataset)
     gghistServer("gghist", dataset)
     ggpointServer("ggpoint", dataset)
-    
+    # Switches.
     output$inputSwitch <- shiny::renderUI({
       shiny::req(input$plottype)
       get(paste0(input$plottype, "Input"))(ns(input$plottype))
@@ -39,7 +38,7 @@ wrapperServer <- function(id) {
 #' @export
 wrapperInput <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
+  list(
     shiny::selectInput(ns("plottype"), "Plot Type:",
                        c("hist","gghist","ggpoint")),
     dataInput(ns("data")),
@@ -67,7 +66,7 @@ wrapperOutput <- function(id) {
 #' @rdname wrapperServer
 #' @export
 wrapperApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     wrapperInput("wrapper"), 
     wrapperUI("wrapper"),
     wrapperOutput("wrapper")

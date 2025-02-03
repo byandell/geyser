@@ -6,8 +6,9 @@
 #' @return reactive server
 #' @export
 #' @rdname ggpointServer
-#' @importFrom shiny bootstrapPage checkboxInput moduleServer NS plotOutput
-#'             renderPlot renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot 
+#'             renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom bslib page
 #' @importFrom ggplot2 aes geom_point geom_rug geom_smooth ggplot ggtitle
 #'             xlab ylab
 #' @importFrom rlang .data
@@ -94,7 +95,7 @@ ggpointOutput <- function(id) {
 #' @rdname ggpointServer
 #' @export
 ggpointApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     ggpointInput("ggpoint"), 
     ggpointOutput("ggpoint"),
     # Display this only if the smooth is shown

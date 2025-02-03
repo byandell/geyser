@@ -5,16 +5,13 @@
 #' @return reactive server
 #' @export
 #' @rdname rowsServer
-#' @importFrom shiny bootstrapPage column fluidRow moduleServer NS 
-#'             renderUI selectInput shinyApp uiOutput
+#' @importFrom shiny moduleServer NS renderUI selectInput shinyApp uiOutput
+#' @importFrom bslib card card_header layout_columns page
 rowsServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    
     # Module to select `dataset()`.
-    # This `datasets.R` module is fancier than `data.R`.
     dataset <- datasetsServer("datasets")
-    
     # Modules to plot data.
     histServer("hist", dataset)
     gghistServer("gghist", dataset)
@@ -22,50 +19,40 @@ rowsServer <- function(id) {
   })
 }
 #' Shiny Module Input
-#' @return nothing returned
 #' @rdname rowsServer
 #' @export
 rowsInput <- function(id) {
   ns <- shiny::NS(id)
-  shiny::fluidRow(
-    shiny::column(6, datasetsInput(ns("datasets"))),
-    shiny::column(6, datasetsUI(ns("datasets")))
+  bslib::layout_columns(
+    datasetsInput(ns("datasets")),
+    datasetsUI(ns("datasets"))
   )
 }
-  #' Shiny Module UI
-#' @return nothing returned
+#' Shiny Module UI
 #' @rdname rowsServer
 #' @export
 rowsUI <- function(id) {
   ns <- shiny::NS(id)
-  shiny::fluidRow(
-    shiny::column(4, shiny::tagList(
-      shiny::titlePanel(ns("hist")),
-      histInput(ns("hist")), 
-      histOutput(ns("hist")),
-      histUI(ns("hist"))
-    )),
-    shiny::column(4, shiny::tagList(
-      shiny::titlePanel(ns("gghist")),
-      gghistInput(ns("gghist")), 
-      gghistOutput(ns("gghist")),
-      gghistUI(ns("gghist"))
-    )),
-    shiny::column(4, shiny::tagList(
-      shiny::titlePanel(ns("ggpoint")),
-      ggpointInput(ns("ggpoint")), 
-      ggpointOutput(ns("ggpoint")),
-      ggpointUI(ns("ggpoint"))
-    ))
-  )
+  bslib::layout_columns(
+    bslib::card(bslib::card_header("hist"),
+                histInput(ns("hist")), 
+                histOutput(ns("hist")),
+                histUI(ns("hist"))),
+    bslib::card(bslib::card_header("gghist"),
+                gghistInput(ns("gghist")), 
+                gghistOutput(ns("gghist")),
+                gghistUI(ns("gghist"))),
+    bslib::card(bslib::card_header("ggpoint"),
+                ggpointInput(ns("ggpoint")), 
+                ggpointOutput(ns("ggpoint")),
+                ggpointUI(ns("ggpoint"))))
 }
 #' Shiny Module App
-#' @return nothing returned
 #' @rdname rowsServer
 #' @export
 rowsApp <- function() {
-  ui <- shiny::fluidPage(
-    shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
+  ui <- bslib::page(
+    title = "Geyser Rows Modules",
     rowsInput("rows"),
     rowsUI("rows")
   )

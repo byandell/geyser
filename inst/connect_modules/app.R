@@ -1,32 +1,32 @@
 devtools::install_github("byandell/geyser")
 
-ui <- shiny::navbarPage(
-  "Geyser Modules with NavBar, Brian Yandell",
-  shiny::tabPanel("hist",
-    geyser::histInput("hist"), 
-    geyser::histOutput("hist"),
-    geyser::histUI("hist")
+ui <- bslib::page_navbar(
+  title = "Geyser Modules with NavBar, Brian Yandell",
+  bslib::nav_panel("hist",
+                   geyser::histInput("hist"), 
+                   geyser::histOutput("hist"),
+                   geyser::histUI("hist")
   ),
   shiny::tabPanel("gghist",
-    geyser::gghistInput("gghist"), 
-    geyser::gghistOutput("gghist"),
-    geyser::gghistUI("gghist")
+                  geyser::gghistInput("gghist"), 
+                  geyser::gghistOutput("gghist"),
+                  geyser::gghistUI("gghist")
   ),
-  shiny::tabPanel("ggpoint",
-    geyser::ggpointInput("ggpoint"), 
-    geyser::ggpointOutput("ggpoint"),
-    geyser::ggpointUI("ggpoint")
+  bslib::nav_panel("ggpoint",
+                   geyser::ggpointInput("ggpoint"), 
+                   geyser::ggpointOutput("ggpoint"),
+                   geyser::ggpointUI("ggpoint")
   ),
-  shiny::tabPanel("Rows",
-    shiny::titlePanel("Geyser Rows Modules"),
-    geyser::rowsInput("rows"),
-    geyser::rowsUI("rows")
+  bslib::nav_panel("Rows",
+                   shiny::titlePanel("Geyser Rows Modules"),
+                   geyser::rowsInput("rows"),
+                   geyser::rowsUI("rows")
   ),
-  shiny::tabPanel("Switch",
-    shiny::titlePanel("Geyser Switch Modules"),
-    geyser::switchInput("switch"),
-    geyser::switchOutput("switch"), 
-    geyser::switchUI("switch")
+  bslib::nav_panel("Switch",
+                   shiny::titlePanel("Geyser Switch Modules"),
+                   geyser::switchInput("switch"),
+                   geyser::switchOutput("switch"), 
+                   geyser::switchUI("switch")
   )
 )
 

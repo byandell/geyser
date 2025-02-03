@@ -125,8 +125,8 @@ shiny::shinyApp(ui, server)
 
 ## Modular Geyser App
 
-```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-6|8-10|12|"}
-ui <- shiny::bootstrapPage(
+```{.r filename="inst/build_module/4_moduleServer/app.R" code-line-numbers="|1-6|7-9|10|"}
+ui <- bslib::page(
   geyserInput(id = "geyser"), 
   geyserOutput(id = "geyser"),
   # Display this only if the density is shown
@@ -146,7 +146,7 @@ shiny::shinyApp(ui, server)
 
 ```{.r filename="inst/build_module/4_moduleServer/moduleServer.R" code-line-numbers="|3-6|9|"}
 geyserApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     geyserInput("geyser"), 
     geyserOutput("geyser"),
     # Display this only if the density is shown
@@ -305,7 +305,7 @@ shiny::shinyApp(ui, server)
 - [inst/connect_modules/appPages.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R)
 - [inst/connect_modules/pages.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/pages.qmd)
 
-## Connecting Modules with Rows and Columns
+## Connecting Module Rows and Columns
 
 :::: {.columns}
 ::: {.column width="50%"}
@@ -317,21 +317,21 @@ shiny::shinyApp(ui, server)
 :::
 ::::
 
-## Connecting Modules with Rows and Columns {.scrollable .smaller}
+## Connecting Modules Rows and Columns {.scrollable .smaller}
 
 ```{.r filename="inst/connect_modules/appRows.R" code-line-numbers="|3-5|6-12|14-17|"}
-ui <- shiny::fluidPage(
-  shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
-  shiny::fluidRow(
-    shiny::column(6, datasetsInput("datasets")),
-    shiny::column(6, datasetsUI("datasets"))),
-  shiny::fluidRow(
-    shiny::column(4, shiny::tagList(shiny::titlePanel("hist"),
-      histInput("hist"), histOutput("hist"), histUI("hist"))),
-    shiny::column(4, shiny::tagList(shiny::titlePanel("gghist"),
-      gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist"))),
-    shiny::column(4, shiny::tagList(shiny::titlePanel("ggpoint"),
-      ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))))
+ui <- bslib::page(
+  title = "Geyser Rows Modules",
+    bslib::layout_columns(
+      datasetsInput("datasets"),
+      datasetsUI("datasets")),
+  bslib::layout_columns(
+    bslib::card(bslib::card_header("hist"),
+      histInput("hist"), histOutput("hist"), histUI("hist")),
+    bslib::card(bslib::card_header("gghist"),
+      gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist")),
+    bslib::card(bslib::card_header("ggpoint"),
+      ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint"))))
 server <- function(input, output, session) {
   dataset <- datasetsServer("datasets")
   histServer("hist", dataset)
@@ -350,14 +350,14 @@ Shiny module version
 - [inst/connect_modules/appRowsModule.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRowsModule.R):
 Shiny app with `R/rows.R` functions
 
-## Connecting Modules with Plot Type Switch
+## Connecting Modules with Plot Switch
 
 ![[R/switch.R](https://github.com/byandell/geyser/blob/main/R/switch.R)](images/switch.png)
 
 
 ## Connecting Modules with Plot Switch {.scrollable .smaller}
 
-```{.r filename="R/switch.R" code-line-numbers="|4-7|9-20|26-33|38|42|45-52|"}
+```{.r filename="R/switch.R" code-line-numbers="|4-7|9-20|23-33|34-37|38-41|42-52|"}
 switchServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -382,14 +382,12 @@ switchServer <- function(id) {
 }
 switchInput <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::fluidRow(
-      shiny::column(4,
-        shiny::selectInput(ns("plottype"), "Plot Type:",
-                           c("hist","gghist","ggpoint"))),
-      shiny::column(4, datasetsInput(ns("datasets"))),
-      shiny::column(4, datasetsUI(ns("datasets")))
-    ),
+  list(
+    bslib::layout_columns(
+      shiny::selectInput(ns("plottype"), "Plot Type:",
+                         c("hist","gghist","ggpoint")),
+      datasetsInput(ns("datasets")),
+      datasetsUI(ns("datasets"))),
     shiny::uiOutput(ns("inputSwitch"))
   )
 }
@@ -402,7 +400,7 @@ switchOutput <- function(id) {
   shiny::uiOutput(ns("outputSwitch"))
 }
 switchApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     switchInput("switch"), 
     switchUI("switch"),
     switchOutput("switch")

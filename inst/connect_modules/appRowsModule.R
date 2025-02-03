@@ -2,9 +2,8 @@
 library(geyser)
 
 # context: ui
-ui <- shiny::fluidPage(
-  # context: ui
-  shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
+ui <- bslib::page(
+  title = "Geyser Rows Modules",
   rowsInput("rows"),
   rowsUI("rows")
 )

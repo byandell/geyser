@@ -2,33 +2,24 @@
 library(geyser)
 
 # context: ui
-ui <- shiny::fluidPage(
-  # context: ui
-  shiny::titlePanel("Geyser Rows Modules in Shiny, Brian Yandell"),
-  shiny::fluidRow(
-    shiny::column(6, datasetsInput("datasets")),
-    shiny::column(6, datasetsUI("datasets"))
-  ),
-  shiny::fluidRow(
-    shiny::column(4, shiny::tagList(
-      shiny::titlePanel("hist"),
-      histInput("hist"), 
-      histOutput("hist"),
-      histUI("hist")
-    )),
-    shiny::column(4, shiny::tagList(
-      shiny::titlePanel("gghist"),
-      gghistInput("gghist"), 
-      gghistOutput("gghist"),
-      gghistUI("gghist")
-    )),
-    shiny::column(4, shiny::tagList(
-      shiny::titlePanel("ggpoint"),
-      ggpointInput("ggpoint"), 
-      ggpointOutput("ggpoint"),
-      ggpointUI("ggpoint")
-    ))
-  )
+ui <- bslib::page(
+  title = "Geyser Rows Modules",
+  bslib::layout_columns(
+    datasetsInput("datasets"),
+    datasetsUI("datasets")),
+  bslib::layout_columns(
+    bslib::card(bslib::card_header("hist"),
+                histInput("hist"), 
+                histOutput("hist"),
+                histUI("hist")),
+    bslib::card(bslib::card_header("gghist"),
+                gghistInput("gghist"), 
+                gghistOutput("gghist"),
+                gghistUI("gghist")),
+    bslib::card(bslib::card_header("ggpoint"),
+                ggpointInput("ggpoint"), 
+                ggpointOutput("ggpoint"),
+                ggpointUI("ggpoint")))
 )
 
 # context: server

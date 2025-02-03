@@ -5,7 +5,8 @@
 #' @return reactive server
 #' @export
 #' @rdname dataServer
-#' @importFrom shiny bootstrapPage moduleServer NS selectInput shinyApp
+#' @importFrom shiny moduleServer NS selectInput shinyApp
+#' @importFrom bslib page
 #' @importFrom DT dataTableOutput renderDataTable
 dataServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
@@ -45,7 +46,7 @@ dataOutput <- function(id) {
 #' @rdname dataServer
 #' @export
 dataApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     dataInput("data"), 
     dataOutput("data")
   )

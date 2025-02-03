@@ -84,7 +84,7 @@ geyserUI <- function(id) {
 #' @rdname geyser
 #' @export
 geyserApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     geyserInput("geyser"), 
     geyserOutput("geyser"),
     # Display this only if the density is shown

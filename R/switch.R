@@ -5,21 +5,19 @@
 #' @return reactive server
 #' @export
 #' @rdname switchServer
-#' @importFrom shiny bootstrapPage column fluidRow moduleServer NS 
-#'             renderUI selectInput shinyApp uiOutput
+#' @importFrom shiny moduleServer NS renderUI selectInput shinyApp uiOutput
+#' @importFrom bslib layout_columns page
 switchServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
     
     # Module to select `dataset()`.
-    # This `datasets.R` module is fancier than `data.R`.
     dataset <- datasetsServer("datasets")
-    
     # Modules to plot data.
     histServer("hist", dataset)
     gghistServer("gghist", dataset)
     ggpointServer("ggpoint", dataset)
-    
+    # Switches
     output$inputSwitch <- shiny::renderUI({
       shiny::req(input$plottype)
       get(paste0(input$plottype, "Input"))(ns(input$plottype))
@@ -40,15 +38,13 @@ switchServer <- function(id) {
 #' @export
 switchInput <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::fluidRow(
-      shiny::column(4,
-        shiny::selectInput(ns("plottype"), "Plot Type:",
-                           c("hist","gghist","ggpoint"))),
-      shiny::column(4, datasetsInput(ns("datasets"))),
-      shiny::column(4, datasetsUI(ns("datasets")))
-    ),
-    shiny::uiOutput(ns("inputSwitch"))
+  list(
+    bslib::layout_columns(
+      shiny::selectInput(ns("plottype"), "Plot Type:",
+                         c("hist","gghist","ggpoint")),
+      datasetsInput(ns("datasets")),
+      datasetsUI(ns("datasets"))),
+  shiny::uiOutput(ns("inputSwitch"))
   )
 }
 #' Shiny Module UI
@@ -72,7 +68,7 @@ switchOutput <- function(id) {
 #' @rdname switchServer
 #' @export
 switchApp <- function() {
-  ui <- shiny::bootstrapPage(
+  ui <- bslib::page(
     switchInput("switch"),
     switchOutput("switch"), 
     switchUI("switch")

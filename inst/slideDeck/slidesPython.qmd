@@ -54,15 +54,14 @@ App(app_ui, app_server).run()
 ```
 
 ```{.r filename="inst/build_module/4_moduleServer/appHist.R"}
-library(shiny)
 library(geyser)
-appUI <- bootstrapPage(
+appUI <- bslib::page(
   histInput("hist"), 
   histOutput("hist"),
   histUI("hist"))
 appServer <- function(input, output, session) {
   histServer("hist")}
-shinyApp(appUI, appServer)
+shiny::shinyApp(appUI, appServer)
 ```
 
 - id `"hist"` connects `app_ui` and `app_server` components
@@ -90,16 +89,15 @@ def hist_app():
 ```
 
 ```{.r filename="R/hist.R"}
-library(shiny)
 library(geyser)
 histApp <- function() {
-  ui <- bootstrapPage(
+  ui <- bslib::page(
     histInput("hist"), 
     histOutput("hist"),
     histUI("hist"))
   server <- function(input, output, session) {
     histServer("hist")}
-  shinyApp(ui, server)
+  shiny::shinyApp(ui, server)
 }
 ```
 
@@ -301,20 +299,19 @@ App(app_ui, app_server).run()
 ```
 
 ```{.r filename="inst/connect_modules/appPages.R"}
-library(shiny)
 library(geyser)
-appUI <- navbarPage("Geyser Modules with NavBar, Brian Yandell",
-  tabPanel("hist",
+appUI <- bslib::page_navbar(
+  bslib::nav_panel("hist",
     histInput("hist"), histOutput("hist"), histUI("hist")),
-  tabPanel("gghist",
+  bslib::nav_panel("gghist",
     gghistInput("gghist"), gghistOutput("gghist"), gghistUI("gghist")),
-  tabPanel("ggpoint",
+  bslib::nav_panel("ggpoint",
     ggpointInput("ggpoint"), ggpointOutput("ggpoint"), ggpointUI("ggpoint")))
 appServer <- function(input, output, session) {
   histServer("hist")
   gghistServer("gghist")
   ggpointServer("ggpoint")}
-shinyApp(appUI, appServer)
+shiny::shinyApp(appUI, appServer)
 ```
 
 - UIs organize `hist`, `gghist`, `ggpoint` UIs across `nav` pages
@@ -352,17 +349,16 @@ App(app_ui, app_server).run()
 ```
 
 ```{.r filename="R/rows.R"}
-library(shiny)
 library(geyser)
-appUI <- fluidPage(
-  titlePanel("Geyser Rows Modules in Shiny"),
+appUI <- bslib::page(
+  title = "Geyser R Rows Modules",
   rowsInput("rows"),
   rowsUI("rows")
 )
 appServer <- function(input, output, session) {
   rowsServer("rows")
 }
-shinyApp(appUI, appServer)
+shiny::shinyApp(appUI, appServer)
 ```
 
 - `rows` shiny modules organize details across modules
@@ -395,21 +391,21 @@ def rows_ui():
 ```
 
 ```{.r filename="R/rows.R"}
-library(shiny)
 library(geyser)
 rowsInput <- function(id) {
   ns <- NS(id)
-  fluidRow(column(6, datasetsInput(ns("datasets"))),
-           column(6, datasetsUI(ns("datasets"))))}
+  bslib::layout_columns(
+    datasetsInput(ns("datasets")),
+    datasetsUI(ns("datasets")))
 rowsUI <- function(id) {
   ns <- NS(id)
-  fluidRow(
-    column(4, tagList(titlePanel(ns("hist")),
-      histInput(ns("hist")), histOutput(ns("hist")), histUI(ns("hist")))),
-    column(4, tagList(titlePanel(ns("gghist")),
-      gghistInput(ns("gghist")), gghistOutput(ns("gghist")), gghistUI(ns("gghist")))),
-    column(4, tagList(titlePanel(ns("ggpoint")),
-      ggpointInput(ns("ggpoint")), ggpointOutput(ns("ggpoint")), ggpointUI(ns("ggpoint")))))}
+  bslib::layout_columns(
+    bslib::card(bslib::card_header("hist"),
+      histInput(ns("hist")), histOutput(ns("hist")), histUI(ns("hist"))),
+    bslib::card(bslib::card_header("gghist"),
+      gghistInput(ns("gghist")), gghistOutput(ns("gghist")), gghistUI(ns("gghist"))),
+    bslib::card(bslib::card_header("ggpoint"),
+      ggpointInput(ns("ggpoint")), ggpointOutput(ns("ggpoint")), ggpointUI(ns("ggpoint"))))}
 ```
 
 ## Rows Servers Connect Modules {.smaller}

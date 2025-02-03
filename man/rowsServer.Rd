@@ -20,12 +20,6 @@ rowsApp()
 }
 \value{
 reactive server
-
-nothing returned
-
-nothing returned
-
-nothing returned
 }
 \description{
 Shiny Server for Geyser Rows

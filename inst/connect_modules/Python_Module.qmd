@@ -12,6 +12,7 @@ server: shiny
 #| context: setup
 #| title: Python Example
 import seaborn as sns
+from shiny import render, ui
 geyser = sns.load_dataset("geyser")
 ```
 
@@ -19,13 +20,16 @@ geyser = sns.load_dataset("geyser")
 
 ```{python}
 #| context: ui
-from shiny.express import render, ui
 ui.input_select("x", "Variable:", choices=["duration", "waiting"])
 ui.input_select("dist", "Distribution:", choices=["hist", "kde"])
 ui.input_checkbox("rug", "Show rug marks", value = False)
 ```
 
 ### Row -- Python Output {height="60%"}
+
+```{python}
+#ui.output_plot("displot")
+```
 
 ```{python}
 from shiny.express import render, ui
