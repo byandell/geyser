@@ -29,10 +29,12 @@ You can learn something about connecting multiple modules from examples in
 [inst/connect_modules](https://github.com/byandell/geyser/tree/main/inst/connect_modules).
 
 This repo is organized as an 
-[R package](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html).
-You can explore this rep as is, mostly, but it is helpful to clone the repo
+[R package](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html)
+(and as a
+[Python package](https://packaging.python.org/en/latest/tutorials/packaging-projects/)).
+You can explore this repo as is, mostly, but it is helpful to clone the repo
 <https://github.com/byandell/geyser>
-and then install the `geyser` package.
+and then install the `geyser` R and/or Python package.
 
 ```
 > library(devtools)
