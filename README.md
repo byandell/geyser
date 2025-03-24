@@ -41,6 +41,10 @@ and then install the `geyser` R and/or Python package.
 > install_github("byandell/geyser")
 ```
 
+See
+[Shiny Apps](https://github.com/AttieLab-Systems-Genetics/Documentation/blob/main/ShinyApps.md)
+for other Shiny apps under collaborative development.
+
 ### Study in [Building a Module](https://github.com/byandell/geyser/tree/main/inst/build_module)
 
 Once we have code for an app as `ui` and `server`, we can turn that into a module.
