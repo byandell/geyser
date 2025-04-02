@@ -1,12 +1,22 @@
-#' Shiny Server for Geyser Data Wrapper
+#' Shiny App for Geyser Data Wrapper
 #'
 #' @param id shiny identifier
-
-#' @return reactive server
-#' @export
-#' @rdname wrapperServer
 #' @importFrom shiny moduleServer NS renderUI selectInput shinyApp uiOutput
 #' @importFrom bslib page
+#' @export
+wrapperApp <- function() {
+  ui <- bslib::page(
+    wrapperInput("wrapper"), 
+    wrapperUI("wrapper"),
+    wrapperOutput("wrapper")
+  )
+  server <- function(input, output, session) {
+    wrapperServer("wrapper")
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname wrapperApp
+#' @export
 wrapperServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -32,9 +42,7 @@ wrapperServer <- function(id) {
     })
   })
 }
-#' Shiny Module Input
-#' @return nothing returned
-#' @rdname wrapperServer
+#' @rdname wrapperApp
 #' @export
 wrapperInput <- function(id) {
   ns <- shiny::NS(id)
@@ -45,34 +53,15 @@ wrapperInput <- function(id) {
     shiny::uiOutput(ns("inputSwitch"))
   )
 }
-#' Shiny Module UI
-#' @return nothing returned
-#' @rdname wrapperServer
+#' @rdname wrapperApp
 #' @export
 wrapperUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("uiSwitch"))
 }
-#' Shiny Module Output
-#' @return nothing returned
-#' @rdname wrapperServer
+#' @rdname wrapperApp
 #' @export
 wrapperOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("outputSwitch"))
-}
-#' Shiny Module App
-#' @return nothing returned
-#' @rdname wrapperServer
-#' @export
-wrapperApp <- function() {
-  ui <- bslib::page(
-    wrapperInput("wrapper"), 
-    wrapperUI("wrapper"),
-    wrapperOutput("wrapper")
-  )
-  server <- function(input, output, session) {
-    wrapperServer("wrapper")
-  }
-  shiny::shinyApp(ui, server)
 }

@@ -1,12 +1,22 @@
-#' Shiny Server for Geyser Data Switch
+#' Shiny App for Geyser Data Switch
 #'
 #' @param id shiny identifier
-
-#' @return reactive server
-#' @export
-#' @rdname switchServer
 #' @importFrom shiny moduleServer NS renderUI selectInput shinyApp uiOutput
 #' @importFrom bslib layout_columns page
+#' @export
+switchApp <- function() {
+  ui <- bslib::page(
+    switchInput("switch"),
+    switchOutput("switch"), 
+    switchUI("switch")
+  )
+  server <- function(input, output, session) {
+    switchServer("switch")
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname switchApp
+#' @export
 switchServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -32,9 +42,7 @@ switchServer <- function(id) {
     })
   })
 }
-#' Shiny Module Input
-#' @return nothing returned
-#' @rdname switchServer
+#' @rdname switchApp
 #' @export
 switchInput <- function(id) {
   ns <- shiny::NS(id)
@@ -47,34 +55,15 @@ switchInput <- function(id) {
   shiny::uiOutput(ns("inputSwitch"))
   )
 }
-#' Shiny Module UI
-#' @return nothing returned
-#' @rdname switchServer
+#' @rdname switchApp
 #' @export
 switchUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("uiSwitch"))
 }
-#' Shiny Module Output
-#' @return nothing returned
-#' @rdname switchServer
+#' @rdname switchApp
 #' @export
 switchOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("outputSwitch"))
-}
-#' Shiny Module App
-#' @return nothing returned
-#' @rdname switchServer
-#' @export
-switchApp <- function() {
-  ui <- bslib::page(
-    switchInput("switch"),
-    switchOutput("switch"), 
-    switchUI("switch")
-  )
-  server <- function(input, output, session) {
-    switchServer("switch")
-  }
-  shiny::shinyApp(ui, server)
 }

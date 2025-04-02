@@ -1,0 +1,37 @@
+---
+title: "Shiny Python Example"
+format: html
+server: shiny
+editor: visual
+---
+
+```{python}
+import shiny
+from shiny import App, ui
+import geyser.io as io
+import nest_asyncio
+
+nest_asyncio.apply()
+
+app_ui = ui.page_fluid(
+    ui.input_slider("n", "Number of bins:", min=10, max=100, value=30),
+    ui.output_plot("hist")
+)
+
+def server(input, output, session):
+    @render.plot
+    def hist():
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        data = np.random.randn(1000)
+        bins = np.linspace(min(data), max(data), input.n() + 1)
+
+        fig, ax = plt.subplots()
+        ax.hist(data, bins=bins, edgecolor='black')
+        return fig
+
+app = App(app_ui, server)
+io.app_run(app)
+#app.run()
+```

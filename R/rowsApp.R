@@ -1,12 +1,22 @@
-#' Shiny Server for Geyser Rows
+#' Shiny App for Geyser Rows
 #'
 #' @param id shiny identifier
-
-#' @return reactive server
-#' @export
-#' @rdname rowsServer
 #' @importFrom shiny moduleServer NS renderUI selectInput shinyApp uiOutput
 #' @importFrom bslib card card_header layout_columns page
+#' @export
+rowsApp <- function() {
+  ui <- bslib::page(
+    title = "Geyser Rows Modules",
+    rowsInput("rows"),
+    rowsUI("rows")
+  )
+  server <- function(input, output, session) {
+    rowsServer("rows")
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname rowsApp
+#' @export
 rowsServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -18,8 +28,7 @@ rowsServer <- function(id) {
     ggpointServer("ggpoint", dataset)
   })
 }
-#' Shiny Module Input
-#' @rdname rowsServer
+#' @rdname rowsApp
 #' @export
 rowsInput <- function(id) {
   ns <- shiny::NS(id)
@@ -28,8 +37,7 @@ rowsInput <- function(id) {
     datasetsUI(ns("datasets"))
   )
 }
-#' Shiny Module UI
-#' @rdname rowsServer
+#' @rdname rowsApp
 #' @export
 rowsUI <- function(id) {
   ns <- shiny::NS(id)
@@ -46,18 +54,4 @@ rowsUI <- function(id) {
                 ggpointInput(ns("ggpoint")), 
                 ggpointOutput(ns("ggpoint")),
                 ggpointUI(ns("ggpoint"))))
-}
-#' Shiny Module App
-#' @rdname rowsServer
-#' @export
-rowsApp <- function() {
-  ui <- bslib::page(
-    title = "Geyser Rows Modules",
-    rowsInput("rows"),
-    rowsUI("rows")
-  )
-  server <- function(input, output, session) {
-    rowsServer("rows")
-  }
-  shiny::shinyApp(ui, server)
 }

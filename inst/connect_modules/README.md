@@ -10,7 +10,7 @@ app with multiple pages
 app laid out in rows and columns
 - [appRowsModule.R](https://github.com/byandell/geyser/tree/main/inst/connect_modules/appRowsModule.R):
 version of `appRows.R` using module
-[R/rows.R](https://github.com/byandell/geyser/tree/main/R/rows.R):
+[R/rowsApp.R](https://github.com/byandell/geyser/tree/main/R/rowsApp.R):
 - [pages.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/pages.qmd): Quarto version of `appPages.R`
 - [rows.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/rows.qmd): Quarto version of `appRows.R`
 

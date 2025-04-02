@@ -28,7 +28,7 @@ format:
 [12-18]
   - Modules across [Pages](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appPages.R) [12-13]
   - Modules with [Rows and Columns](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRows.R) [14-15]
-  - Embed [Switch](https://github.com/byandell/geyser/blob/main/R/switch.R)
+  - Embed [Switch](https://github.com/byandell/geyser/blob/main/R/switchApp.R)
 in
 [Module Demo](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R) [16-17]
   - [Twin](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appTwin.R)
@@ -345,19 +345,19 @@ shiny::shinyApp(ui, server)
 Shiny app version
 - [inst/connect_modules/rows.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/rows.qmd):
 Quarto version
-- [R/rows.R](https://github.com/byandell/geyser/blob/main/R/rows.R):
+- [R/rowsApp.R](https://github.com/byandell/geyser/blob/main/R/rowsApp.R):
 Shiny module version
 - [inst/connect_modules/appRowsModule.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/appRowsModule.R):
-Shiny app with `R/rows.R` functions
+Shiny app with `R/rowsApp.R` functions
 
 ## Connecting Modules with Plot Switch
 
-![[R/switch.R](https://github.com/byandell/geyser/blob/main/R/switch.R)](images/switch.png)
+![[R/switchApp.R](https://github.com/byandell/geyser/blob/main/R/switchApp.R)](images/switch.png)
 
 
 ## Connecting Modules with Plot Switch {.scrollable .smaller}
 
-```{.r filename="R/switch.R" code-line-numbers="|4-7|9-20|23-33|34-37|38-41|42-52|"}
+```{.r filename="R/switchApp.R" code-line-numbers="|4-7|9-20|23-33|34-37|38-41|42-52|"}
 switchServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -412,7 +412,7 @@ switchApp <- function() {
 }
 ```
 
-- [R/switch.R](https://github.com/byandell/geyser/blob/main/R/switch.R)
+- [R/switchApp.R](https://github.com/byandell/geyser/blob/main/R/switchApp.R)
 - [inst/connect-modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R)
 - See [geyserDemo](https://connect.doit.wisc.edu/geyserDemo)
 
@@ -458,11 +458,11 @@ written in Quarto.
     - images
     - slideDeck.qmd*
 - R
-  - hist.R*
-  - gghist.R*
-  - ggpoint.R*
-  - datasets.R*
-  - switch.R*
+  - histApp.R*
+  - gghistApp.R*
+  - ggpointApp.R*
+  - datasetsApp.R*
+  - switchApp.R*
 ```
 
 ## Clone repo and run yourself

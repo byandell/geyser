@@ -88,7 +88,7 @@ def hist_app():
   io.app_run(app) # replaces app.run()
 ```
 
-```{.r filename="R/hist.R"}
+```{.r filename="R/histApp.R"}
 library(geyser)
 histApp <- function() {
   ui <- bslib::page(
@@ -162,7 +162,7 @@ def hist_ui():
   return ui.output_ui("output_bw_adjust")
 ```
 
-```{.r filename="R/hist.R"}
+```{.r filename="R/histApp.R"}
 histServer <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -201,7 +201,7 @@ def hist_server(input, output, session):
             return ui.input_slider("bw_adjust", ...)
 ```
 
-```{.r filename="R/hist.R"}
+```{.r filename="R/histApp.R"}
 histServer <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -238,7 +238,7 @@ def hist_output():
 def hist_ui():
 ```
 
-```{.r filename="R/hist.R"}
+```{.r filename="R/histApp.R"}
 histServer <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -348,7 +348,7 @@ def app_server(input, output, session):
 App(app_ui, app_server).run()
 ```
 
-```{.r filename="R/rows.R"}
+```{.r filename="R/rowsApp.R"}
 library(geyser)
 appUI <- bslib::page(
   title = "Geyser R Rows Modules",
@@ -390,7 +390,7 @@ def rows_ui():
       ggpoint_input("ggpoint"), ggpoint_output("ggpoint"), ggpoint_ui("ggpoint"))))
 ```
 
-```{.r filename="R/rows.R"}
+```{.r filename="R/rowsApp.R"}
 library(geyser)
 rowsInput <- function(id) {
   ns <- NS(id)
@@ -423,7 +423,7 @@ def rows_server(input, output, session):
     ggpoint_server("ggpoint", dataset)
 ```
 
-```{.r filename="R/rows.R"}
+```{.r filename="R/rowsApp.R"}
 library(shiny)
 library(geyser)
 rowsServer <- function(id) {

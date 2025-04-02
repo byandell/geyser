@@ -1,0 +1,76 @@
+---
+title: "Geyser Python Rows Modules in Quarto"
+author: "Brian Yandell"
+format: 
+  dashboard:
+    orientation: rows
+server: shiny
+editor: visual
+---
+
+```{python}
+#| context: setup
+from shiny import App, module, reactive, render, ui
+import geyser.io as io
+from geyser.hist import *
+from geyser.gghist import *
+from geyser.ggpoint import *
+import nest_asyncio
+
+nest_asyncio.apply()
+```
+
+## Row - Datasets {height="20%"}
+
+### Column dataset
+
+```{r}
+geyser::datasetsInput("datasets")
+```
+
+### Column variable
+
+```{r}
+geyser::datasetsUI("datasets")
+```
+
+```{r}
+#| context: server
+datasets <- geyser::datasetsServer("datasets")
+```
+
+## Row - Plots {height="80%"}
+
+### Column - Hist
+
+```{python}
+#| title: Basic Histogram
+hist_input("hist")
+hist_output("hist")
+hist_ui("hist")
+```
+
+### Column - GGhist
+
+```{python}
+#| title: GGplot2 Histogram
+gghist_input("gghist")
+gghist_output("gghist")
+gghist_ui("gghist")
+```
+
+### Column - GGpoint
+
+```{python}
+#| title: GGplot2 Point Plot
+ggpoint_input("ggpoint")
+ggpoint_output("ggpoint")
+ggpoint_ui("ggpoint")
+```
+
+```{python}
+#| context: server
+hist_server("hist")#, datasets)
+gghist_server("gghist")#, datasets)
+ggpoint_server("ggpoint")#, datasets)
+```

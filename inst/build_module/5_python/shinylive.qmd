@@ -1,0 +1,31 @@
+---
+title: "My Shiny App"
+format: html
+server: shiny
+---
+Code
+
+```{python}
+from shiny import ui, render, App
+import nest_asyncio
+import geyser.io as io
+
+nest_asyncio.apply()
+
+app_ui = ui.page_fluid(
+    ui.input_slider("n", "Number of bins:", min=10, max=50, value=30),
+    ui.output_plot("hist"),
+)
+
+def server(input, output, session):
+    @render.plot
+    def hist():
+        import numpy as np
+        import matplotlib.pyplot as plt
+        x = np.random.randn(1000)
+        plt.hist(x, bins=input.n())
+
+app = App(app_ui, server)
+
+io.app_run(app)
+```

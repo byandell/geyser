@@ -1,7 +1,7 @@
 # context: setup
-source("../../R/hist.R")
-source("../../R/gghist.R")
-source("../../R/ggpoint.R")
+source("../../R/histApp.R")
+source("../../R/gghistApp.R")
+source("../../R/ggpointApp.R")
 
 # context: ui
 ui <- bslib::page_navbar(

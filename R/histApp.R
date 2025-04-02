@@ -1,17 +1,28 @@
-#' Shiny Server for Geyser Graphics Histogram
+#' Shiny App for Geyser Graphics Histogram
 #'
 #' @param id shiny identifier
 #' @param df reactive data frame
-
-#' @return reactive server
-#' @export
-#' @rdname histServer
 #' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot 
 #'             renderUI selectInput shinyApp sliderInput uiOutput
 #' @importFrom bslib page
 #' @importFrom graphics hist lines rug
 #' @importFrom stats density
 #' @importFrom stringr str_to_title
+#' @export
+histApp <- function() {
+  ui <- bslib::page(
+    histInput("hist"), 
+    histOutput("hist"),
+    # Display this only if the density is shown
+    histUI("hist")
+  )
+  server <- function(input, output, session) {
+    histServer("hist") 
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname histApp
+#' @export
 histServer <- function(id, df = shiny::reactive(faithful)) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -50,10 +61,7 @@ histServer <- function(id, df = shiny::reactive(faithful)) {
     })
   })
 }
-#' Shiny Module Input for Geyser Graphics Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname histServer
+#' @rdname histApp
 #' @export
 histInput <- function(id) {
   ns <- shiny::NS(id)
@@ -70,37 +78,15 @@ histInput <- function(id) {
                   label = shiny::strong("Show density estimate"),
                   value = FALSE))
 }
-#' Shiny Module UI for Geyser Graphics Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname histServer
+#' @rdname histApp
 #' @export
 histUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("bw_adjust"))
 }
-#' Shiny Module Output for Geyser Graphics Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname histServer
+#' @rdname histApp
 #' @export
 histOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::plotOutput(ns("main_plot"), height = "300px")
-}
-#' Shiny Module App for Geyser Graphics Histogram
-#' @return nothing returned
-#' @rdname histServer
-#' @export
-histApp <- function() {
-  ui <- bslib::page(
-    histInput("hist"), 
-    histOutput("hist"),
-    # Display this only if the density is shown
-    histUI("hist")
-  )
-  server <- function(input, output, session) {
-    histServer("hist") 
-  }
-  shiny::shinyApp(ui, server)
 }

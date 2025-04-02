@@ -1,11 +1,7 @@
-#' Shiny Server for Geyser Ggplot2 Histogram
+#' Shiny App for Geyser Ggplot2 Histogram
 #'
 #' @param id shiny identifier
 #' @param df reactive data frame
-
-#' @return reactive server
-#' @export
-#' @rdname gghistServer
 #' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot
 #'             renderUI selectInput shinyApp sliderInput uiOutput
 #' @importFrom bslib page
@@ -13,6 +9,21 @@
 #'             stat_density xlab
 #' @importFrom rlang .data
 #' @importFrom stringr str_to_title
+#' @export
+gghistApp <- function() {
+  ui <- bslib::page(
+    gghistInput("gghist"), 
+    gghistOutput("gghist"),
+    # Display this only if the density is shown
+    gghistUI("gghist")
+  )
+  server <- function(input, output, session) {
+    gghistServer("gghist")
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname gghistApp
+#' @export
 gghistServer <- function(id, df = shiny::reactive(faithful)) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -54,10 +65,7 @@ gghistServer <- function(id, df = shiny::reactive(faithful)) {
     })
   })
 }
-#' Shiny Module Input for Geyser Ggplot2 Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname gghistServer
+#' @rdname gghistApp
 #' @export
 gghistInput <- function(id) {
   ns <- shiny::NS(id)
@@ -74,37 +82,15 @@ gghistInput <- function(id) {
                   label = shiny::strong("Show density estimate"),
                   value = FALSE))
 }
-#' Shiny Module UI for Geyser Ggplot2 Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname gghistServer
+#' @rdname gghistApp
 #' @export
 gghistUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("bw_adjust"))
 }
-#' Shiny Module Output for Geyser Ggplot2 Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname gghistServer
+#' @rdname gghistApp
 #' @export
 gghistOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::plotOutput(ns("main_plot"), height = "300px")
-}
-#' Shiny Module App for Geyser Ggplot2 Histogram
-#' @return nothing returned
-#' @rdname gghistServer
-#' @export
-gghistApp <- function() {
-  ui <- bslib::page(
-    gghistInput("gghist"), 
-    gghistOutput("gghist"),
-    # Display this only if the density is shown
-    gghistUI("gghist")
-  )
-  server <- function(input, output, session) {
-    gghistServer("gghist")
-  }
-  shiny::shinyApp(ui, server)
 }

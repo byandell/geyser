@@ -1,11 +1,7 @@
-#' Shiny Server for Geyser Ggplot2 Point Plot
+#' Shiny App for Geyser Ggplot2 Point Plot
 #'
 #' @param id shiny identifier
 #' @param df reactive data frame
-
-#' @return reactive server
-#' @export
-#' @rdname ggpointServer
 #' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot 
 #'             renderUI selectInput shinyApp sliderInput uiOutput
 #' @importFrom bslib page
@@ -13,6 +9,21 @@
 #'             xlab ylab
 #' @importFrom rlang .data
 #' @importFrom stringr str_to_title
+#' @export
+ggpointApp <- function() {
+  ui <- bslib::page(
+    ggpointInput("ggpoint"), 
+    ggpointOutput("ggpoint"),
+    # Display this only if the smooth is shown
+    ggpointUI("ggpoint")
+  )
+  server <- function(input, output, session) {
+    ggpointServer("ggpoint")
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname ggpointApp
+#' @export
 ggpointServer <- function(id, df = shiny::reactive(faithful)) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -56,10 +67,7 @@ ggpointServer <- function(id, df = shiny::reactive(faithful)) {
     })
   })
 }
-#' Shiny Module Input for Geyser Ggplot2 Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname ggpointServer
+#' @rdname ggpointApp
 #' @export
 ggpointInput <- function(id) {
   ns <- shiny::NS(id)
@@ -72,37 +80,15 @@ ggpointInput <- function(id) {
                   label = shiny::strong("Show smooth estimate"),
                   value = FALSE))
 }
-#' Shiny Module UI for Geyser Ggplot2 Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname ggpointServer
+#' @rdname ggpointApp
 #' @export
 ggpointUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("bw_adjust"))
 }
-#' Shiny Module Output for Geyser Ggplot2 Histogram
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname ggpointServer
+#' @rdname ggpointApp
 #' @export
 ggpointOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::plotOutput(ns("main_plot"), height = "300px")
-}
-#' Shiny Module App for Geyser Ggplot2 Histogram
-#' @return nothing returned
-#' @rdname ggpointServer
-#' @export
-ggpointApp <- function() {
-  ui <- bslib::page(
-    ggpointInput("ggpoint"), 
-    ggpointOutput("ggpoint"),
-    # Display this only if the smooth is shown
-    ggpointUI("ggpoint")
-  )
-  server <- function(input, output, session) {
-    ggpointServer("ggpoint")
-  }
-  shiny::shinyApp(ui, server)
 }

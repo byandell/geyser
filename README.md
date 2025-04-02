@@ -88,7 +88,7 @@ to
 to 
 [Python](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app_hist.py)
   - code module: compare
-[R](https://github.com/byandell/geyser/blob/main/R/hist.R)
+[R](https://github.com/byandell/geyser/blob/main/R/histApp.R)
 to 
 [Python](https://github.com/byandell/geyser/blob/main/geyser/hist.py)
 

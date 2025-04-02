@@ -1,13 +1,22 @@
-#' Shiny Server for Geyser Graphics Histogram
+#' Shiny App for Geyser Graphics Histogram
 #'
 #' @param id shiny identifier
-
-#' @return reactive server
-#' @export
-#' @rdname dataServer
 #' @importFrom shiny moduleServer NS selectInput shinyApp
 #' @importFrom bslib page
 #' @importFrom DT dataTableOutput renderDataTable
+#' @export
+dataApp <- function() {
+  ui <- bslib::page(
+    dataInput("data"), 
+    dataOutput("data")
+  )
+  server <- function(input, output, session) {
+    dataServer("data")
+  }
+  shiny::shinyApp(ui, server)
+}
+#' @rdname dataApp
+#' @export
 dataServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -25,33 +34,15 @@ dataServer <- function(id) {
     dataset
   })
 }
-#' Shiny Module Input
-#' @return nothing returned
-#' @rdname dataServer
+#' @rdname dataApp
 #' @export
 dataInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::selectInput(ns("dataset"), "Dataset:", c("faithful","mtcars"))
 }
-#' Shiny Module Output
-#' @return nothing returned
-#' @rdname dataServer
+#' @rdname dataApp
 #' @export
 dataOutput <- function(id) {
   ns <- shiny::NS(id)
   DT::dataTableOutput(ns("table"))
-}
-#' Shiny Module App
-#' @return nothing returned
-#' @rdname dataServer
-#' @export
-dataApp <- function() {
-  ui <- bslib::page(
-    dataInput("data"), 
-    dataOutput("data")
-  )
-  server <- function(input, output, session) {
-    dataServer("data")
-  }
-  shiny::shinyApp(ui, server)
 }
