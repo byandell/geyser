@@ -7,7 +7,7 @@ ui <- bslib::page_navbar(
                    geyser::histOutput("hist"),
                    geyser::histUI("hist")
   ),
-  shiny::tabPanel("gghist",
+  bslib::nav_panel("gghist",
                   geyser::gghistInput("gghist"), 
                   geyser::gghistOutput("gghist"),
                   geyser::gghistUI("gghist")
