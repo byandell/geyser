@@ -12,8 +12,10 @@ For an overview, see the
 available at
 
 - <https://connect.doit.wisc.edu/geyserShinyModules>
-- <https://connect.doit.wisc.edu/geyserDemo>
-- <https://connect.doit.wisc.edu/geyserQuartoDemo>
+- <https://connect.doit.wisc.edu/geyserDemo> (see
+[inst/connect_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
+- <https://connect.doit.wisc.edu/geyserQuartoDemo> (see
+[inst/connect_modules/quarto/demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd))
 - <https://connect.doit.wisc.edu/slidesPythonModules>
 
 - [11 Dec 2024 Presentation](https://drive.google.com/file/d/1BGSIhihpBc-2TfRza5RGeXBCB55EC6-l)
@@ -76,6 +78,8 @@ I am at an early stage with python shiny modules.
 There are parts of a package here in the `geyser` folder.
 Shiny python is a bit different from Shiny R in a number of ways.
 See references as well as my notes below.
+[Note: python files in `inst/connect_modules` have been moved to
+[inst/connect_modules/python](https://github.com/byandell/geyser/tree/main/inst/connect_modules/python).]
 
 - [slidesPythonModules](https://connect.doit.wisc.edu/slidesPythonModules)
 - Simple shiny app: compare
@@ -163,9 +167,11 @@ Essentially, all I could do was wrap the `app*.py` code in a `python` chunk
 Thus, I see no way at this time to build complicated Python-based apps
 via Quarto that take advantage of Quarto's layout features, 
 in a way that was readily done with R-based apps.
+[Note: quarto files in `inst/connect_modules` have been moved to
+[inst/connect_modules/quarto](https://github.com/byandell/geyser/tree/main/inst/connect_modules/quarto).]
 See for example
   - [inst/build_module/5_python/hist.qmd](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/hist.qmd)
-  - [inst/connect_modules/python_demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/python_demo.qmd)
+  - [inst/connect_modules/quarto/python_demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/python_demo.qmd)
 
 #### More Python examples
 
