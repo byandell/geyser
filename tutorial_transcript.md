@@ -39,7 +39,9 @@ They recorded the length of the eruption and the waiting time between eruptions.
 
 ## Basic Shiny App Structure (UI and Server) [13:30]
 
-First, looking at the code itself ([Old Faithful](https://shiny.posit.co/gallery/old-faithful/)). In the app, you can change the bandwidth, add a density curve, and adjust its smoothness. There's also a little rug plot showing the observations.
+First, looking at the code itself
+([Old Faithful Shiny App](https://shiny.posit.co/gallery/old-faithful/)).
+In the app, you can change the bandwidth, add a density curve, and adjust its smoothness. There's also a little rug plot showing the observations.
 
 I took that example and organized it into a module. One way to set up an app is to have a single file (`app.R`) with two main objects defined in it:
 
@@ -48,11 +50,18 @@ I took that example and organized it into a module. One way to set up an app is 
 
 You put these together into a Shiny app: `shinyApp(ui, server)`. The UI sets up the user interface, and the server provides the logic.
 
+- [Old Faithful Shiny App](https://shiny.posit.co/gallery/old-faithful/)
+- [Original Old Faithful Code](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/original-old-faithful-code)
+
 ## Server Logic and Input/Output Parameters [15:28]
 
 Looking at the interface, there are elements for input: the number of histogram breaks, whether to show individual observations (the rug plot), and whether to show the density. If you enable the density, you can then adjust the bandwidth via a conditional slider.
 
 The other half is the server logic. The server calls the standard R `hist()` function with various arguments. One argument is the number of breaks, which is tied to the input. You can also set the bandwidth adjustment parameter, determined by the slider input at the bottom.
+
+- [Old Faithful App Code](inst/build_module/1_oldfaithful/app.R)
+- [Faithful Server Logic](inst/build_module/1_oldfaithful/appLogic.R)
+- [Faithful Code with Server Logic](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/faithful-code-with-server-logic)
 
 ## Modularizing Shiny Code [17:54]
 
@@ -62,11 +71,18 @@ Instead of having a half-page of server logic, I now have a single line in the m
 
 The `app.R` file now looks very clean. The actual modularized source code is in a separate file where those functions are defined. For example, the input function contains the three input components.
 
+- [Modular App](inst/build_module/4_moduleServer/app.R)
+- [Modular Geyser App](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/modular-geyser-app)
+
 ## Advanced UI Components and Dynamic Output [22:00]
 
 The slider input can have some complicated logic. I use a Shiny function called `uiOutput()`, and its "meat" is actually defined in the server using `renderUI()`.
 
 I often use the convention of putting the package name in front (e.g., `shiny::sliderInput()`) to be explicit. You can use any R functions in here, like `hist()` from the `graphics` package or `ggplot2` functions. I make package names explicit to be clear which package a function belongs to.
+
+- [Module Server](inst/build_module/4_moduleServer/moduleServer.R)
+- [Self Contained GeyserApp Function](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/self-contained-geyserapp-function)
+- [Shiny Module in One File](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/shiny-module-in-one-file)
 
 ## Running Shiny Apps as Functions [24:00]
 
@@ -86,11 +102,16 @@ The `reactlog` package is a powerful tool for monitoring this activity. It logs 
 
 When a node is invalidated (turning from green to grey in the log), any plot or output that depends on it must be recalculated. This ensures that the app only does the work it needs to do. You can subset the React log to focus on specific parts of your logic. It's worth reading the "Shiny React Log" article for a deeper dive.
 
+- [Shiny React Log](https://shiny.posit.co/articles/reactlog.html)
+- [Reactlog Show App Reactivity](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/reactlog-show-app-reactivity)
+
 ## Working with Multiple Modules [37:25]
 
 Now, let's look at using multiple modules. I created a version with a navigation bar containing three instances: a standard histogram (`hist`), a `ggplot2` histogram (`gg_hist`), and a scatter plot (`gg_point`).
 
 Each tab panel calls a module. The first two are histograms, while the third is a scatter plot requiring two variables (like eruption duration against waiting time). The logic for creating these is straightforward once you have the module functions defined.
+
+- [Connecting Modules Across Pages](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/connecting-modules-across-pages)
 
 ## Laying Out Apps with Rows and Columns [40:12]
 
@@ -98,11 +119,15 @@ We can also put these modules on the same page using a grid layout. A `fluidRow(
 
 I set up an example where you can pick different datasets (like `faithful` or `mtcars`). The controls for each module work separately. You can change the data or variables on the fly, and the app updates accordingly.
 
+- [Connecting Modules Rows and Columns](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/connecting-modules-rows-and-columns)
+
 ## Nested Modules and Data Communication [47:35]
 
 As apps get more complex, you can have modules that call other modules. For example, a "row module" can contain a "data module" and several "plot modules." The output from the data module (the selected dataset) becomes the input for the plot modules.
 
 This allows for very sophisticated architectures where five or more "servers" (module instances) are communicating. The term "module" in Shiny has its own specific meaning, distinct from how it might be used in other contexts, but it's been the standard in Shiny for ten years.
+
+- [Connecting Modules with Plot Switch](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/connecting-modules-with-plot-switch)
 
 ## Complex Reactivity Demo [51:20]
 
@@ -115,6 +140,8 @@ Having each module have its own test function makes debugging these complex inte
 A critical part of Shiny modules is the identifier (the `id` or `namespace`). If you use the same identifier for two different instances of a module, they will get confused—one might control the other's output.
 
 In my code, I explicitly assign identifiers like `hist_1` and `hist_2`. This ensures that their inputs and outputs stay isolated even if they use the same underlying module code. If you flip the identifiers between the UI and the server, you can even intentionally swap their outputs, which is a good way to test your understanding of how they are tied together.
+
+- [Goofing Around with Duplicate Modules](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/goofing-around-with-duplicate-modules)
 
 ## Best Practices for Shiny Module Design [1:02:15]
 
@@ -131,3 +158,6 @@ I use Shiny not just for presenting data to others, but also for my own explorat
 You can also integrate Shiny with Quarto to create interactive dashboards. Quarto allows you to connect Shiny apps written in R and Python. While I primarily use R, there is a growing convergence between languages.
 
 For example, Python has the `shiny` package, `streamlit`, and `plotnine` (which is a Python implementation of `ggplot2`). Whether you're using R or Python, the principles of modular dashboarding and interactive data visualization are becoming increasingly similar across the data science landscape.
+
+- [Quarto Examples](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/quarto-examples)
+- [Quarto Slide Deck](inst/slideDeck/slideDeck.qmd)
