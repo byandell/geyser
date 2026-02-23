@@ -7,6 +7,9 @@
 
 ---
 
+This is a transcript of a
+[presentation I gave to the R Shiny Club on December 11, 2024.](https://drive.google.com/file/d/1BGSIhihpBc-2TfRza5RGeXBCB55EC6-l).
+
 ## Table of Contents
 
 1. [Introduction: Old Faithful Geyser Example [12:30]](#introduction-old-faithful-geyser-example-1230)
