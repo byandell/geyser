@@ -7,7 +7,7 @@ This demonstrates how to take the
 and modularize it, either by putting `ui()` and `server()` as functions in a
 separate file from `app.R` or by using the Shiny module technology.
 Sometimes the modular stuff is tricky to figure out.
-For an overview, see the 
+For an overview, see the
 [slideDeck](https://github.com/byandell/geyser/tree/main/inst/slideDeck)
 available at
 
@@ -18,8 +18,9 @@ available at
 [inst/connect_modules/quarto/demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd))
 - <https://connect.doit.wisc.edu/slidesPythonModules>
 
-- [11 Dec 2024 Presentation](https://drive.google.com/file/d/1BGSIhihpBc-2TfRza5RGeXBCB55EC6-l)
-([Transcript](https://docs.google.com/document/d/1x15G20Mj8EBFJTAit8-LP-9DlystM6TR9TQf8-tBpjs))
+- [11 Dec 2024 Presentation](https://drive.google.com/file/d/1BGSIhihpBc-2TfRza5RGeXBCB55EC6-l) and
+[Transcript](tutorial_transcript.md)
+([Original Transcript](https://docs.google.com/document/d/1x15G20Mj8EBFJTAit8-LP-9DlystM6TR9TQf8-tBpjs))
 
 Go into one of the first four folders in
 [inst/build_module](https://github.com/byandell/geyser/tree/main/inst/build_module)
@@ -30,7 +31,7 @@ To run the `quarto` versions, you will need to install
 You can learn something about connecting multiple modules from examples in
 [inst/connect_modules](https://github.com/byandell/geyser/tree/main/inst/connect_modules).
 
-This repo is organized as an 
+This repo is organized as an
 [R package](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html)
 (and as a
 [Python package](https://packaging.python.org/en/latest/tutorials/packaging-projects/)).
@@ -52,7 +53,7 @@ for other Shiny apps under collaborative development.
 Once we have code for an app as `ui` and `server`, we can turn that into a module.
 A module is a `Server` function and at least one `Input`, `Output`, and/or
 `UI` functions. In addition, an `App` function enables us to test module code.
-Attending to namespace conventions is important. 
+Attending to namespace conventions is important.
 
 1. [oldFaithful](https://github.com/byandell/geyser/tree/main/inst/build_module/1_oldFaithful)
 (original code in one file `app.R`)
@@ -84,16 +85,16 @@ See references as well as my notes below.
 - [slidesPythonModules](https://connect.doit.wisc.edu/slidesPythonModules)
 - Simple shiny app: compare
 [R](https://github.com/byandell/geyser/tree/main/inst/build_module/1_oldFaithful/appLogic.R)
-to 
+to
 [Python](https://github.com/byandell/geyser/tree/main/inst/build_module/5_Python/appHist.py)
 - Shiny module app
   - app calling module: compare
 [R](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer/app_hist.R)
-to 
+to
 [Python](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app_hist.py)
   - code module: compare
 [R](https://github.com/byandell/geyser/blob/main/R/histApp.R)
-to 
+to
 [Python](https://github.com/byandell/geyser/blob/main/geyser/hist.py)
 
 A variety of Python apps can be found in
@@ -106,7 +107,7 @@ While you can generally run `shiny run my_app.R` or
 `shiny run my_app.py` from the system command line,
 it sometimes acts wierdly for `app.py` or `app.R` files.
 
-#### Issues with Python:
+#### Issues with Python
 
 Be sure you have the latest Python (say 3.12),
 and that you have installed
@@ -146,7 +147,7 @@ See examples above as well as the more complicated (6-module) `app_demo`:
   - [inst/compare_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R)
   - [inst/compare_modules/app_demo.py](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app_demo.py)
 
-- Python apps from Rstudio: 
+- Python apps from Rstudio:
   - I created a Python function in the `io` module,
 [r_object()](https://github.com/byandell/geyser/blob/main/geyser/io.py)
 which finds a free port.
@@ -165,7 +166,7 @@ Python Quarto apps from any folder.
 server function in Quarto. Further, I could not find any working example.
 Essentially, all I could do was wrap the `app*.py` code in a `python` chunk
 Thus, I see no way at this time to build complicated Python-based apps
-via Quarto that take advantage of Quarto's layout features, 
+via Quarto that take advantage of Quarto's layout features,
 in a way that was readily done with R-based apps.
 [Note: quarto files in `inst/connect_modules` have been moved to
 [inst/connect_modules/quarto](https://github.com/byandell/geyser/tree/main/inst/connect_modules/quarto).]
@@ -178,7 +179,7 @@ See for example
 - [inst/build_module/5_python/app.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app.py)
 functioning python app without `hist` module (open and run app)
 - [inst/build_module/5_python/appHist.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/appHist.py)
-functioning python `hist` app with module 
+functioning python `hist` app with module
 - [inst/build_module/5_python/appGghist.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/appGghist.py)
 module with grammar of graphics using `gghist` module
 - [inst/build_module/5_python/app_gghist.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app_gghist.py)
