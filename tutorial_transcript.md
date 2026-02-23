@@ -161,3 +161,6 @@ For example, Python has the `shiny` package, `streamlit`, and `plotnine` (which 
 
 - [Quarto Examples](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/quarto-examples)
 - [Quarto Slide Deck](inst/slideDeck/slideDeck.qmd)
+
+Original material is on Google Drive in the folder
+[Diet_Systems_Genetics/Presentations](https://drive.google.com/drive/u/1/folders/1lxNJxVycKvbugTWEl5NHDO3fgTYT0AWM).
