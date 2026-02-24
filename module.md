@@ -27,7 +27,7 @@ Demos are available at
 
 - <https://connect.doit.wisc.edu/geyserDemo> (see
 [inst/connect_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
-- <https://connect.doit.wisc.edu/geyserQuartoDemo> (this is broken; see
+- <https://connect.doit.wisc.edu/geyserQuartoDemo> (see
 [inst/connect_modules/quarto/demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd))
 
 The following presentation demonstrates R Shiny apps and their modules
