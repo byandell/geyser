@@ -1,4 +1,4 @@
-# R Shiny Club - Meeting Recording
+# R Shiny Apps with Old Faithful Geyser Data
 
 **Date:** December 11, 2024
 **Duration:** 1h 17m 59s
@@ -12,22 +12,22 @@ This is a transcript of a
 
 ## Table of Contents
 
-1. [Introduction: Old Faithful Geyser Example [12:30]](#introduction-old-faithful-geyser-example-1230)
-2. [Basic Shiny App Structure (UI and Server) [13:30]](#basic-shiny-app-structure-ui-and-server-1330)
-3. [Server Logic and Input/Output Parameters [15:28]](#server-logic-and-inputoutput-parameters-1528)
-4. [Modularizing Shiny Code [17:54]](#modularizing-shiny-code-1754)
-5. [Advanced UI Components and Dynamic Output [22:00]](#advanced-ui-components-and-dynamic-output-2200)
-6. [Running Shiny Apps as Functions [24:00]](#running-shiny-apps-as-functions-2400)
-7. [Understanding Reactivity and the React Log [29:30]](#understanding-reactivity-and-the-react-log-2930)
-8. [Demonstrating the React Log in Action [31:50]](#demonstrating-the-react-log-in-action-3150)
-9. [Working with Multiple Modules [37:25]](#working-with-multiple-modules-3725)
-10. [Laying Out Apps with Rows and Columns [40:12]](#laying-out-apps-with-rows-and-columns-4012)
-11. [Nested Modules and Data Communication [47:35]](#nested-modules-and-data-communication-4735)
-12. [Complex Reactivity Demo [51:20]](#complex-reactivity-demo-5120)
-13. [Managing Module Identifiers and Namespaces [55:22]](#managing-module-identifiers-and-namespaces-5522)
-14. [Best Practices for Shiny Module Design [1:02:15]](#best-practices-for-shiny-module-design-10215)
-15. [Applications of Shiny for Analysis and Debugging [1:05:18]](#applications-of-shiny-for-analysis-and-debugging-10518)
-16. [Quarto Integration and Language Convergence [1:08:55]](#quarto-integration-and-language-convergence-10855)
+- [Introduction: Old Faithful Geyser Example [12:30]](#introduction-old-faithful-geyser-example-1230)
+- [Basic Shiny App Structure (UI and Server) [13:30]](#basic-shiny-app-structure-ui-and-server-1330)
+- [Server Logic and Input/Output Parameters [15:28]](#server-logic-and-inputoutput-parameters-1528)
+- [Modularizing Shiny Code [17:54]](#modularizing-shiny-code-1754)
+- [Advanced UI Components and Dynamic Output [22:00]](#advanced-ui-components-and-dynamic-output-2200)
+- [Running Shiny Apps as Functions [24:00]](#running-shiny-apps-as-functions-2400)
+- [Understanding Reactivity and the React Log [29:30]](#understanding-reactivity-and-the-react-log-2930)
+- [Demonstrating the React Log in Action [31:50]](#demonstrating-the-react-log-in-action-3150)
+- [Working with Multiple Modules [37:25]](#working-with-multiple-modules-3725)
+- [Laying Out Apps with Rows and Columns [40:12]](#laying-out-apps-with-rows-and-columns-4012)
+- [Nested Modules and Data Communication [47:35]](#nested-modules-and-data-communication-4735)
+- [Complex Reactivity Demo [51:20]](#complex-reactivity-demo-5120)
+- [Managing Module Identifiers and Namespaces [55:22]](#managing-module-identifiers-and-namespaces-5522)
+- [Best Practices for Shiny Module Design [1:02:15]](#best-practices-for-shiny-module-design-10215)
+- [Applications of Shiny for Analysis and Debugging [1:05:18]](#applications-of-shiny-for-analysis-and-debugging-10518)
+- [Quarto Integration and Language Convergence [1:08:55]](#quarto-integration-and-language-convergence-10855)
 
 ---
 
@@ -161,6 +161,8 @@ For example, Python has the `shiny` package, `streamlit`, and `plotnine` (which 
 
 - [Quarto Examples](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/quarto-examples)
 - [Quarto Slide Deck](inst/slideDeck/slideDeck.qmd)
+
+---
 
 Original material is on Google Drive in the folder
 [Diet_Systems_Genetics/Presentations](https://drive.google.com/drive/u/1/folders/1lxNJxVycKvbugTWEl5NHDO3fgTYT0AWM).
