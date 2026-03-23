@@ -180,3 +180,4 @@ myenv/
 /.quarto/
 _extensions/
 app.py
+*.mp4
