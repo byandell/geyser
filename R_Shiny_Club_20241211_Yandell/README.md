@@ -200,3 +200,9 @@ For example, Python has the `shiny` package, `streamlit`, and `plotnine` (which 
 
 Original material is on Google Drive in the folder
 [Diet_Systems_Genetics/Presentations](https://drive.google.com/drive/u/1/folders/1lxNJxVycKvbugTWEl5NHDO3fgTYT0AWM).
+See
+[Walkthrough](walkthrough.md)
+and
+[extract_videos.py](extract_videos.py)
+for information on how the 1-hour MP4 video was parsed
+into individual videos.
