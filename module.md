@@ -33,7 +33,7 @@ Demos are available at
 The following presentation demonstrates R Shiny apps and their modules
 using the Old Faithful geyser data.
 
-- [11 Dec 2024 Presentation](tutorial_transcript.md)
+- [11 Dec 2024 Presentation](R_Shiny_Club_20241211_Yandell/README.md)
 
 ## R Shiny App Code Tutorial
 

@@ -33,4 +33,4 @@ See
 [Shiny Geyser App with and without Modules](module.md)
 for detailed information about layout, tutorials and code.
 See also the
-[Video Tutorial](tutorial_transcript.md).
+[Video Tutorial](R_Shiny_Club_20241211_Yandell/README.md).
