@@ -67,8 +67,8 @@ Looking at the interface, there are elements for input: the number of histogram 
 
 The other half is the server logic. The server calls the standard R `hist()` function with various arguments. One argument is the number of breaks, which is tied to the input. You can also set the bandwidth adjustment parameter, determined by the slider input at the bottom.
 
-- [Old Faithful App Code](inst/build_module/1_oldfaithful/app.R)
-- [Faithful Server Logic](inst/build_module/1_oldfaithful/appLogic.R)
+- [Old Faithful App Code](https://github.com/byandell/geyser/blob/main/inst/build_module/1_oldfaithful/app.R)
+- [Faithful Server Logic](https://github.com/byandell/geyser/blob/main/inst/build_module/1_oldfaithful/appLogic.R)
 - [Faithful Code with Server Logic](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/faithful-code-with-server-logic)
 
 ## Modularizing Shiny Code [17:54]
@@ -81,7 +81,7 @@ Instead of having a half-page of server logic, I now have a single line in the m
 
 The `app.R` file now looks very clean. The actual modularized source code is in a separate file where those functions are defined. For example, the input function contains the three input components.
 
-- [Modular App](inst/build_module/4_moduleServer/app.R)
+- [Modular App](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer/app.R)
 - [Modular Geyser App](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/modular-geyser-app)
 
 ## Advanced UI Components and Dynamic Output [22:00]
@@ -92,7 +92,7 @@ The slider input can have some complicated logic. I use a Shiny function called 
 
 I often use the convention of putting the package name in front (e.g., `shiny::sliderInput()`) to be explicit. You can use any R functions in here, like `hist()` from the `graphics` package or `ggplot2` functions. I make package names explicit to be clear which package a function belongs to.
 
-- [Module Server](inst/build_module/4_moduleServer/moduleServer.R)
+- [Module Server](https://github.com/byandell/geyser/blob/main/inst/build_module/4_moduleServer/moduleServer.R)
 - [Self Contained GeyserApp Function](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/self-contained-geyserapp-function)
 - [Shiny Module in One File](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/shiny-module-in-one-file)
 
@@ -194,7 +194,7 @@ You can also integrate Shiny with Quarto to create interactive dashboards. Quart
 For example, Python has the `shiny` package, `streamlit`, and `plotnine` (which is a Python implementation of `ggplot2`). Whether you're using R or Python, the principles of modular dashboarding and interactive data visualization are becoming increasingly similar across the data science landscape.
 
 - [Quarto Examples](https://connect.doit.wisc.edu/geyserShinyModules/slideDeck.html#/quarto-examples)
-- [Quarto Slide Deck](inst/slideDeck/slideDeck.qmd)
+- [Quarto Slide Deck](https://github.com/byandell/geyser/blob/main/inst/slideDeck/slideDeck.qmd)
 
 ---
 
