@@ -4,7 +4,6 @@
 .Ruserdata
 *.Rproj
 rsconnect/
-*.html
 *_files/
 data/
 *.pyc
@@ -183,3 +182,8 @@ app.py
 *.mp4
 
 site_libs/
+index.html
+inst/*.html
+inst/*/*.html
+inst/*/*/*.html
+
