@@ -18,7 +18,12 @@ for other Shiny apps under collaborative development.
 Slide decks were developed using
 [Quarto](https://quarto.org/);
 see code in
-[inst/slideDeck](https://github.com/byandell/geyser/tree/main/inst/slideDeck).
+[docs](./docs).
+
+- [geyserShinyR](./docs/geyserShinyR.html)
+- [geyserShinyPython](./docs/geyserShinyPython.html)
+
+Earlier slide decks are available from [DoIT Connect](https://connect.doit.wisc.edu/):  
 
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/slidesPythonModules>
