@@ -1,4 +1,5 @@
 Package: geyser
+Type: Analysis
 Version: 0.7.2
 Date: 2025-04-16
 Title: Geyser Shiny Module Examples

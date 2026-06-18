@@ -10,6 +10,7 @@ format:
     transition: fade
     slide-number: true
     code-block-height: 450px
+    embed-resources: true
 # https://github.com/mine-cetinkaya-rundel/quarto-dashboards/blob/main/1-hello-dashboards/index.qmd
 ---
 

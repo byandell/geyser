@@ -1,7 +1,7 @@
 ---
 title: "Geyser Shiny Python Modules<br>with Old Faithful"
 author: "Brian S. Yandell"
-date: last-modified
+date: "2 April 2025"
 date-format: "D MMMM YYYY"
 footer: "[byandell/geyser](https://github.com/byandell/geyser)"
 format:
@@ -10,6 +10,7 @@ format:
     transition: fade
     slide-number: true
     code-block-height: 550px
+    embed-resources: true
 ---
 
 # Plan of Study {.smaller}

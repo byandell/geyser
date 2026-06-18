@@ -181,3 +181,5 @@ myenv/
 _extensions/
 app.py
 *.mp4
+
+site_libs/
