@@ -1,4 +1,4 @@
-# Geyser Slide Decks
+# `geyser` Slide Decks and Demos
 
 *[GitHub](https://github.com/byandell/geyser)*
 
