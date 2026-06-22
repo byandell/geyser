@@ -5,14 +5,12 @@
 ## Slide Decks
 
 Slide decks were developed using
-[Quarto](https://quarto.org/);
-see code in
-[docs](./docs).
+[Quarto](https://quarto.org/).
 
-- [geyserShinyR](./geyserShinyR.html)
-- [geyserShinyPython](./geyserShinyPython.html)
+- [geyserShinyR](./geyserShinyR.html) ([`qmd`](https://github.com/byandell/geyser/blob/main/docs/geyserShinyR.qmd))
+- [geyserShinyPython](./geyserShinyPython.html) ([`qmd`](https://github.com/byandell/geyser/blob/main/docs/geyserShinyPython.qmd))
 
-Earlier slide decks are available from [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/):  
+Earlier versions of these slide decks are available from [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/):  
 
 - <https://connect.doit.wisc.edu/geyserShinyModules>
 - <https://connect.doit.wisc.edu/slidesPythonModules>
