@@ -25,7 +25,9 @@ Live demos are available via [Posit Connect](https://it.wisc.edu/services/data-s
 [inst/connect_modules/quarto/demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd))
 
 The following presentation demonstrates R Shiny apps and their modules
-using the Old Faithful geyser data.
+using the
+[geyserShinyR](./geyserShinyR.html)
+slide deck.
 
 - [11 Dec 2024 Presentation](R_Shiny_Club_20241211_Yandell/README.md)
 
