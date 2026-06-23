@@ -8,37 +8,10 @@ for other Shiny apps under collaborative development.
 
 ## Table of Contents
 
-- [Slide Decks, Demos, and Presentations](#slide-decks-demos-and-presentations)
+- [Slide Decks, Demos, and Presentations](https://byandell.github.io/geyser)
 - [R Shiny App Code Tutorial](#r-shiny-app-code-tutorial)
 - [Python Modules](#python-modules)
 - [References](#references)
-
-## Slide Decks, Demos, and Presentations
-
-Slide decks were developed using
-[Quarto](https://quarto.org/);
-see code in
-[docs](./docs).
-
-- [geyserShinyR](./docs/geyserShinyR.html)
-- [geyserShinyPython](./docs/geyserShinyPython.html)
-
-Earlier slide decks are available from [DoIT Connect](https://connect.doit.wisc.edu/):  
-
-- <https://connect.doit.wisc.edu/geyserShinyModules>
-- <https://connect.doit.wisc.edu/slidesPythonModules>
-
-Demos are available at
-
-- <https://connect.doit.wisc.edu/geyserDemo> (see
-[inst/connect_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
-- <https://connect.doit.wisc.edu/geyserQuartoDemo> (see
-[inst/connect_modules/quarto/demo.qmd](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd))
-
-The following presentation demonstrates R Shiny apps and their modules
-using the Old Faithful geyser data.
-
-- [11 Dec 2024 Presentation](R_Shiny_Club_20241211_Yandell/README.md)
 
 ## R Shiny App Code Tutorial
 
