@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geyser"
+version = "0.2"
+description = "Geyser Python package"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "matplotlib",
+    "nest_asyncio",
+    "numpy",
+    "rpy2",
+    "scipy",
+    "shiny",
+]
+
+[tool.setuptools]
+packages = ["geyser"]

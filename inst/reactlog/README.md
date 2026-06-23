@@ -1,10 +1,24 @@
-# inst/reactlog/README.md 
+# inst/reactlog/README.md
 
 - Read [Shiny Reactlog](https://rstudio.github.io/reactlog/articles/reactlog.html) article.
 - See [inst/reactlog](https://github.com/byandell/geyser/blob/main/inst/reactlog) examples saved as `RDS` objects.
 - Re-open repo to reset `reactlog` before enabling.
 
-### Examples in the folder:
+```
+library(shiny)
+# You will need to install reactlog:
+# install.packages("reactlog")
+library(reactlog)
+
+# Run an app with reactlog tracing enabled
+reactlog::enable()
+runApp("path/to/app", display.mode = "normal")
+
+# To disable reactlog tracing at any time
+# reactlog::disable()
+```
+
+### Examples in the folder
 
 - [inst/reactlog/geyser.rds](https://github.com/byandell/geyser/blob/main/inst/reactlog/geyser.rds):
 modular version of old Faithful in
@@ -19,7 +33,7 @@ rows and columns with code
 [Geyser Shiny Demo](https://connect.doit.wisc.edu/geyserDemo) with code
 [inst/connect_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R).
 
-### Example code:
+### Example code
 
 ```
 # Enable `reactlog` and run app.
@@ -37,4 +51,3 @@ saveRDS(geyser_log, "inst/reactlog/geyser.rds")
 geyser_log <- readRDS("inst/reactlog/geyser.rds")
 reactlog::reactlog_show(geyser_log)
 ```
-

@@ -106,7 +106,7 @@ python -m pip install ~/Documents/GitHub/geyser
 The Python library code is in folder
 [github.com/byandell/geyser/geyser](https://github.com/byandell/geyser/blob/main/geyser)
 with setup file
-[github.com/byandell/setup.py](https://github.com/byandell/geyser/blob/main/setup.py)
+[github.com/byandell/pyproject.toml](https://github.com/byandell/geyser/blob/main/pyproject.toml)
 in the main package folder.
 This way, the same repo is used for both R and Python code,
 and Python `import` lines refer to `geyser`.
