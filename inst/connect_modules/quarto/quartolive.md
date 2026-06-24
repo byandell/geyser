@@ -78,14 +78,15 @@ quarto add quarto-ext/shinylive --no-prompt
 
 ### 2. Created Self-Contained Shinylive Document
 Created [docs/demo_shinylive.qmd](file:///Users/brianyandell/Documents/GitHub/geyser/docs/demo_shinylive.qmd). It is structured to run completely in the browser via WebAssembly:
-* **YAML Header**: Configured format as `html` and registered the `shinylive` filter.
+* **YAML Header**: Configured format as `html` and registered the `shinylive` filter. Explicitly specified `engine: knitr` to bypass Jupyter/Python kernel execution checks (avoiding errors like `ModuleNotFoundError: No module named 'nbformat'`).
 * **Code Chunk**: Set `#| standalone: true` and concatenated all the R modules (from the root `R/` directory) and the navbar UI layout (from `app.R`) inside a single `{shinylive-r}` code block.
 
 ### 3. Integrated into CI/CD Deployment Workflow
 Updated [.github/workflows/deploy.yml](file:///Users/brianyandell/Documents/GitHub/geyser/.github/workflows/deploy.yml) to automate the build-and-deploy process on GitHub Actions:
+* Installs both `shinylive` and `knitr` R packages inside the runner.
 * Installs the Quarto Shinylive extension inside the GitHub Actions runner.
 * Renders `docs/demo_shinylive.qmd` using `quarto render docs/demo_shinylive.qmd`.
 * Deploys the output `docs/demo_shinylive.html` (along with the other pages in the `docs/` folder) directly to GitHub Pages.
 
-This avoids local rendering Deno cache errors and automates updates every time you push to the `main` or `master` branch.
+This avoids local rendering Deno cache errors, bypasses unnecessary Jupyter python dependencies, and automates updates every time you push to the `main` or `master` branch.
 

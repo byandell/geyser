@@ -1,6 +1,7 @@
 ---
 title: "Geyser Dashboard (Static)"
 format: html
+engine: knitr
 filters:
   - shinylive
 ---
