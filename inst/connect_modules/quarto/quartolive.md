@@ -83,7 +83,7 @@ Created [docs/demo_shinylive.qmd](file:///Users/brianyandell/Documents/GitHub/ge
 
 ### 3. Integrated into CI/CD Deployment Workflow
 Updated [.github/workflows/deploy.yml](file:///Users/brianyandell/Documents/GitHub/geyser/.github/workflows/deploy.yml) to automate the build-and-deploy process on GitHub Actions:
-* Installs both `shinylive` and `knitr` R packages inside the runner.
+* Installs `shinylive`, `knitr`, and `rmarkdown` R packages inside the runner.
 * Installs the Quarto Shinylive extension inside the GitHub Actions runner.
 * Renders `docs/demo_shinylive.qmd` using `quarto render docs/demo_shinylive.qmd`.
 * Deploys the output `docs/demo_shinylive.html` (along with the other pages in the `docs/` folder) directly to GitHub Pages.

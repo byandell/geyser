@@ -30,9 +30,9 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install Shinylive and Knitr
+      - name: Install Shinylive, Knitr, and Rmarkdown
         run: |
-          Rscript -e "install.packages(c('shinylive', 'knitr'))"
+          Rscript -e "install.packages(c('shinylive', 'knitr', 'rmarkdown'))"
 
       - name: Export Shinylive App
         run: |
