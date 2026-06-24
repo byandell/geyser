@@ -19,8 +19,8 @@ Sometimes this module stuff is tricky to figure out.
 Slide decks were developed using
 [Quarto](https://quarto.org/).
 
-- [geyserShinyR](./geyserShinyR.html) ([`qmd`](https://github.com/byandell/geyser/blob/main/docs/geyserShinyR.qmd))
-- [geyserShinyPython](./geyserShinyPython.html) ([`qmd`](https://github.com/byandell/geyser/blob/main/docs/geyserShinyPython.qmd))
+- [geyserShinyR](./geyserShinyR.html) ([source](https://github.com/byandell/geyser/blob/main/docs/geyserShinyR.qmd))
+- [geyserShinyPython](./geyserShinyPython.html) ([source](https://github.com/byandell/geyser/blob/main/docs/geyserShinyPython.qmd))
 
 Earlier versions of these slide decks are available from [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/):  
 
