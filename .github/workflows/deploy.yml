@@ -44,10 +44,15 @@ jobs:
 
       - name: Install Shinylive Quarto Extension
         run: |
-          quarto add quarto-ext/shinylive --no-prompt
+          cd docs && quarto add quarto-ext/shinylive --no-prompt
 
-      - name: Render Shinylive Dashboard
+      - name: Copy README to index
         run: |
+          cp docs/README.md docs/index.md
+
+      - name: Render Homepage and Shinylive Dashboard
+        run: |
+          quarto render docs/index.md
           quarto render docs/demo_shinylive.qmd
 
       - name: Setup Pages
