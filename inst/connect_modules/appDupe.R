@@ -1,5 +1,5 @@
 # context: setup
-library(geyser)
+source("load_geyser.R")
 
 # context: ui
 ui <- bslib::page(

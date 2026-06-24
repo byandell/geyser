@@ -1,42 +1,42 @@
-devtools::install_github("byandell/geyser")
+source("load_geyser.R")
 
 ui <- bslib::page_navbar(
   title = "Geyser Modules with NavBar, Brian Yandell",
   bslib::nav_panel("hist",
-                   geyser::histInput("hist"), 
-                   geyser::histOutput("hist"),
-                   geyser::histUI("hist")
+                   histInput("hist"), 
+                   histOutput("hist"),
+                   histUI("hist")
   ),
   bslib::nav_panel("gghist",
-                  geyser::gghistInput("gghist"), 
-                  geyser::gghistOutput("gghist"),
-                  geyser::gghistUI("gghist")
+                  gghistInput("gghist"), 
+                  gghistOutput("gghist"),
+                  gghistUI("gghist")
   ),
   bslib::nav_panel("ggpoint",
-                   geyser::ggpointInput("ggpoint"), 
-                   geyser::ggpointOutput("ggpoint"),
-                   geyser::ggpointUI("ggpoint")
+                   ggpointInput("ggpoint"), 
+                   ggpointOutput("ggpoint"),
+                   ggpointUI("ggpoint")
   ),
   bslib::nav_panel("Rows",
                    shiny::titlePanel("Geyser Rows Modules"),
-                   geyser::rowsInput("rows"),
-                   geyser::rowsUI("rows")
+                   rowsInput("rows"),
+                   rowsUI("rows")
   ),
   bslib::nav_panel("Switch",
                    shiny::titlePanel("Geyser Switch Modules"),
-                   geyser::switchInput("switch"),
-                   geyser::switchOutput("switch"), 
-                   geyser::switchUI("switch")
+                   switchInput("switch"),
+                   switchOutput("switch"), 
+                   switchUI("switch")
   )
 )
 
 server <- function(input, output, session) {
-  geyser::histServer("hist")
-  geyser::gghistServer("gghist")
-  geyser::ggpointServer("ggpoint")
+  histServer("hist")
+  gghistServer("gghist")
+  ggpointServer("ggpoint")
   
-  geyser::rowsServer("rows")
+  rowsServer("rows")
   
-  geyser::switchServer("switch")
+  switchServer("switch")
 }
 shiny::shinyApp(ui, server)

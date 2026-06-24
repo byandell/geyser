@@ -187,3 +187,4 @@ inst/*.html
 inst/*/*.html
 inst/*/*/*.html
 
+/docs/shiny/
