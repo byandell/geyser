@@ -29,7 +29,17 @@ Earlier versions of these slide decks are available from [Posit Connect](https:/
 
 ## Demos
 
-Live demos are available via [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/).
+Live demos rendered with GitHub Pages are.
+See
+[Shinylive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/shinylive.md)
+and
+[Quartolive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/quartolive.md)
+for more information.
+
+- [geyserDemo](shiny/) ([source](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
+- [geyserQuartoDemo](demo_shinylive.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demo_shinylive.qmd))
+
+Live demos are also available via [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/).
 
 - <https://connect.doit.wisc.edu/geyserDemo> (see
 [inst/connect_modules/app.R](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
@@ -41,7 +51,7 @@ using the
 [geyserShinyR](./geyserShinyR.html)
 slide deck.
 
-- [11 Dec 2024 Presentation](R_Shiny_Club_20241211_Yandell/README.md)
+- [11 Dec 2024 Presentation](../R_Shiny_Club_20241211_Yandell/README.md)
 
 ### ShinyLive Demos
 

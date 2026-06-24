@@ -63,3 +63,29 @@ If you specifically want a `.qmd` document that compiles to a static page contai
    ```
 4. **Render it**:
    When you run `quarto render docs/demo_shinylive.qmd`, it will compile into a serverless interactive HTML page that runs entirely in the browser and can be served statically on GitHub Pages.
+
+---
+
+## Walkthrough: Option B Implementation
+
+I have implemented and automated Option B to host a serverless, interactive Quarto dashboard on GitHub Pages:
+
+### 1. Installed Quarto Shinylive Extension
+Installed the extension in the repository:
+```bash
+quarto add quarto-ext/shinylive --no-prompt
+```
+
+### 2. Created Self-Contained Shinylive Document
+Created [docs/demo_shinylive.qmd](file:///Users/brianyandell/Documents/GitHub/geyser/docs/demo_shinylive.qmd). It is structured to run completely in the browser via WebAssembly:
+* **YAML Header**: Configured format as `html` and registered the `shinylive` filter.
+* **Code Chunk**: Set `#| standalone: true` and concatenated all the R modules (from the root `R/` directory) and the navbar UI layout (from `app.R`) inside a single `{shinylive-r}` code block.
+
+### 3. Integrated into CI/CD Deployment Workflow
+Updated [.github/workflows/deploy.yml](file:///Users/brianyandell/Documents/GitHub/geyser/.github/workflows/deploy.yml) to automate the build-and-deploy process on GitHub Actions:
+* Installs the Quarto Shinylive extension inside the GitHub Actions runner.
+* Renders `docs/demo_shinylive.qmd` using `quarto render docs/demo_shinylive.qmd`.
+* Deploys the output `docs/demo_shinylive.html` (along with the other pages in the `docs/` folder) directly to GitHub Pages.
+
+This avoids local rendering Deno cache errors and automates updates every time you push to the `main` or `master` branch.
+

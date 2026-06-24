@@ -39,6 +39,17 @@ jobs:
           cp -r R inst/connect_modules/
           Rscript -e "shinylive::export('inst/connect_modules', 'docs/shiny', wasm_packages = FALSE)"
 
+      - name: Setup Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install Shinylive Quarto Extension
+        run: |
+          quarto add quarto-ext/shinylive --no-prompt
+
+      - name: Render Shinylive Dashboard
+        run: |
+          quarto render docs/demo_shinylive.qmd
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
