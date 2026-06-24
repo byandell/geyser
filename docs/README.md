@@ -9,7 +9,7 @@ Sometimes this module stuff is tricky to figure out.
 - [Slide Decks](#slide-decks)
 - [Demos](#demos)
   - [ShinyLive Demos](#shinylive-demos)
-- [R and Python Packages](#r-and-python-packages)
+- [R and Python Package Layouts](#r-and-python-package-layouts)
 - [Shiny Reactlog](#shiny-reactlog)
 
 *[GitHub](https://github.com/byandell/geyser)*
@@ -61,7 +61,7 @@ For Python, see
 [py-shinylive](https://github.com/posit-dev/py-shinylive) and
 [Python Shinylive: Shiny + WebAssembly (Posit)](https://shiny.posit.co/py/get-started/shinylive.html).
 
-## R and Python Packages
+## R and Python Package Layouts
 
 The repo has both an
 [R](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html)
@@ -80,7 +80,7 @@ R package
 └── inst/
 ```
 
-The Python package is organized as follows
+The `Python` package is organized as follows
 
 ```
 Python package
