@@ -30,11 +30,6 @@ Earlier versions of these slide decks are available from [Posit Connect](https:/
 ## Demos
 
 Live demos rendered with GitHub Pages are.
-See
-[Shinylive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/shinylive.md)
-and
-[Quartolive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/quartolive.md)
-for more information.
 
 - [geyserDemo](shiny/) ([source](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
 - [geyserQuartoDemo](demo_shinylive.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demo_shinylive.qmd))
@@ -55,21 +50,13 @@ slide deck.
 
 ### ShinyLive Demos
 
-I am woking on building these demos on GitHub Pages using
-[r-shinylive](https://posit-dev.github.io/r-shinylive/)
+I tried building these demos on GitHub Pages using
+[shinylive](https://byandell.github.io/Documentations/github).
+See
+[Shinylive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/shinylive.md)
 and
-[Using Shinylive to host Shiny app on GitHub Pages (HBC Training)](https://hbctraining.github.io/Training-modules/RShiny/lessons/shinylive.html).
-
-```R
-install.packages(".", repos = NULL, type = "source")
-shinylive::export(appdir = "inst/connect_modules/", destdir = "~/docs")
-# should create ~/docs/app.json
-httpuv::runStaticServer("~/docs")
-```
-
-For Python, see
-[py-shinylive](https://github.com/posit-dev/py-shinylive) and
-[Python Shinylive: Shiny + WebAssembly (Posit)](https://shiny.posit.co/py/get-started/shinylive.html).
+[Quartolive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/quartolive.md)
+for more information.
 
 ## R and Python Package Layouts
 
