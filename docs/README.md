@@ -53,9 +53,9 @@ slide deck.
 I tried building these demos on GitHub Pages using
 [shinylive](https://byandell.github.io/Documentations/github).
 See
-[Shinylive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/shinylive.md)
+[Shinylive Narrative](https://github.com/byandell/geyser/blob/main/inst/connect_modules/shinylive.md)
 and
-[Quartolive Narrative](https://github.com/byandellgeyser/blob/main/inst/connect_modules/quartolive.md)
+[Quartolive Narrative](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/quartolive.md)
 for more information.
 
 ## R and Python Package Layouts
