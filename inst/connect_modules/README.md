@@ -1,6 +1,12 @@
-#! geyser/inst/connect_modules
+# ! geyser/inst/connect_modules
 
 ## Connecting Multiple Modules
+
+These generally assume the `geyser` R page is installed
+
+```
+devtools::install_github("byandell/geyser)
+```
 
 - [app.R](https://github.com/byandell/geyser/tree/main/inst/connect_modules/app.R):
 Geyser Shiny Demo app
@@ -11,8 +17,8 @@ app laid out in rows and columns
 - [appRowsModule.R](https://github.com/byandell/geyser/tree/main/inst/connect_modules/appRowsModule.R):
 version of `appRows.R` using module
 [R/rowsApp.R](https://github.com/byandell/geyser/tree/main/R/rowsApp.R):
-- [pages.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/pages.qmd): Quarto version of `appPages.R`
-- [rows.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/rows.qmd): Quarto version of `appRows.R`
+- [pages.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/quarto/pages.qmd): Quarto version of `appPages.R`
+- [rows.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/quarto/rows.qmd): Quarto version of `appRows.R`
 
 ### Twin & Flip
 
@@ -22,7 +28,7 @@ app with twin `hist` modules
 app flips controls of `hist` modules
 - [appDupe.R](https://github.com/byandell/geyser/tree/main/inst/connect_modules/appDupe.R):
 app fails in duplicating `hist` modules
-- [twin.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/twin.qmd):
+- [twin.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/quarto/twin.qmd):
 Quarto version of `appTwin.R`
-- [twin.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/flip.qmd):
+- [twin.qmd](https://github.com/byandell/geyser/tree/main/inst/connect_modules/quarto/flip.qmd):
 Quarto version of `appFlip.R`
