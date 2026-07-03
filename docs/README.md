@@ -1,4 +1,4 @@
-# `geyser` Slide Decks and Demos
+# `geyser`: Shiny Module Demo
 
 This repo demonstrates how to modularize the
 [Faithful Geyser Shiny example](https://shiny.rstudio.com/gallery/faithful.html)
@@ -12,7 +12,7 @@ Sometimes this module stuff is tricky to figure out.
 - [R and Python Package Layouts](#r-and-python-package-layouts)
 - [Shiny Reactlog](#shiny-reactlog)
 
-*[GitHub](https://github.com/byandell/geyser)*
+*[byandell.github.io](https://byandell.github.io)*
 
 ## Slide Decks
 
@@ -46,7 +46,7 @@ using the
 [geyserShinyR](./geyserShinyR.html)
 slide deck.
 
-- [11 Dec 2024 Presentation](../R_Shiny_Club_20241211_Yandell/README.md)
+- [11 Dec 2024 Presentation](https://github.com/byandell/geyser/tree/main/R_Shiny_Club_20241211_Yandell)
 
 ### ShinyLive Demos
 
