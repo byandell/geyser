@@ -188,3 +188,10 @@ inst/*/*.html
 inst/*/*/*.html
 
 /docs/shiny/
+
+# Quarto generated website assets (built and deployed dynamically by GitHub Actions)
+/docs/*.html
+/docs/site_libs/
+/docs/_extensions/
+/docs/shinylive-sw.js
+/docs/app.json
