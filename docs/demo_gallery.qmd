@@ -26,13 +26,12 @@ This section displays the classic Old Faithful Shiny app as hosted on the offici
 
 This section displays the running version of the geyser app using the source code from your package's [4_moduleServer](file:///Users/brianyandell/Documents/GitHub/geyser/inst/build_module/4_moduleServer) directory, powered directly in the page via **Shinylive** (WebAssembly).
 
-The editor on the left contains your module's source code, and the viewer on the right runs the interactive app. You can modify the code and click **Run** to see changes in real-time.
+The live application is run completely serverless in your browser. Below the application, you can view the R source files for both the main application (`app.R`) and the custom module (`moduleServer.R`) in separate tabs.
 
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 500
-#| components: [editor, viewer]
-#| layout: vertical
+#| components: [viewer]
 
 library(shiny)
 library(bslib)
@@ -114,3 +113,21 @@ server <- function(input, output, session) {
 
 shiny::shinyApp(ui, server)
 ```
+
+## Source Code
+
+::: {.panel-tabset}
+
+### app.R
+```{r}
+#| code: !expr readLines("../inst/build_module/4_moduleServer/app.R")
+#| eval: false
+```
+
+### moduleServer.R
+```{r}
+#| code: !expr readLines("../inst/build_module/4_moduleServer/moduleServer.R")
+#| eval: false
+```
+
+:::
