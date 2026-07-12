@@ -33,12 +33,12 @@ jobs:
 
       - name: Install R package dependencies
         run: |
-          install.packages(c("rmarkdown", "knitr", "shinylive", "bslib", "shiny", "ggplot2", "dplyr", "DT", "devtools"))
+          install.packages(c("rmarkdown", "knitr", "shinylive", "bslib", "shiny", "ggplot2", "dplyr", "DT", "rlang", "stringr", "tibble"))
         shell: Rscript {0}
 
       - name: Install local geyser package
         run: |
-          Rscript -e "devtools::install_local('.')"
+          R CMD INSTALL .
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
