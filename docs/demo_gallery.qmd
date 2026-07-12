@@ -1,13 +1,43 @@
-#' Shiny Server for geyser Example
-#'
-#' @param input,output,session shiny server reactives
-#' @return reactive server
-#' @export
-#' @rdname geyser
-#' @importFrom shiny bootstrapPage checkboxInput moduleServer NS plotOutput
-#'             renderPlot renderUI selectInput shinyApp sliderInput uiOutput
-#' @importFrom graphics hist lines rug
-#' @importFrom stats density
+---
+title: "Geyser Module Server Gallery Demo"
+author: "Brian S. Yandell"
+format: html
+filters:
+  - shinylive
+toc: true
+---
+
+This page showcases two different methods of displaying Shiny apps alongside their code: the official Posit Shiny Gallery example and your package's own modularized code.
+
+# Posit Gallery Example
+
+This section displays the classic Old Faithful Shiny app as hosted on the official Posit Shiny Gallery, using a simple `iframe` embedding.
+
+## Live Application
+
+<div class="shiny-app-frame" style="margin-bottom: 30px;">
+  <iframe src="https://gallery.shinyapps.io/083-front-page" style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
+</div>
+
+---
+
+# My Source Code App
+
+This section displays the running version of the geyser app using the source code from your package's [4_moduleServer](file:///Users/brianyandell/Documents/GitHub/geyser/inst/build_module/4_moduleServer) directory, powered directly in the page via **Shinylive** (WebAssembly).
+
+The editor on the left contains your module's source code, and the viewer on the right runs the interactive app. You can modify the code and click **Run** to see changes in real-time.
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 500
+#| components: [editor, viewer]
+#| layout: vertical
+
+library(shiny)
+library(bslib)
+
+# --- Module definitions (from moduleServer.R) ---
+
 geyserServer <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
@@ -41,11 +71,7 @@ geyserServer <- function(id) {
     })
   })
 }
-#' Shiny Module Input for Geyser
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname geyser
-#' @export
+
 geyserInput <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
@@ -61,37 +87,29 @@ geyserInput <- function(id) {
                   label = shiny::strong("Show density estimate"),
                   value = FALSE))
 }
-#' Shiny Module Output for Geyser
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname geyser
-#' @export
+
 geyserOutput <- function(id) {
   ns <- shiny::NS(id)
   shiny::plotOutput(ns("main_plot"), height = "300px")
 }
-#' Shiny Module UI for Geyser
-#' @param id identifier for shiny reactive
-#' @return nothing returned
-#' @rdname geyser
-#' @export
+
 geyserUI <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("bw_adjust_ui"))
 }
-#' Shiny Module App for Geyser
-#' @return nothing returned
-#' @rdname geyser
-#' @export
-geyserApp <- function() {
-  ui <- bslib::page(
-    geyserInput("geyser"), 
-    geyserOutput("geyser"),
-    # Display this only if the density is shown
-    geyserUI("geyser")
-  )
-  server <- function(input, output, session) {
-    geyserServer("geyser")
-  }
-  shiny::shinyApp(ui, server)
+
+# --- App entry point (from app.R) ---
+
+ui <- bslib::page(
+  geyserInput(id = "geyser"), 
+  geyserOutput(id = "geyser"),
+  # Display this only if the density is shown
+  geyserUI(id = "geyser")
+)
+
+server <- function(input, output, session) {
+  geyserServer(id = "geyser")
 }
+
+shiny::shinyApp(ui, server)
+```
