@@ -45,7 +45,7 @@ jobs:
 
       - name: Install Quarto Shinylive Extension
         run: |
-          quarto add --no-ask quarto-ext/shinylive
+          quarto add --no-prompt quarto-ext/shinylive
 
       - name: Render Website
         run: |
