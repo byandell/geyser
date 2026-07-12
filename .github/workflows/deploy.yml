@@ -44,6 +44,7 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Install Quarto Shinylive Extension
+        working-directory: docs
         run: |
           quarto add --no-prompt quarto-ext/shinylive
 
