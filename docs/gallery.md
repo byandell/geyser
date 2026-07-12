@@ -72,13 +72,12 @@ To preview and test the app locally, you must serve the files via a local HTTP s
   servr::httd("docs")
   ```
 
-### 4. Deploying to GitHub Pages (Automated via GitHub Actions)
-To keep your Git repository clean and avoid committing large generated folders (like `site_libs/` which is over 70MB), the deployment is automated via a GitHub Actions workflow:
+### 4. Deploying to GitHub Pages
+To avoid committing large generated assets (like the 70MB `site_libs/` folder) to your Git repository, the website compilation and hosting are automated via a GitHub Actions pipeline.
 
-1. **Only Commit Source Files**: You only need to commit your source `.qmd` files (like `docs/demo_gallery.qmd`). All generated files (`site_libs/`, `.html` pages, `shinylive-sw.js`, etc.) are ignored locally via `.gitignore`.
-2. **Push to main**: When you push to the `main` branch, the workflow inside `.github/workflows/deploy.yml` will automatically trigger, install Quarto and R dependencies, render the website, and publish the artifact directly to GitHub Pages.
+For detailed setup instructions, troubleshooting steps, and custom configurations, see the [Quarto GitHub Actions Deployment Guide](github_actions.md).
 
-Your page will be live at:
+Once set up, your live page will be automatically built and hosted at:
 `https://byandell.github.io/geyser/demo_gallery.html`
 
 ---
