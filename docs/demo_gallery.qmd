@@ -2,6 +2,7 @@
 title: "Geyser Module Server Gallery Demo"
 author: "Brian S. Yandell"
 format: html
+engine: knitr
 filters:
   - shinylive
 toc: true

@@ -11,6 +11,7 @@ format:
     slide-number: true
     code-block-height: 450px
     embed-resources: true
+engine: knitr
 # https://github.com/mine-cetinkaya-rundel/quarto-dashboards/blob/main/1-hello-dashboards/index.qmd
 ---
 
