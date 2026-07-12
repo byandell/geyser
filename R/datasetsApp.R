@@ -2,7 +2,7 @@
 #'
 #' @param id shiny identifier
 #' @importFrom shiny moduleServer NS reactive renderUI req selectInput shinyApp
-#'             uiOutput
+#' @importFrom shiny uiOutput
 #' @importFrom bslib page
 #' @importFrom dplyr select where
 #' @export

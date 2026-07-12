@@ -1,11 +1,11 @@
-# ! geyser/inst/connect_modules
+# geyser/inst/connect_modules
 
 ## Connecting Multiple Modules
 
 These generally assume the `geyser` R page is installed
 
 ```
-devtools::install_github("byandell/geyser)
+pak::pak("byandell/geyser)
 ```
 
 - [app.R](https://github.com/byandell/geyser/tree/main/inst/connect_modules/app.R):

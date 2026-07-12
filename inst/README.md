@@ -1,4 +1,4 @@
-#! geyser/inst
+# geyser/inst
 
 ## Installed Directories
 

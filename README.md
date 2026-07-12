@@ -19,8 +19,7 @@ or clone the repo
 Alternatively, you can install in`R`
 
 ```{r}
-library(devtools)
-install_github("byandell/geyser")
+pak::pak("byandell/geyser")
 ```
 
 and/or in `Python`.

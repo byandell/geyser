@@ -1,6 +1,8 @@
-devtools::install_github("byandell/geyser")
+# context: setup
+pak::pak("geyser")
 library(geyser)
 
+# context: ui
 ui <- bslib::page_navbar(
   title = "Geyser Modules with NavBar, Brian Yandell",
   bslib::nav_panel(
@@ -36,6 +38,7 @@ ui <- bslib::page_navbar(
   )
 )
 
+# context: server
 server <- function(input, output, session) {
   histServer("hist")
   gghistServer("gghist")

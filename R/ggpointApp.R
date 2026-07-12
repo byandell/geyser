@@ -3,10 +3,10 @@
 #' @param id shiny identifier
 #' @param df reactive data frame
 #' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot 
-#'             renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom shiny renderUI selectInput shinyApp sliderInput uiOutput
 #' @importFrom bslib page
 #' @importFrom ggplot2 aes geom_point geom_rug geom_smooth ggplot ggtitle
-#'             xlab ylab
+#' @importFrom ggplot2 xlab ylab
 #' @importFrom rlang .data
 #' @importFrom stringr str_to_title
 #' @export

@@ -3,7 +3,7 @@
 #' @param id shiny identifier
 #' @param df reactive data frame
 #' @importFrom shiny checkboxInput moduleServer NS plotOutput renderPlot 
-#'             renderUI selectInput shinyApp sliderInput uiOutput
+#' @importFrom shiny renderUI selectInput shinyApp sliderInput uiOutput
 #' @importFrom bslib page
 #' @importFrom graphics hist lines rug
 #' @importFrom stats density
