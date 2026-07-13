@@ -191,6 +191,7 @@ inst/*/*/*.html
 
 # Quarto generated website assets (built and deployed dynamically by GitHub Actions)
 /docs/*.html
+/docs/demos/*.html
 /docs/site_libs/
 /docs/_extensions/
 /docs/shinylive-sw.js

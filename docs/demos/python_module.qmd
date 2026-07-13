@@ -15,7 +15,7 @@ The live application is run completely serverless in your browser. Below the app
 
 ```{shinylive-python}
 #| standalone: true
-#| viewerHeight: 600
+#| viewerHeight: 800
 #| components: [viewer]
 
 ## file: requirements.txt
