@@ -67,15 +67,20 @@ shiny::shinyApp(ui, server)
 For Python-based Shiny apps, you can use the `{shinylive-python}` code block. The Quarto Shinylive filter handles compiling and packaging the Python code just like the R version.
 
 #### 1. Specifying Requirements
-Inside browser WebAssembly (Pyodide), packages are downloaded dynamically. You must declare any package requirements in your code block options:
+Inside browser WebAssembly (Pyodide), packages are downloaded dynamically. You must declare any package requirements by creating a virtual `requirements.txt` file within the code block using the `## file: ` header syntax:
 ```markdown
 \`\`\`{shinylive-python}
 #| standalone: true
 #| viewerHeight: 600
 #| components: [viewer]
-#| requirements: [pandas, numpy, matplotlib, scipy]
 
-# Python code here...
+## file: requirements.txt
+pandas
+numpy
+matplotlib
+scipy
+
+# Python code files here (e.g. ## file: app.py)...
 \`\`\`
 ```
 
