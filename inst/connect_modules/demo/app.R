@@ -2,6 +2,13 @@
 # challenge is that there is now a bioconductor package called "geyser"
 # pak::pak("geyser")
 # library(geyser)
+source("datanames.R")
+source("datasetsApp.R")
+source("gghistApp.R")
+source("ggpointApp.R")
+source("histApp.R")
+source("rowsApp.R")
+source("switchApp.R")
 
 # context: ui
 ui <- bslib::page_navbar(

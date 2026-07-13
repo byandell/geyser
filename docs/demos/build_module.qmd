@@ -7,10 +7,13 @@ toc: true
 
 [← Back to Demos Gallery](index.qmd)
 
-This section displays the running version of the geyser app using the source code from [4_moduleServer](https://github.com/byandell/geyser/tree/main/inst/build_module/4_moduleServer),
+This section displays a geyser app using
+[4_moduleServer](https://github.com/byandell/geyser/tree/main/inst/build_module/4_moduleServer),
 powered directly in the page via the serverless **Shinylive** (WebAssembly).
 
-The live application is run completely serverless in your browser. Below the application, you can view the R source files for both the main application (`app.R`) and the custom module (`moduleServer.R`) in separate tabs.
+The live application is run completely serverless in your browser. Below the application, view the
+R source files for both the main application (`app.R`) and the custom module
+(`moduleServer.R`) in separate tabs.
 
 ```{shinylive-r}
 #| standalone: true

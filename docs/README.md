@@ -12,7 +12,7 @@ Sometimes this module stuff is tricky to figure out.
 - [R and Python Package Layouts](#r-and-python-package-layouts)
 - [Shiny Reactlog](#shiny-reactlog)
 
-*[byandell.github.io](https://byandell.github.io)*
+*[GitHub](https://github.com/byandell/geyser)*
 
 ## Slide Decks
 
