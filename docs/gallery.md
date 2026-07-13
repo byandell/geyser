@@ -140,6 +140,20 @@ To avoid committing large generated assets (like the 70MB `site_libs/` folder) t
 
 For detailed setup instructions, troubleshooting steps, and custom configurations, see the [Quarto GitHub Actions Deployment Guide](github_actions.md).
 
+> [!IMPORTANT]
+> **GitHub Actions & Python Shinylive**:
+> If your site includes `{shinylive-python}` blocks, the GitHub Actions deployment runner must have Python and the `shinylive` Python package installed to render them. Ensure your `.github/workflows/deploy.yml` includes:
+> ```yaml
+> - name: Set up Python
+>   uses: actions/setup-python@v5
+>   with:
+>     python-version: '3.12'
+> - name: Install Python dependencies
+>   run: |
+>     pip install shinylive
+> ```
+> Otherwise, the build will fail with the error: `Error running 'shinylive' command`.
+
 Once set up, your live page will be automatically built and hosted at:
 `https://byandell.github.io/geyser/demos/index.html` (or `demos/build_module.html` for the direct app).
 
