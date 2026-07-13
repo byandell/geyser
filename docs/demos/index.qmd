@@ -1,0 +1,13 @@
+---
+title: "Geyser Demos Gallery"
+subtitle: "Explore interactive R Shiny modules powered by WebAssembly (Shinylive)"
+toc: false
+listing:
+  contents:
+    - build_module.qmd
+    - posit_gallery.qmd
+  type: grid
+  categories: false
+---
+
+This page showcases different methods of displaying Shiny apps alongside their code, ranging from standard iframe embeds to serverless WebAssembly-powered modular R applications running completely in your browser.

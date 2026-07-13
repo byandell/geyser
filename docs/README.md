@@ -33,7 +33,7 @@ Live demos rendered with GitHub Pages are.
 
 - [geyserDemo](shiny/) ([source](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
 - [geyserQuartoDemo](demo_shinylive.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demo_shinylive.qmd))
-- [geyserModuleServerDemo](demo_gallery.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demo_gallery.qmd)) ([prompt](gallery.md))
+- [geyserModuleServerDemo](demos/index.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/index.qmd)) ([prompt](gallery.md))
 
 Live demos are also available via [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/).
 

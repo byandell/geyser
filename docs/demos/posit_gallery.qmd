@@ -1,0 +1,14 @@
+---
+title: "Posit Gallery Example"
+description: "The classic Old Faithful Shiny app as hosted on the official Posit Shiny Gallery, embedded using a traditional iframe."
+author: "Brian S. Yandell"
+toc: false
+---
+
+[← Back to Demos Gallery](index.qmd)
+
+This section displays the classic Old Faithful Shiny app as hosted on the official Posit Shiny Gallery, using a simple `iframe` embedding.
+
+<div class="shiny-app-frame" style="margin-bottom: 30px;">
+  <iframe src="https://gallery.shinyapps.io/083-front-page" style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
+</div>

@@ -1,0 +1,127 @@
+---
+title: "Build Module (Shinylive)"
+description: "A serverless WebAssembly-powered R Shiny app running directly in the browser using the package's modular code, with full source tabs."
+author: "Brian S. Yandell"
+toc: true
+---
+
+[← Back to Demos Gallery](index.qmd)
+
+This section displays the running version of the geyser app using the source code from [4_moduleServer](https://github.com/byandell/geyser/tree/main/inst/build_module/4_moduleServer),
+powered directly in the page via the serverless **Shinylive** (WebAssembly).
+
+The live application is run completely serverless in your browser. Below the application, you can view the R source files for both the main application (`app.R`) and the custom module (`moduleServer.R`) in separate tabs.
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 600
+#| components: [viewer]
+
+library(shiny)
+library(bslib)
+
+# --- Module definitions (from moduleServer.R) ---
+
+geyserServer <- function(id) {
+    shiny::moduleServer(id, function(input, output, session) {
+        ns <- session$ns
+
+        # Output Main Plot
+        output$main_plot <- shiny::renderPlot({
+            graphics::hist(faithful$eruptions,
+                probability = TRUE,
+                breaks = as.numeric(input$n_breaks),
+                xlab = "Duration (minutes)",
+                main = "Geyser eruption duration"
+            )
+
+            if (input$individual_obs) {
+                graphics::rug(faithful$eruptions)
+            }
+            if (input$density) {
+                shiny::req(input$bw_adjust)
+                dens <- stats::density(faithful$eruptions,
+                    adjust = input$bw_adjust
+                )
+                graphics::lines(dens, col = "blue")
+            }
+        })
+
+        # Input Bandwidth Adjustment
+        output$bw_adjust_ui <- shiny::renderUI({
+            if (input$density) {
+                shiny::sliderInput(
+                    inputId = ns("bw_adjust"),
+                    label = "Bandwidth adjustment:",
+                    min = 0.2, max = 2, value = 1, step = 0.2
+                )
+            }
+        })
+    })
+}
+
+geyserInput <- function(id) {
+    ns <- shiny::NS(id)
+    shiny::tagList(
+        shiny::selectInput(
+            inputId = ns("n_breaks"),
+            label = "Number of bins in histogram (approximate):",
+            choices = c(10, 20, 35, 50),
+            selected = 20
+        ),
+        shiny::checkboxInput(
+            inputId = ns("individual_obs"),
+            label = shiny::strong("Show individual observations"),
+            value = FALSE
+        ),
+        shiny::checkboxInput(
+            inputId = ns("density"),
+            label = shiny::strong("Show density estimate"),
+            value = FALSE
+        )
+    )
+}
+
+geyserOutput <- function(id) {
+    ns <- shiny::NS(id)
+    shiny::plotOutput(ns("main_plot"), height = "300px")
+}
+
+geyserUI <- function(id) {
+    ns <- shiny::NS(id)
+    shiny::uiOutput(ns("bw_adjust_ui"))
+}
+
+# --- App entry point (from app.R) ---
+
+ui <- bslib::page(
+    geyserInput(id = "geyser"),
+    geyserOutput(id = "geyser"),
+    # Display this only if the density is shown
+    geyserUI(id = "geyser")
+)
+
+server <- function(input, output, session) {
+    geyserServer(id = "geyser")
+}
+
+shiny::shinyApp(ui, server)
+```
+
+## Source Code
+
+::: {.panel-tabset}
+
+### app.R
+```{r}
+#| code: !expr readLines("../../inst/build_module/4_moduleServer/app.R")
+#| eval: false
+```
+
+### moduleServer.R
+```{r}
+#| code: !expr readLines("../../inst/build_module/4_moduleServer/moduleServer.R")
+#| eval: false
+```
+
+:::

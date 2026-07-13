@@ -129,7 +129,7 @@ Add the following to your `.gitignore` to keep your workspace clean:
 
 If you previously committed these generated files to Git, remove them from tracking (while keeping your local files) using:
 ```bash
-git rm --cached docs/demo_gallery.html
+git rm --cached docs/demos/*.html
 git rm -r --cached docs/site_libs/ docs/_extensions/ docs/app.json
 git commit -m "Untrack generated files"
 ```

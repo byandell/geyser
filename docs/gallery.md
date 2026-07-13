@@ -19,11 +19,11 @@ By using the `{shinylive-r}` Quarto block, your app code is compiled and embedde
 
 ### 1. Configure the Quarto Document
 
-Create a `.qmd` file (like [docs/demo_gallery.qmd](demo_gallery.qmd)) that includes the `shinylive` filter in the YAML header:
+Create a `.qmd` file (like [docs/demos/build_module.qmd](demos/build_module.qmd)) that includes the `shinylive` filter in the YAML header (or share it across the directory via `_metadata.yml`):
 
 ```yaml
 ---
-title: "Geyser Module Server Gallery Demo"
+title: "Build Module (Shinylive)"
 filters:
   - shinylive
 ---
@@ -71,7 +71,7 @@ To preview and test the app locally, you must serve the files via a local HTTP s
 * **Quarto Preview (Easiest)**: Run this in your terminal. It will render the page, start a local server, and open your browser:
 
   ```bash
-  quarto preview docs/demo_gallery.qmd
+  quarto preview docs/demos/build_module.qmd
   ```
 
 * **Python HTTP Server**: Serve the `docs/` folder from Python:
@@ -80,7 +80,7 @@ To preview and test the app locally, you must serve the files via a local HTTP s
   python3 -m http.server 8000 --directory docs
   ```
 
-  Then navigate to `http://localhost:8000/demo_gallery.html`.
+  Then navigate to `http://localhost:8000/demos/build_module.html`.
 * **R `servr` Package**: Serve from R console:
 
   ```r
@@ -94,7 +94,70 @@ To avoid committing large generated assets (like the 70MB `site_libs/` folder) t
 For detailed setup instructions, troubleshooting steps, and custom configurations, see the [Quarto GitHub Actions Deployment Guide](github_actions.md).
 
 Once set up, your live page will be automatically built and hosted at:
-`https://byandell.github.io/geyser/demo_gallery.html`
+`https://byandell.github.io/geyser/demos/index.html` (or `demos/build_module.html` for the direct app).
+
+---
+
+## Organizing & Scaling Future Demos
+
+As your project grows and you add more modules or demo applications, keeping them in a dedicated `docs/demos/` subdirectory scales much better than single files.
+
+### 1. The Directory Layout
+Organize the subdirectory with an index and shared metadata:
+```
+docs/
+└── demos/
+    ├── _metadata.yml          # Shared Quarto settings for the directory
+    ├── index.qmd              # Demos landing/gallery index
+    ├── posit_gallery.qmd      # Individual demo (e.g. iframe embed)
+    └── build_module.qmd       # Individual demo (e.g. Shinylive app)
+```
+
+### 2. Sharing Configurations via `_metadata.yml`
+Instead of repeating the `shinylive` filter and `knitr` engine in every new `.qmd` file, you can create a `_metadata.yml` file in the subdirectory. Quarto automatically applies these settings to all documents in that directory:
+```yaml
+# docs/demos/_metadata.yml
+engine: knitr
+filters:
+  - shinylive
+```
+
+### 3. Automated Listing Galleries (`index.qmd`)
+You can use Quarto's built-in **Listings** to automatically build a landing page grid. When you add a new demo `.qmd` file to the folder, Quarto will automatically detect it and render a preview card on the landing page, without requiring you to manually maintain list links.
+
+Example `docs/demos/index.qmd`:
+```yaml
+---
+title: "Geyser Demos Gallery"
+toc: false
+listing:
+  contents:
+    - build_module.qmd         # List files in the exact order you want them displayed
+    - posit_gallery.qmd
+  type: grid                   # Renders a modern grid layout of card previews
+  categories: true             # Set to true to filter demos by tags (e.g., R, Python)
+---
+
+Explore the interactive geyser demos below:
+```
+
+### 4. Adding New Demos
+To add a new demo:
+1. Create a new `.qmd` file under `docs/demos/` (e.g. `gghist_demo.qmd`).
+2. Add a simple YAML header specifying the title, description, and optional categories:
+   ```yaml
+   ---
+   title: "ggplot2 Histogram Demo"
+   description: "Interactive exploration of geyser wait times using ggplot2."
+   categories: [R, ggplot2]
+   ---
+   ```
+3. Use relative paths starting with `../../` to refer to root package assets (since files under `docs/demos/` are two levels deep relative to the project root).
+4. Add a navigation link back to the gallery page at the top of your page content:
+   ```markdown
+   [← Back to Demos Gallery](index.qmd)
+   ```
+5. Update `index.qmd`'s `listing.contents` list if you want to explicitly place it in the display order.
 
 ---
 
