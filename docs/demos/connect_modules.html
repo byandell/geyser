@@ -160,13 +160,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="../demos/index.html">← Back to Demos Gallery</a></p>
-<p>This section displays the running version of the geyser app using the source code from <a href="https://github.com/byandell/geyser/tree/main/inst/connect_modules/demo">inst/connect_modules/demo</a>, powered directly in the page via the serverless <strong>Shinylive</strong> (WebAssembly).</p>
-<p>This advanced app combines a central dataset selector module with multiple plotting and layout modules, allowing them to share state reactively. Below the application, you can view the source files for each of the modules in separate tabs.</p>
+<p>This displays a geyser app from <a href="https://github.com/byandell/geyser/tree/main/inst/connect_modules/demo">inst/connect_modules/demo</a>, powered directly in the page via the serverless <strong>Shinylive</strong> (WebAssembly).</p>
+<p>This advanced app combines a central dataset selector module with multiple plotting and layout modules, allowing them to share state reactively. Below the application, you can view the source files for each of the 6 modules plus 1 function in separate tabs.</p>
 <pre class="shinylive-r" data-engine="r"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
 #| standalone: true
-#| viewerHeight: 800
+#| viewerHeight: 1000
+#| viewerWidth: 100%
 #| components: [viewer]
 
 ## file: app.R
@@ -189,477 +190,540 @@ source("switchApp.R")
 
 # ui
 ui &lt;- bslib::page_navbar(
-  title = "Geyser Modules with NavBar",
-  bslib::nav_panel(
-    "hist",
-    histInput("hist"),
-    histOutput("hist"),
-    histUI("hist")
-  ),
-  bslib::nav_panel(
-    "gghist",
-    gghistInput("gghist"),
-    gghistOutput("gghist"),
-    gghistUI("gghist")
-  ),
-  bslib::nav_panel(
-    "ggpoint",
-    ggpointInput("ggpoint"),
-    ggpointOutput("ggpoint"),
-    ggpointUI("ggpoint")
-  ),
-  bslib::nav_panel(
-    "Rows",
-    shiny::titlePanel("Geyser Rows Modules"),
-    rowsInput("rows"),
-    rowsUI("rows")
-  ),
-  bslib::nav_panel(
-    "Switch",
-    shiny::titlePanel("Geyser Switch Modules"),
-    switchInput("switch"),
-    switchOutput("switch"),
-    switchUI("switch")
-  )
+    title = "Geyser Modules with NavBar",
+    bslib::nav_panel(
+        "hist",
+        histInput("hist"),
+        histOutput("hist"),
+        histUI("hist")
+    ),
+    bslib::nav_panel(
+        "gghist",
+        gghistInput("gghist"),
+        gghistOutput("gghist"),
+        gghistUI("gghist")
+    ),
+    bslib::nav_panel(
+        "ggpoint",
+        ggpointInput("ggpoint"),
+        ggpointOutput("ggpoint"),
+        ggpointUI("ggpoint")
+    ),
+    bslib::nav_panel(
+        "Rows",
+        shiny::titlePanel("Geyser Rows Modules"),
+        rowsInput("rows"),
+        rowsUI("rows")
+    ),
+    bslib::nav_panel(
+        "Switch",
+        shiny::titlePanel("Geyser Switch Modules"),
+        switchInput("switch"),
+        switchOutput("switch"),
+        switchUI("switch")
+    )
 )
 
 # server
 server &lt;- function(input, output, session) {
-  histServer("hist")
-  gghistServer("gghist")
-  ggpointServer("ggpoint")
+    histServer("hist")
+    gghistServer("gghist")
+    ggpointServer("ggpoint")
 
-  rowsServer("rows")
+    rowsServer("rows")
 
-  switchServer("switch")
+    switchServer("switch")
 }
 shiny::shinyApp(ui, server)
 
 ## file: datanames.R
 datanames &lt;- function() {
-  # Fallback list since help("datasets") info is not fully accessible in WebAssembly R
-  dataname &lt;- unique(c("faithful", "mtcars", "cars", "iris", "quakes", "rock", "trees"))
-  classes &lt;- sapply(dataname, function(x) {
-    tryCatch(class(get(x))[1],
-             error = function(e) "none")
-  })
-  tibble::as_tibble(data.frame(name = dataname, class = classes)) |&gt;
-    dplyr::filter(classes %in% c("data.frame", "matrix"))
+    # Fallback list since help("datasets") info is not fully accessible in WebAssembly R
+    dataname &lt;- unique(c("faithful", "mtcars", "cars", "iris", "quakes", "rock", "trees"))
+    classes &lt;- sapply(dataname, function(x) {
+        tryCatch(class(get(x))[1],
+            error = function(e) "none"
+        )
+    })
+    tibble::as_tibble(data.frame(name = dataname, class = classes)) |&gt;
+        dplyr::filter(classes %in% c("data.frame", "matrix"))
 }
 
 ## file: datasetsApp.R
 datasetsApp &lt;- function() {
-  ui &lt;- bslib::page(
-    datasetsInput("datasets"), 
-    datasetsUI("datasets"), 
-    datasetsOutput("datasets")
-  )
-  server &lt;- function(input, output, session) {
-    datasetsServer("datasets")
-  }
-  shiny::shinyApp(ui, server)
+    ui &lt;- bslib::page(
+        datasetsInput("datasets"),
+        datasetsUI("datasets"),
+        datasetsOutput("datasets")
+    )
+    server &lt;- function(input, output, session) {
+        datasetsServer("datasets")
+    }
+    shiny::shinyApp(ui, server)
 }
 
 datasetsServer &lt;- function(id) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns &lt;- session$ns
-    
-    # Select Dataset
-    data &lt;- datanames()
-    output$dataset &lt;- shiny::renderUI({
-      shiny::selectInput(ns("dataset"), "Dataset:", data$name)
+    shiny::moduleServer(id, function(input, output, session) {
+        ns &lt;- session$ns
+
+        # Select Dataset.
+        # Static `datanames` = names in `datasets` package.
+        data &lt;- datanames()
+        output$dataset &lt;- shiny::renderUI({
+            shiny::selectInput(ns("dataset"), "Dataset:", data$name)
+        })
+        dataset &lt;- shiny::reactive({
+            shiny::req(input$dataset, input$columns)
+            data &lt;- get(input$dataset)
+            # Contingency of columns for previous dataset.
+            if (!all(input$columns %in% colnames(data))) {
+                return(NULL)
+            }
+            data[, input$columns, drop = FALSE]
+        })
+
+        # Columns
+        output$columns &lt;- shiny::renderUI({
+            choices &lt;- shiny::req(columnnames())
+            selected &lt;- input$columns
+            if (shiny::isTruthy(selected)) {
+                choices &lt;- unique(c(selected, choices))
+            } else {
+                selected &lt;- choices[1:min(2, length(choices))]
+            }
+            shiny::selectInput(ns("columns"), "Variables:",
+                choices = choices,
+                selected = selected,
+                multiple = TRUE
+            )
+        })
+        columnnames &lt;- shiny::reactive({
+            shiny::req(input$dataset)
+            names(get(input$dataset) |&gt; as.data.frame() |&gt;
+                dplyr::select(dplyr::where(is.numeric)))
+        })
+        shiny::observeEvent(shiny::req(input$dataset), {
+            # Get `dataset()`, selecting only numeric columns.
+            choices &lt;- columnnames()
+            selected &lt;- choices[1:min(2, length(choices))]
+            shiny::updateSelectInput(session, "columns",
+                choices = choices,
+                selected = selected
+            )
+        })
+
+        output$table &lt;- DT::renderDataTable(
+            shiny::req(dataset())
+        )
+        #########################################
+        dataset
     })
-    dataset &lt;- shiny::reactive({
-      shiny::req(input$dataset, input$columns)
-      data &lt;- get(input$dataset)
-      if(!all(input$columns %in% colnames(data)))
-        return(NULL)
-      data[, input$columns, drop = FALSE]
-    })
-    
-    # Columns
-    output$columns &lt;- shiny::renderUI({
-      choices &lt;- shiny::req(columnnames())
-      if(shiny::isTruthy(input$columns))
-        choices &lt;- unique(c(input$columns, choices))
-      shiny::selectInput(ns("columns"), "Variables:", choices = choices,
-                         selected = input$columns,
-                         multiple = TRUE)
-    })
-    columnnames &lt;- shiny::reactive({
-      shiny::req(input$dataset)
-      names(get(input$dataset) |&gt; as.data.frame() |&gt;
-        dplyr::select(dplyr::where(is.numeric)))
-    })
-    shiny::observeEvent(shiny::req(input$dataset), {
-      choices &lt;- columnnames()
-      shiny::updateSelectInput(session, "columns", choices = choices,
-                               selected = NULL)
-    })
-    
-    output$table &lt;- DT::renderDataTable(
-      shiny::req(dataset())
-    )
-    
-    dataset
-  })
 }
 
 datasetsInput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("dataset"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("dataset"))
 }
 
 datasetsUI &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("columns"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("columns"))
 }
 
 datasetsOutput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  DT::dataTableOutput(ns("table"))
+    ns &lt;- shiny::NS(id)
+    DT::dataTableOutput(ns("table"))
 }
 
 ## file: gghistApp.R
 gghistApp &lt;- function() {
-  ui &lt;- bslib::page(
-    gghistInput("gghist"), 
-    gghistOutput("gghist"),
-    gghistUI("gghist")
-  )
-  server &lt;- function(input, output, session) {
-    gghistServer("gghist")
-  }
-  shiny::shinyApp(ui, server)
+    ui &lt;- bslib::page(
+        gghistInput("gghist"),
+        gghistOutput("gghist"),
+        gghistUI("gghist")
+    )
+    server &lt;- function(input, output, session) {
+        gghistServer("gghist")
+    }
+    shiny::shinyApp(ui, server)
 }
 
 gghistServer &lt;- function(id, df = shiny::reactive(faithful)) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns &lt;- session$ns
-    
-    # Output Main Plot
-    output$main_plot &lt;- shiny::renderPlot({
-      shiny::req(df())
-      if(ncol(df()) &lt; 1) return(ggplot2::ggplot())
-      
-      xvar &lt;- colnames(df())[1]
-      p &lt;- ggplot2::ggplot(df()) +
-        ggplot2::aes(.data[[xvar]]) +
-        ggplot2::geom_histogram(
-          ggplot2::aes(y = ggplot2::after_stat(density)),
-          bins = as.numeric(input$n_breaks),
-          color = "black", fill = "white") +
-        ggplot2::xlab(xvar) +
-        ggplot2::ggtitle(stringr::str_to_title(xvar))
-      
-      if (input$individual_obs) {
-        p &lt;- p + ggplot2::geom_rug()
-      }
-      if (input$density) {
-        shiny::req(input$bw_adjust)
-        p &lt;- p + ggplot2::stat_density(
-          adjust = input$bw_adjust,
-          color = "blue", linewidth = 1, fill = "transparent")
-      }
-      print(p)
+    shiny::moduleServer(id, function(input, output, session) {
+        ns &lt;- session$ns
+
+        # Output Main Plot
+        output$main_plot &lt;- shiny::renderPlot({
+            shiny::req(df())
+            if (ncol(df()) &lt; 1) {
+                return(ggplot2::ggplot())
+            }
+
+            xvar &lt;- colnames(df())[1]
+            p &lt;- ggplot2::ggplot(df()) +
+                ggplot2::aes(.data[[xvar]]) +
+                ggplot2::geom_histogram(
+                    ggplot2::aes(y = ggplot2::after_stat(density)),
+                    bins = as.numeric(input$n_breaks),
+                    color = "black", fill = "white"
+                ) +
+                ggplot2::xlab(xvar) +
+                ggplot2::ggtitle(stringr::str_to_title(xvar))
+
+            if (input$individual_obs) {
+                p &lt;- p + ggplot2::geom_rug()
+            }
+            if (input$density) {
+                shiny::req(input$bw_adjust)
+                p &lt;- p + ggplot2::stat_density(
+                    adjust = input$bw_adjust,
+                    color = "blue", linewidth = 1, fill = "transparent"
+                )
+            }
+            print(p)
+        })
+
+        # Input Bandwidth Adjustment
+        output$bw_adjust &lt;- shiny::renderUI({
+            if (input$density) {
+                shiny::sliderInput(
+                    inputId = ns("bw_adjust"),
+                    label = "Bandwidth adjustment:",
+                    min = 0.2, max = 2, value = 1, step = 0.2
+                )
+            }
+        })
     })
-    
-    # Input Bandwidth Adjustment
-    output$bw_adjust &lt;- shiny::renderUI({
-      if(input$density) {
-        shiny::sliderInput(inputId = ns("bw_adjust"),
-                           label = "Bandwidth adjustment:",
-                           min = 0.2, max = 2, value = 1, step = 0.2)
-      }
-    })
-  })
 }
 
 gghistInput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::tagList(
-    shiny::selectInput(inputId = ns("n_breaks"),
-                label = "Number of bins in histogram (approximate):",
-                choices = c(10, 20, 35, 50),
-                selected = 20),
-    shiny::checkboxInput(inputId = ns("individual_obs"),
-                  label = shiny::strong("Show individual observations"),
-                  value = FALSE),
-    shiny::checkboxInput(inputId = ns("density"),
-                  label = shiny::strong("Show density estimate"),
-                  value = FALSE))
+    ns &lt;- shiny::NS(id)
+    shiny::tagList(
+        shiny::selectInput(
+            inputId = ns("n_breaks"),
+            label = "Number of bins in histogram (approximate):",
+            choices = c(10, 20, 35, 50),
+            selected = 20
+        ),
+        shiny::checkboxInput(
+            inputId = ns("individual_obs"),
+            label = shiny::strong("Show individual observations"),
+            value = FALSE
+        ),
+        shiny::checkboxInput(
+            inputId = ns("density"),
+            label = shiny::strong("Show density estimate"),
+            value = FALSE
+        )
+    )
 }
 
 gghistUI &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("bw_adjust"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("bw_adjust"))
 }
 
 gghistOutput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::plotOutput(ns("main_plot"), height = "300px")
+    ns &lt;- shiny::NS(id)
+    shiny::plotOutput(ns("main_plot"), height = "300px")
 }
 
 ## file: ggpointApp.R
 ggpointApp &lt;- function() {
-  ui &lt;- bslib::page(
-    ggpointInput("ggpoint"), 
-    ggpointOutput("ggpoint"),
-    ggpointUI("ggpoint")
-  )
-  server &lt;- function(input, output, session) {
-    ggpointServer("ggpoint")
-  }
-  shiny::shinyApp(ui, server)
+    ui &lt;- bslib::page(
+        ggpointInput("ggpoint"),
+        ggpointOutput("ggpoint"),
+        ggpointUI("ggpoint")
+    )
+    server &lt;- function(input, output, session) {
+        ggpointServer("ggpoint")
+    }
+    shiny::shinyApp(ui, server)
 }
 
 ggpointServer &lt;- function(id, df = shiny::reactive(faithful)) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns &lt;- session$ns
-    
-    # Output Main Plot
-    output$main_plot &lt;- shiny::renderPlot({
-      shiny::req(df())
-      if(ncol(df()) &lt; 2) return(ggplot2::ggplot())
-      
-      xvar &lt;- colnames(df())[1]
-      yvar &lt;- colnames(df())[2]
-      p &lt;- ggplot2::ggplot(df()) +
-        ggplot2::aes(.data[[xvar]], .data[[yvar]]) +
-        ggplot2::geom_point(
-          color = "black", fill = "white") +
-        ggplot2::xlab(xvar) +
-        ggplot2::ylab(yvar) +
-        ggplot2::ggtitle(
-          stringr::str_to_title(paste(xvar, "by", yvar)))
-      
-      if (input$individual_obs) {
-        p &lt;- p + ggplot2::geom_rug()
-      }
-      if (input$smooth) {
-        shiny::req(input$bw_adjust)
-        p &lt;- p +
-          ggplot2::geom_smooth(formula = "y~x", se = FALSE,
-            method = "loess", span = input$bw_adjust,
-            color = "blue", linewidth = 1)
-      }
-      print(p)
+    shiny::moduleServer(id, function(input, output, session) {
+        ns &lt;- session$ns
+
+        # Output Main Plot
+        output$main_plot &lt;- shiny::renderPlot({
+            shiny::req(df())
+            if (ncol(df()) &lt; 2) {
+                return(ggplot2::ggplot())
+            }
+
+            xvar &lt;- colnames(df())[1]
+            yvar &lt;- colnames(df())[2]
+            p &lt;- ggplot2::ggplot(df()) +
+                ggplot2::aes(.data[[xvar]], .data[[yvar]]) +
+                ggplot2::geom_point(
+                    color = "black", fill = "white"
+                ) +
+                ggplot2::xlab(xvar) +
+                ggplot2::ylab(yvar) +
+                ggplot2::ggtitle(
+                    stringr::str_to_title(paste(xvar, "by", yvar))
+                )
+
+            if (input$individual_obs) {
+                p &lt;- p + ggplot2::geom_rug()
+            }
+            if (input$smooth) {
+                shiny::req(input$bw_adjust)
+                p &lt;- p +
+                    ggplot2::geom_smooth(
+                        formula = "y~x", se = FALSE,
+                        method = "loess", span = input$bw_adjust,
+                        color = "blue", linewidth = 1
+                    )
+            }
+            print(p)
+        })
+
+        # Input Bandwidth Adjustment
+        output$bw_adjust &lt;- shiny::renderUI({
+            if (input$smooth) {
+                shiny::sliderInput(
+                    inputId = ns("bw_adjust"),
+                    label = "Span adjustment:",
+                    min = 0, max = 1, value = 0.75, step = 0.05
+                )
+            }
+        })
     })
-    
-    # Input Bandwidth Adjustment
-    output$bw_adjust &lt;- shiny::renderUI({
-      if(input$smooth) {
-        shiny::sliderInput(inputId = ns("bw_adjust"),
-                           label = "Span adjustment:",
-                           min = 0, max = 1, value = 0.75, step = 0.05)
-      }
-    })
-  })
 }
 
 ggpointInput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::tagList(
-    shiny::checkboxInput(inputId = ns("individual_obs"),
-                  label = shiny::strong("Show individual observations"),
-                  value = FALSE),
-    shiny::checkboxInput(inputId = ns("smooth"),
-                  label = shiny::strong("Show smooth estimate"),
-                  value = FALSE))
+    ns &lt;- shiny::NS(id)
+    shiny::tagList(
+        shiny::checkboxInput(
+            inputId = ns("individual_obs"),
+            label = shiny::strong("Show individual observations"),
+            value = FALSE
+        ),
+        shiny::checkboxInput(
+            inputId = ns("smooth"),
+            label = shiny::strong("Show smooth estimate"),
+            value = FALSE
+        )
+    )
 }
 
 ggpointUI &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("bw_adjust"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("bw_adjust"))
 }
 
 ggpointOutput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::plotOutput(ns("main_plot"), height = "300px")
+    ns &lt;- shiny::NS(id)
+    shiny::plotOutput(ns("main_plot"), height = "300px")
 }
 
 ## file: histApp.R
 histApp &lt;- function() {
-  ui &lt;- bslib::page(
-    histInput("hist"), 
-    histOutput("hist"),
-    histUI("hist")
-  )
-  server &lt;- function(input, output, session) {
-    histServer("hist") 
-  }
-  shiny::shinyApp(ui, server)
+    ui &lt;- bslib::page(
+        histInput("hist"),
+        histOutput("hist"),
+        histUI("hist")
+    )
+    server &lt;- function(input, output, session) {
+        histServer("hist")
+    }
+    shiny::shinyApp(ui, server)
 }
 
 histServer &lt;- function(id, df = shiny::reactive(faithful)) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns &lt;- session$ns
-    
-    # Output Main Plot
-    output$main_plot &lt;- shiny::renderPlot({
-      shiny::req(df())
-      if(ncol(df()) &lt; 1) return(NULL)
-      
-      xvar &lt;- colnames(df())[1]
-      graphics::hist(df()[[xvar]],
-                     probability = TRUE,
-                     breaks = as.numeric(input$n_breaks),
-                     xlab = xvar,
-                     main = stringr::str_to_title(xvar))
-      
-      if (input$individual_obs) {
-        graphics::rug(df()[[xvar]])
-      }
-      if (input$density) {
-        shiny::req(df())
-        shiny::req(input$bw_adjust)
-        dens &lt;- stats::density(df()[[xvar]],
-                               adjust = input$bw_adjust)
-        graphics::lines(dens, col = "blue")
-      }
+    shiny::moduleServer(id, function(input, output, session) {
+        ns &lt;- session$ns
+
+        # Output Main Plot
+        output$main_plot &lt;- shiny::renderPlot({
+            shiny::req(df())
+            if (ncol(df()) &lt; 1) {
+                return(NULL)
+            }
+
+            xvar &lt;- colnames(df())[1]
+            graphics::hist(df()[[xvar]],
+                probability = TRUE,
+                breaks = as.numeric(input$n_breaks),
+                xlab = xvar,
+                main = stringr::str_to_title(xvar)
+            )
+
+            if (input$individual_obs) {
+                graphics::rug(df()[[xvar]])
+            }
+            if (input$density) {
+                shiny::req(df())
+                shiny::req(input$bw_adjust)
+                dens &lt;- stats::density(df()[[xvar]],
+                    adjust = input$bw_adjust
+                )
+                graphics::lines(dens, col = "blue")
+            }
+        })
+
+        # Input Bandwidth Adjustment
+        output$bw_adjust &lt;- shiny::renderUI({
+            if (input$density) {
+                shiny::sliderInput(
+                    inputId = ns("bw_adjust"),
+                    label = "Bandwidth adjustment:",
+                    min = 0.2, max = 2, value = 1, step = 0.2
+                )
+            }
+        })
     })
-    
-    # Input Bandwidth Adjustment
-    output$bw_adjust &lt;- shiny::renderUI({
-      if(input$density) {
-        shiny::sliderInput(inputId = ns("bw_adjust"),
-                           label = "Bandwidth adjustment:",
-                           min = 0.2, max = 2, value = 1, step = 0.2)
-      }
-    })
-  })
 }
 
 histInput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::tagList(
-    shiny::selectInput(inputId = ns("n_breaks"),
-                label = "Number of bins in histogram (approximate):",
-                choices = c(10, 20, 35, 50),
-                selected = 20),
-    shiny::checkboxInput(inputId = ns("individual_obs"),
-                  label = shiny::strong("Show individual observations"),
-                  value = FALSE),
-    shiny::checkboxInput(inputId = ns("density"),
-                  label = shiny::strong("Show density estimate"),
-                  value = FALSE))
+    ns &lt;- shiny::NS(id)
+    shiny::tagList(
+        shiny::selectInput(
+            inputId = ns("n_breaks"),
+            label = "Number of bins in histogram (approximate):",
+            choices = c(10, 20, 35, 50),
+            selected = 20
+        ),
+        shiny::checkboxInput(
+            inputId = ns("individual_obs"),
+            label = shiny::strong("Show individual observations"),
+            value = FALSE
+        ),
+        shiny::checkboxInput(
+            inputId = ns("density"),
+            label = shiny::strong("Show density estimate"),
+            value = FALSE
+        )
+    )
 }
 
 histUI &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("bw_adjust"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("bw_adjust"))
 }
 
 histOutput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::plotOutput(ns("main_plot"), height = "300px")
+    ns &lt;- shiny::NS(id)
+    shiny::plotOutput(ns("main_plot"), height = "300px")
 }
 
 ## file: rowsApp.R
 rowsApp &lt;- function() {
-  ui &lt;- bslib::page(
-    title = "Geyser Rows Modules",
-    rowsInput("rows"),
-    rowsUI("rows")
-  )
-  server &lt;- function(input, output, session) {
-    rowsServer("rows")
-  }
-  shiny::shinyApp(ui, server)
+    ui &lt;- bslib::page(
+        title = "Geyser Rows Modules",
+        rowsInput("rows"),
+        rowsUI("rows")
+    )
+    server &lt;- function(input, output, session) {
+        rowsServer("rows")
+    }
+    shiny::shinyApp(ui, server)
 }
 
 rowsServer &lt;- function(id) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns &lt;- session$ns
-    dataset &lt;- datasetsServer("datasets")
-    histServer("hist", dataset)
-    gghistServer("gghist", dataset)
-    ggpointServer("ggpoint", dataset)
-  })
+    shiny::moduleServer(id, function(input, output, session) {
+        ns &lt;- session$ns
+        dataset &lt;- datasetsServer("datasets")
+        histServer("hist", dataset)
+        gghistServer("gghist", dataset)
+        ggpointServer("ggpoint", dataset)
+    })
 }
 
 rowsInput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  bslib::layout_columns(
-    datasetsInput(ns("datasets")),
-    datasetsUI(ns("datasets"))
-  )
+    ns &lt;- shiny::NS(id)
+    bslib::layout_columns(
+        datasetsInput(ns("datasets")),
+        datasetsUI(ns("datasets"))
+    )
 }
 
 rowsUI &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  bslib::layout_columns(
-    bslib::card(bslib::card_header("hist"),
-                histInput(ns("hist")), 
-                histOutput(ns("hist")),
-                histUI(ns("hist"))),
-    bslib::card(bslib::card_header("gghist"),
-                gghistInput(ns("gghist")), 
-                gghistOutput(ns("gghist")),
-                gghistUI(ns("gghist"))),
-    bslib::card(bslib::card_header("ggpoint"),
-                ggpointInput(ns("ggpoint")), 
-                ggpointOutput(ns("ggpoint")),
-                ggpointUI(ns("ggpoint"))))
+    ns &lt;- shiny::NS(id)
+    bslib::layout_columns(
+        bslib::card(
+            bslib::card_header("hist"),
+            histInput(ns("hist")),
+            histOutput(ns("hist")),
+            histUI(ns("hist"))
+        ),
+        bslib::card(
+            bslib::card_header("gghist"),
+            gghistInput(ns("gghist")),
+            gghistOutput(ns("gghist")),
+            gghistUI(ns("gghist"))
+        ),
+        bslib::card(
+            bslib::card_header("ggpoint"),
+            ggpointInput(ns("ggpoint")),
+            ggpointOutput(ns("ggpoint")),
+            ggpointUI(ns("ggpoint"))
+        )
+    )
 }
 
 ## file: switchApp.R
 switchApp &lt;- function() {
-  ui &lt;- bslib::page(
-    switchInput("switch"),
-    switchOutput("switch"), 
-    switchUI("switch")
-  )
-  server &lt;- function(input, output, session) {
-    switchServer("switch")
-  }
-  shiny::shinyApp(ui, server)
+    ui &lt;- bslib::page(
+        switchInput("switch"),
+        switchOutput("switch"),
+        switchUI("switch")
+    )
+    server &lt;- function(input, output, session) {
+        switchServer("switch")
+    }
+    shiny::shinyApp(ui, server)
 }
 
 switchServer &lt;- function(id) {
-  shiny::moduleServer(id, function(input, output, session) {
-    ns &lt;- session$ns
-    
-    dataset &lt;- datasetsServer("datasets")
-    histServer("hist", dataset)
-    gghistServer("gghist", dataset)
-    ggpointServer("ggpoint", dataset)
-    
-    output$inputSwitch &lt;- shiny::renderUI({
-      shiny::req(input$plottype)
-      get(paste0(input$plottype, "Input"))(ns(input$plottype))
+    shiny::moduleServer(id, function(input, output, session) {
+        ns &lt;- session$ns
+
+        dataset &lt;- datasetsServer("datasets")
+        histServer("hist", dataset)
+        gghistServer("gghist", dataset)
+        ggpointServer("ggpoint", dataset)
+
+        output$inputSwitch &lt;- shiny::renderUI({
+            shiny::req(input$plottype)
+            get(paste0(input$plottype, "Input"))(ns(input$plottype))
+        })
+        output$uiSwitch &lt;- shiny::renderUI({
+            shiny::req(input$plottype)
+            get(paste0(input$plottype, "UI"))(ns(input$plottype))
+        })
+        output$outputSwitch &lt;- shiny::renderUI({
+            shiny::req(input$plottype)
+            get(paste0(input$plottype, "Output"))(ns(input$plottype))
+        })
     })
-    output$uiSwitch &lt;- shiny::renderUI({
-      shiny::req(input$plottype)
-      get(paste0(input$plottype, "UI"))(ns(input$plottype))
-    })
-    output$outputSwitch &lt;- shiny::renderUI({
-      shiny::req(input$plottype)
-      get(paste0(input$plottype, "Output"))(ns(input$plottype))
-    })
-  })
 }
 
 switchInput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  list(
-    bslib::layout_columns(
-      shiny::selectInput(ns("plottype"), "Plot Type:",
-                         c("hist","gghist","ggpoint")),
-      datasetsInput(ns("datasets")),
-      datasetsUI(ns("datasets"))),
-  shiny::uiOutput(ns("inputSwitch"))
-  )
+    ns &lt;- shiny::NS(id)
+    list(
+        bslib::layout_columns(
+            shiny::selectInput(
+                ns("plottype"), "Plot Type:",
+                c("hist", "gghist", "ggpoint")
+            ),
+            datasetsInput(ns("datasets")),
+            datasetsUI(ns("datasets"))
+        ),
+        shiny::uiOutput(ns("inputSwitch"))
+    )
 }
 
 switchUI &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("uiSwitch"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("uiSwitch"))
 }
 
 switchOutput &lt;- function(id) {
-  ns &lt;- shiny::NS(id)
-  shiny::uiOutput(ns("outputSwitch"))
+    ns &lt;- shiny::NS(id)
+    shiny::uiOutput(ns("outputSwitch"))
 }</code></pre>
 <section id="source-code" class="level2">
 <h2 class="anchored" data-anchor-id="source-code">Source Code</h2>
@@ -766,8 +830,8 @@ switchOutput &lt;- function(id) {
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>datasetsApp <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  ui <span class="ot">&lt;-</span> bslib<span class="sc">::</span><span class="fu">page</span>(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">datasetsInput</span>(<span class="st">"datasets"</span>), </span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">datasetsUI</span>(<span class="st">"datasets"</span>), </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">datasetsInput</span>(<span class="st">"datasets"</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">datasetsUI</span>(<span class="st">"datasets"</span>),</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">datasetsOutput</span>(<span class="st">"datasets"</span>)</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session) {</span>
@@ -780,7 +844,7 @@ switchOutput &lt;- function(id) {
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>datasetsServer <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  shiny<span class="sc">::</span><span class="fu">moduleServer</span>(id, <span class="cf">function</span>(input, output, session) {</span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    ns <span class="ot">&lt;-</span> session<span class="sc">$</span>ns</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select Dataset.</span></span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Static `datanames` = names in `datasets` package.</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    data <span class="ot">&lt;-</span> <span class="fu">datanames</span>()</span>
@@ -791,57 +855,67 @@ switchOutput &lt;- function(id) {
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">req</span>(input<span class="sc">$</span>dataset, input<span class="sc">$</span>columns)</span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      data <span class="ot">&lt;-</span> <span class="fu">get</span>(input<span class="sc">$</span>dataset)</span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Contingency of columns for previous dataset.</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(<span class="sc">!</span><span class="fu">all</span>(input<span class="sc">$</span>columns <span class="sc">%in%</span> <span class="fu">colnames</span>(data)))</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(input<span class="sc">$</span>columns <span class="sc">%in%</span> <span class="fu">colnames</span>(data))) {</span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>      data[, input<span class="sc">$</span>columns, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Columns</span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    output<span class="sc">$</span>columns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">renderUI</span>({</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>      choices <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">req</span>(<span class="fu">columnnames</span>())</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(shiny<span class="sc">::</span><span class="fu">isTruthy</span>(input<span class="sc">$</span>columns))</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        choices <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">c</span>(input<span class="sc">$</span>columns, choices))</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">selectInput</span>(<span class="fu">ns</span>(<span class="st">"columns"</span>), <span class="st">"Variables:"</span>, <span class="at">choices =</span> choices,</span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>                         <span class="at">selected =</span> input<span class="sc">$</span>columns,</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>                         <span class="at">multiple =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    columnnames <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">reactive</span>({</span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">req</span>(input<span class="sc">$</span>dataset)</span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">names</span>(<span class="fu">get</span>(input<span class="sc">$</span>dataset) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">where</span>(is.numeric)))</span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    shiny<span class="sc">::</span><span class="fu">observeEvent</span>(shiny<span class="sc">::</span><span class="fu">req</span>(input<span class="sc">$</span>dataset), {</span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get `dataset()`, selecting only numeric columns.</span></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>      choices <span class="ot">&lt;-</span> <span class="fu">columnnames</span>()</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">updateSelectInput</span>(session, <span class="st">"columns"</span>, <span class="at">choices =</span> choices,</span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>                               <span class="at">selected =</span> <span class="cn">NULL</span>)</span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    output<span class="sc">$</span>table <span class="ot">&lt;-</span>   DT<span class="sc">::</span><span class="fu">renderDataTable</span>(</span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">req</span>(<span class="fu">dataset</span>())</span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>    <span class="do">#########################################</span></span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    dataset</span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="co">#' @rdname datasetsApp</span></span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>datasetsInput <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">NS</span>(id)</span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>  shiny<span class="sc">::</span><span class="fu">uiOutput</span>(<span class="fu">ns</span>(<span class="st">"dataset"</span>))</span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="co">#' @rdname datasetsApp</span></span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>datasetsUI <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">NS</span>(id)</span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>  shiny<span class="sc">::</span><span class="fu">uiOutput</span>(<span class="fu">ns</span>(<span class="st">"columns"</span>))</span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="co">#' @rdname datasetsApp</span></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>datasetsOutput <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">NS</span>(id)</span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">dataTableOutput</span>(<span class="fu">ns</span>(<span class="st">"table"</span>))</span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>      data[, input<span class="sc">$</span>columns, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Columns</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    output<span class="sc">$</span>columns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">renderUI</span>({</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>      choices <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">req</span>(<span class="fu">columnnames</span>())</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>      selected <span class="ot">&lt;-</span> input<span class="sc">$</span>columns</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (shiny<span class="sc">::</span><span class="fu">isTruthy</span>(selected)) {</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>        choices <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">c</span>(selected, choices))</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        selected <span class="ot">&lt;-</span> choices[<span class="dv">1</span><span class="sc">:</span><span class="fu">min</span>(<span class="dv">2</span>, <span class="fu">length</span>(choices))]</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">selectInput</span>(<span class="fu">ns</span>(<span class="st">"columns"</span>), <span class="st">"Variables:"</span>,</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">choices =</span> choices,</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">selected =</span> selected,</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">multiple =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    columnnames <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">reactive</span>({</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">req</span>(input<span class="sc">$</span>dataset)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">names</span>(<span class="fu">get</span>(input<span class="sc">$</span>dataset) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">where</span>(is.numeric)))</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    shiny<span class="sc">::</span><span class="fu">observeEvent</span>(shiny<span class="sc">::</span><span class="fu">req</span>(input<span class="sc">$</span>dataset), {</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get `dataset()`, selecting only numeric columns.</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>      choices <span class="ot">&lt;-</span> <span class="fu">columnnames</span>()</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>      selected <span class="ot">&lt;-</span> choices[<span class="dv">1</span><span class="sc">:</span><span class="fu">min</span>(<span class="dv">2</span>, <span class="fu">length</span>(choices))]</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">updateSelectInput</span>(session, <span class="st">"columns"</span>,</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        <span class="at">choices =</span> choices,</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">selected =</span> selected</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>    output<span class="sc">$</span>table <span class="ot">&lt;-</span> DT<span class="sc">::</span><span class="fu">renderDataTable</span>(</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">req</span>(<span class="fu">dataset</span>())</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>    <span class="do">#########################################</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>    dataset</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="co">#' @rdname datasetsApp</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>datasetsInput <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">NS</span>(id)</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>  shiny<span class="sc">::</span><span class="fu">uiOutput</span>(<span class="fu">ns</span>(<span class="st">"dataset"</span>))</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a><span class="co">#' @rdname datasetsApp</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>datasetsUI <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">NS</span>(id)</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  shiny<span class="sc">::</span><span class="fu">uiOutput</span>(<span class="fu">ns</span>(<span class="st">"columns"</span>))</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="co">#' @rdname datasetsApp</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>datasetsOutput <span class="ot">&lt;-</span> <span class="cf">function</span>(id) {</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>  ns <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">NS</span>(id)</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">dataTableOutput</span>(<span class="fu">ns</span>(<span class="st">"table"</span>))</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">

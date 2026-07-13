@@ -15,7 +15,8 @@ This advanced app combines a central dataset selector module with multiple plott
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 800
+#| viewerHeight: 1000
+#| viewerWidth: 100%
 #| components: [viewer]
 
 ## file: app.R
@@ -114,7 +115,8 @@ datasetsServer <- function(id) {
     shiny::moduleServer(id, function(input, output, session) {
         ns <- session$ns
 
-        # Select Dataset
+        # Select Dataset.
+        # Static `datanames` = names in `datasets` package.
         data <- datanames()
         output$dataset <- shiny::renderUI({
             shiny::selectInput(ns("dataset"), "Dataset:", data$name)
@@ -122,6 +124,7 @@ datasetsServer <- function(id) {
         dataset <- shiny::reactive({
             shiny::req(input$dataset, input$columns)
             data <- get(input$dataset)
+            # Contingency of columns for previous dataset.
             if (!all(input$columns %in% colnames(data))) {
                 return(NULL)
             }
@@ -131,12 +134,15 @@ datasetsServer <- function(id) {
         # Columns
         output$columns <- shiny::renderUI({
             choices <- shiny::req(columnnames())
-            if (shiny::isTruthy(input$columns)) {
-                choices <- unique(c(input$columns, choices))
+            selected <- input$columns
+            if (shiny::isTruthy(selected)) {
+                choices <- unique(c(selected, choices))
+            } else {
+                selected <- choices[1:min(2, length(choices))]
             }
             shiny::selectInput(ns("columns"), "Variables:",
                 choices = choices,
-                selected = input$columns,
+                selected = selected,
                 multiple = TRUE
             )
         })
@@ -146,17 +152,19 @@ datasetsServer <- function(id) {
                 dplyr::select(dplyr::where(is.numeric)))
         })
         shiny::observeEvent(shiny::req(input$dataset), {
+            # Get `dataset()`, selecting only numeric columns.
             choices <- columnnames()
+            selected <- choices[1:min(2, length(choices))]
             shiny::updateSelectInput(session, "columns",
                 choices = choices,
-                selected = NULL
+                selected = selected
             )
         })
 
         output$table <- DT::renderDataTable(
             shiny::req(dataset())
         )
-
+        #########################################
         dataset
     })
 }
