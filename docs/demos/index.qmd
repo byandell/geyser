@@ -6,6 +6,7 @@ listing:
   contents:
     - build_module.qmd
     - connect_modules.qmd
+    - python_module.qmd
     - posit_gallery.qmd
   type: grid
   categories: false

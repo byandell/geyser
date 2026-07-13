@@ -29,7 +29,7 @@ Earlier versions of these slide decks are available from [Posit Connect](https:/
 
 ## Demos
 
-Live demos rendered with GitHub Pages are.
+Live demos rendered with GitHub Pages:
 
 - [geyserDemo](shiny/) ([source](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
 - [geyserQuartoDemo](demo_shinylive.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demo_shinylive.qmd))

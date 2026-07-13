@@ -62,6 +62,53 @@ shiny::shinyApp(ui, server)
 \`\`\`
 ```
 
+### 2b. Embed Python Apps using `{shinylive-python}`
+
+For Python-based Shiny apps, you can use the `{shinylive-python}` code block. The Quarto Shinylive filter handles compiling and packaging the Python code just like the R version.
+
+#### 1. Specifying Requirements
+Inside browser WebAssembly (Pyodide), packages are downloaded dynamically. You must declare any package requirements in your code block options:
+```markdown
+\`\`\`{shinylive-python}
+#| standalone: true
+#| viewerHeight: 600
+#| components: [viewer]
+#| requirements: [pandas, numpy, matplotlib, scipy]
+
+# Python code here...
+\`\`\`
+```
+
+#### 2. Multi-File Apps and Local Packages
+You can structure multi-file Python applications using the same `## file: ` header comment syntax. For example, if you want to import from a local package folder (like `geyser/hist.py`), define `geyser/__init__.py` and the module files within the code block:
+```markdown
+## file: app.py
+from shiny import App, ui
+from geyser.hist import hist_server, hist_input, hist_output, hist_ui
+
+app_ui = ui.page_fluid(
+    hist_input("hist"),
+    hist_output("hist"),
+    hist_ui("hist")
+)
+
+def app_server(input, output, session):
+    hist_server("hist")
+
+app = App(app_ui, app_server)
+
+## file: geyser/__init__.py
+# empty package marker
+
+## file: geyser/hist.py
+# custom module logic goes here...
+```
+
+#### 3. WebAssembly Gotchas (CORS & C-Extensions)
+When deploying Python Shinylive apps, be mindful of browser restrictions:
+* **CORS Policies**: Standard python code that fetches data from online repositories (e.g. `seaborn.load_dataset("geyser")`) will fail due to browser CORS restriction blocks. Mock the dataset call to return a local static `pandas.DataFrame`.
+* **C-Extensions**: Packages that compile C code locally (such as `rpy2` or custom DB connectors) are not compatible with standard Pyodide in the browser. You must mock those modules or replace them with native Python/browser equivalents.
+
 ### 3. Rendering and Local Preview
 
 Modern web browsers block Service Workers and WebAssembly from running over the `file://` protocol. If you open the rendered `.html` page directly as a local file, the app will display as a blank page.
@@ -111,7 +158,8 @@ docs/
     ├── index.qmd              # Demos landing/gallery index
     ├── posit_gallery.qmd      # Individual demo (e.g. iframe embed)
     ├── build_module.qmd       # Individual demo (e.g. Shinylive app)
-    └── connect_modules.qmd    # Connected modules demo (multi-file Shinylive)
+    ├── connect_modules.qmd    # Connected modules demo (multi-file Shinylive)
+    └── python_module.qmd      # Python module demo (Python Shinylive)
 ```
 
 ### 2. Sharing Configurations via `_metadata.yml`

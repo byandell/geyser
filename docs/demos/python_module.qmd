@@ -1,0 +1,155 @@
+---
+title: "Python Module (Shinylive)"
+description: "A serverless WebAssembly-powered Python Shiny app demonstrating the implementation of custom modules in Python using shiny.module."
+author: "Brian S. Yandell"
+toc: true
+---
+
+[← Back to Demos Gallery](index.qmd)
+
+This section displays a Python geyser app using
+[inst/build_module/5_python/app_hist.py](https://github.com/byandell/geyser/blob/main/inst/build_module/5_python/app_hist.py),
+powered directly in the page via **Shinylive** (WebAssembly).
+
+The live application is run completely serverless in your browser. Below the application, you can view the Python source files for both the main application (`app_hist.py`) and the custom module (`geyser/hist.py`) in separate tabs.
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 600
+#| components: [viewer]
+#| requirements: [pandas, numpy, matplotlib, scipy]
+
+## file: app.py
+from shiny import App, render, ui
+from geyser.hist import hist_server, hist_input, hist_output, hist_ui
+
+app_ui = ui.page_fluid(
+    hist_input("hist"),
+    hist_output("hist"),
+    hist_ui("hist")
+)
+
+def app_server(input, output, session):
+    hist_server("hist")
+
+app = App(app_ui, app_server)
+
+## file: geyser/__init__.py
+# Package marker
+
+## file: geyser/io.py
+# Mock io module for WebAssembly environment
+def app_run(app, host="127.0.0.1", port=None):
+    pass
+
+## file: geyser/hist.py
+from shiny import App, module, reactive, render, ui
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import gaussian_kde
+
+@reactive.calc
+def default_dataset():
+    # In browser WebAssembly, return local dataset to prevent CORS downloads
+    return pd.DataFrame({
+        "duration": [3.6, 1.8, 3.333, 2.283, 4.533, 2.883, 4.7, 3.6, 1.95, 4.35, 1.833, 3.917, 4.2, 1.75, 4.7, 2.167, 1.75, 4.8, 1.6, 4.25],
+        "waiting": [79, 54, 74, 62, 85, 55, 88, 85, 51, 85, 54, 84, 78, 47, 83, 52, 62, 84, 52, 79]
+    })
+
+@module.server
+def hist_server(input, output, session, data_set=default_dataset):
+    if data_set is None:
+        return None
+
+    @reactive.calc
+    def xval():
+        return data_set().columns[0]
+        
+    @reactive.calc
+    def datacol():
+        return data_set()[xval()]
+    
+    @render.plot
+    def main_plot():
+        if not isinstance(data_set(), pd.DataFrame):
+            return None
+        if data_set().shape[1] < 1:
+            return None
+        fig, ax = plt.subplots()
+        n_breaks = int(input.n_breaks())
+        hist_data = np.histogram(datacol(), bins=n_breaks, density=True)
+        ax.bar(hist_data[1][:-1], hist_data[0], width=np.diff(hist_data[1]), edgecolor='black', align='edge')
+
+        if input.individual_obs():
+            ax.plot(datacol(), np.zeros_like(datacol()), 'r|', markersize=10)
+
+        if input.density():
+            bw_adjust = input.bw_adjust()
+            kde = gaussian_kde(datacol(), bw_method=bw_adjust)
+            x_grid = np.linspace(min(datacol()), max(datacol()), 1000)
+            ax.plot(x_grid, kde(x_grid), color='blue')
+
+        ax.set_xlabel(xval())
+        ax.set_title(xval())
+        return fig
+        
+    @render.ui
+    def output_bw_adjust():
+        if input.density():
+            return ui.input_slider(
+                "bw_adjust",
+                "Bandwidth adjustment:",
+                min=0.2,
+                max=2.0,
+                value=1.0,
+                step=0.2
+            )
+
+@module.ui
+def hist_input():
+    return ui.card(
+        ui.input_select(
+            "n_breaks",
+            "Number of bins in histogram (approximate):",
+            choices=[10, 20, 35, 50],
+            selected=20
+        ),
+        ui.input_checkbox(
+            "individual_obs",
+            "Show individual observations",
+            value=False
+        ),
+        ui.input_checkbox(
+            "density",
+            "Show density estimate",
+            value=False
+        )
+    )
+
+@module.ui
+def hist_output():
+    return ui.output_plot("main_plot")
+
+@module.ui
+def hist_ui():
+    return ui.output_ui("output_bw_adjust")
+```
+
+## Source Code
+
+::: {.panel-tabset}
+
+### app_hist.py
+```{r}
+#| code: !expr readLines("../../inst/build_module/5_python/app_hist.py")
+#| eval: false
+```
+
+### hist.py (module)
+```{r}
+#| code: !expr readLines("../../geyser/hist.py")
+#| eval: false
+```
+
+:::

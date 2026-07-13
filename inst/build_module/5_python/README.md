@@ -1,3 +1,3 @@
-I have not been able to figure out how to run python code,
-and in particular a shiny app.
-I need some help on this.
+Working python examples for shiny with modules:
+
+- [app_hist.py](./app_hist.py)
