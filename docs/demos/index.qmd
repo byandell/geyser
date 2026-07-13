@@ -5,6 +5,7 @@ toc: false
 listing:
   contents:
     - build_module.qmd
+    - connect_modules.qmd
     - posit_gallery.qmd
   type: grid
   categories: false

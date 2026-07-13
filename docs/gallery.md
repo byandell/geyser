@@ -110,7 +110,8 @@ docs/
     ├── _metadata.yml          # Shared Quarto settings for the directory
     ├── index.qmd              # Demos landing/gallery index
     ├── posit_gallery.qmd      # Individual demo (e.g. iframe embed)
-    └── build_module.qmd       # Individual demo (e.g. Shinylive app)
+    ├── build_module.qmd       # Individual demo (e.g. Shinylive app)
+    └── connect_modules.qmd    # Connected modules demo (multi-file Shinylive)
 ```
 
 ### 2. Sharing Configurations via `_metadata.yml`

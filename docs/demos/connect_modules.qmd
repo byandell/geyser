@@ -1,0 +1,559 @@
+---
+title: "Connected Modules (Shinylive)"
+description: "An advanced Shiny application demonstrating how multiple independent modules connect, share reactive data, and communicate within a navigation bar layout."
+author: "Brian S. Yandell"
+toc: true
+---
+
+[← Back to Demos Gallery](index.qmd)
+
+This section displays the running version of the geyser app using the source code from [inst/connect_modules/demo](https://github.com/byandell/geyser/tree/main/inst/connect_modules/demo), powered directly in the page via the serverless **Shinylive** (WebAssembly).
+
+This advanced app combines a central dataset selector module with multiple plotting and layout modules, allowing them to share state reactively. Below the application, you can view the source files for each of the modules in separate tabs.
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 800
+#| components: [viewer]
+
+## file: app.R
+# Load required packages for WebAssembly Shinylive pre-fetching
+library(shiny)
+library(bslib)
+library(ggplot2)
+library(dplyr)
+library(DT)
+library(stringr)
+library(tibble)
+
+# ui
+ui <- bslib::page_navbar(
+  title = "Geyser Modules with NavBar",
+  bslib::nav_panel(
+    "hist",
+    histInput("hist"),
+    histOutput("hist"),
+    histUI("hist")
+  ),
+  bslib::nav_panel(
+    "gghist",
+    gghistInput("gghist"),
+    gghistOutput("gghist"),
+    gghistUI("gghist")
+  ),
+  bslib::nav_panel(
+    "ggpoint",
+    ggpointInput("ggpoint"),
+    ggpointOutput("ggpoint"),
+    ggpointUI("ggpoint")
+  ),
+  bslib::nav_panel(
+    "Rows",
+    shiny::titlePanel("Geyser Rows Modules"),
+    rowsInput("rows"),
+    rowsUI("rows")
+  ),
+  bslib::nav_panel(
+    "Switch",
+    shiny::titlePanel("Geyser Switch Modules"),
+    switchInput("switch"),
+    switchOutput("switch"),
+    switchUI("switch")
+  )
+)
+
+# server
+server <- function(input, output, session) {
+  histServer("hist")
+  gghistServer("gghist")
+  ggpointServer("ggpoint")
+
+  rowsServer("rows")
+
+  switchServer("switch")
+}
+shiny::shinyApp(ui, server)
+
+## file: datanames.R
+datanames <- function() {
+  # Fallback list since help("datasets") info is not fully accessible in WebAssembly R
+  dataname <- unique(c("faithful", "mtcars", "cars", "iris", "quakes", "rock", "trees"))
+  classes <- sapply(dataname, function(x) {
+    tryCatch(class(get(x))[1],
+             error = function(e) "none")
+  })
+  tibble::as_tibble(data.frame(name = dataname, class = classes)) |>
+    dplyr::filter(classes %in% c("data.frame", "matrix"))
+}
+
+## file: datasetsApp.R
+datasetsApp <- function() {
+  ui <- bslib::page(
+    datasetsInput("datasets"), 
+    datasetsUI("datasets"), 
+    datasetsOutput("datasets")
+  )
+  server <- function(input, output, session) {
+    datasetsServer("datasets")
+  }
+  shiny::shinyApp(ui, server)
+}
+
+datasetsServer <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Select Dataset
+    data <- datanames()
+    output$dataset <- shiny::renderUI({
+      shiny::selectInput(ns("dataset"), "Dataset:", data$name)
+    })
+    dataset <- shiny::reactive({
+      shiny::req(input$dataset, input$columns)
+      data <- get(input$dataset)
+      if(!all(input$columns %in% colnames(data)))
+        return(NULL)
+      data[, input$columns, drop = FALSE]
+    })
+    
+    # Columns
+    output$columns <- shiny::renderUI({
+      choices <- shiny::req(columnnames())
+      if(shiny::isTruthy(input$columns))
+        choices <- unique(c(input$columns, choices))
+      shiny::selectInput(ns("columns"), "Variables:", choices = choices,
+                         selected = input$columns,
+                         multiple = TRUE)
+    })
+    columnnames <- shiny::reactive({
+      shiny::req(input$dataset)
+      names(get(input$dataset) |> as.data.frame() |>
+        dplyr::select(dplyr::where(is.numeric)))
+    })
+    shiny::observeEvent(shiny::req(input$dataset), {
+      choices <- columnnames()
+      shiny::updateSelectInput(session, "columns", choices = choices,
+                               selected = NULL)
+    })
+    
+    output$table <- DT::renderDataTable(
+      shiny::req(dataset())
+    )
+    
+    dataset
+  })
+}
+
+datasetsInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("dataset"))
+}
+
+datasetsUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("columns"))
+}
+
+datasetsOutput <- function(id) {
+  ns <- shiny::NS(id)
+  DT::dataTableOutput(ns("table"))
+}
+
+## file: gghistApp.R
+gghistApp <- function() {
+  ui <- bslib::page(
+    gghistInput("gghist"), 
+    gghistOutput("gghist"),
+    gghistUI("gghist")
+  )
+  server <- function(input, output, session) {
+    gghistServer("gghist")
+  }
+  shiny::shinyApp(ui, server)
+}
+
+gghistServer <- function(id, df = shiny::reactive(faithful)) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Output Main Plot
+    output$main_plot <- shiny::renderPlot({
+      shiny::req(df())
+      if(ncol(df()) < 1) return(ggplot2::ggplot())
+      
+      xvar <- colnames(df())[1]
+      p <- ggplot2::ggplot(df()) +
+        ggplot2::aes(.data[[xvar]]) +
+        ggplot2::geom_histogram(
+          ggplot2::aes(y = ggplot2::after_stat(density)),
+          bins = as.numeric(input$n_breaks),
+          color = "black", fill = "white") +
+        ggplot2::xlab(xvar) +
+        ggplot2::ggtitle(stringr::str_to_title(xvar))
+      
+      if (input$individual_obs) {
+        p <- p + ggplot2::geom_rug()
+      }
+      if (input$density) {
+        shiny::req(input$bw_adjust)
+        p <- p + ggplot2::stat_density(
+          adjust = input$bw_adjust,
+          color = "blue", linewidth = 1, fill = "transparent")
+      }
+      print(p)
+    })
+    
+    # Input Bandwidth Adjustment
+    output$bw_adjust <- shiny::renderUI({
+      if(input$density) {
+        shiny::sliderInput(inputId = ns("bw_adjust"),
+                           label = "Bandwidth adjustment:",
+                           min = 0.2, max = 2, value = 1, step = 0.2)
+      }
+    })
+  })
+}
+
+gghistInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::tagList(
+    shiny::selectInput(inputId = ns("n_breaks"),
+                label = "Number of bins in histogram (approximate):",
+                choices = c(10, 20, 35, 50),
+                selected = 20),
+    shiny::checkboxInput(inputId = ns("individual_obs"),
+                  label = shiny::strong("Show individual observations"),
+                  value = FALSE),
+    shiny::checkboxInput(inputId = ns("density"),
+                  label = shiny::strong("Show density estimate"),
+                  value = FALSE))
+}
+
+gghistUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("bw_adjust"))
+}
+
+gghistOutput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::plotOutput(ns("main_plot"), height = "300px")
+}
+
+## file: ggpointApp.R
+ggpointApp <- function() {
+  ui <- bslib::page(
+    ggpointInput("ggpoint"), 
+    ggpointOutput("ggpoint"),
+    ggpointUI("ggpoint")
+  )
+  server <- function(input, output, session) {
+    ggpointServer("ggpoint")
+  }
+  shiny::shinyApp(ui, server)
+}
+
+ggpointServer <- function(id, df = shiny::reactive(faithful)) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Output Main Plot
+    output$main_plot <- shiny::renderPlot({
+      shiny::req(df())
+      if(ncol(df()) < 2) return(ggplot2::ggplot())
+      
+      xvar <- colnames(df())[1]
+      yvar <- colnames(df())[2]
+      p <- ggplot2::ggplot(df()) +
+        ggplot2::aes(.data[[xvar]], .data[[yvar]]) +
+        ggplot2::geom_point(
+          color = "black", fill = "white") +
+        ggplot2::xlab(xvar) +
+        ggplot2::ylab(yvar) +
+        ggplot2::ggtitle(
+          stringr::str_to_title(paste(xvar, "by", yvar)))
+      
+      if (input$individual_obs) {
+        p <- p + ggplot2::geom_rug()
+      }
+      if (input$smooth) {
+        shiny::req(input$bw_adjust)
+        p <- p +
+          ggplot2::geom_smooth(formula = "y~x", se = FALSE,
+            method = "loess", span = input$bw_adjust,
+            color = "blue", linewidth = 1)
+      }
+      print(p)
+    })
+    
+    # Input Bandwidth Adjustment
+    output$bw_adjust <- shiny::renderUI({
+      if(input$smooth) {
+        shiny::sliderInput(inputId = ns("bw_adjust"),
+                           label = "Span adjustment:",
+                           min = 0, max = 1, value = 0.75, step = 0.05)
+      }
+    })
+  })
+}
+
+ggpointInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::tagList(
+    shiny::checkboxInput(inputId = ns("individual_obs"),
+                  label = shiny::strong("Show individual observations"),
+                  value = FALSE),
+    shiny::checkboxInput(inputId = ns("smooth"),
+                  label = shiny::strong("Show smooth estimate"),
+                  value = FALSE))
+}
+
+ggpointUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("bw_adjust"))
+}
+
+ggpointOutput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::plotOutput(ns("main_plot"), height = "300px")
+}
+
+## file: histApp.R
+histApp <- function() {
+  ui <- bslib::page(
+    histInput("hist"), 
+    histOutput("hist"),
+    histUI("hist")
+  )
+  server <- function(input, output, session) {
+    histServer("hist") 
+  }
+  shiny::shinyApp(ui, server)
+}
+
+histServer <- function(id, df = shiny::reactive(faithful)) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    # Output Main Plot
+    output$main_plot <- shiny::renderPlot({
+      shiny::req(df())
+      if(ncol(df()) < 1) return(NULL)
+      
+      xvar <- colnames(df())[1]
+      graphics::hist(df()[[xvar]],
+                     probability = TRUE,
+                     breaks = as.numeric(input$n_breaks),
+                     xlab = xvar,
+                     main = stringr::str_to_title(xvar))
+      
+      if (input$individual_obs) {
+        graphics::rug(df()[[xvar]])
+      }
+      if (input$density) {
+        shiny::req(df())
+        shiny::req(input$bw_adjust)
+        dens <- stats::density(df()[[xvar]],
+                               adjust = input$bw_adjust)
+        graphics::lines(dens, col = "blue")
+      }
+    })
+    
+    # Input Bandwidth Adjustment
+    output$bw_adjust <- shiny::renderUI({
+      if(input$density) {
+        shiny::sliderInput(inputId = ns("bw_adjust"),
+                           label = "Bandwidth adjustment:",
+                           min = 0.2, max = 2, value = 1, step = 0.2)
+      }
+    })
+  })
+}
+
+histInput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::tagList(
+    shiny::selectInput(inputId = ns("n_breaks"),
+                label = "Number of bins in histogram (approximate):",
+                choices = c(10, 20, 35, 50),
+                selected = 20),
+    shiny::checkboxInput(inputId = ns("individual_obs"),
+                  label = shiny::strong("Show individual observations"),
+                  value = FALSE),
+    shiny::checkboxInput(inputId = ns("density"),
+                  label = shiny::strong("Show density estimate"),
+                  value = FALSE))
+}
+
+histUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("bw_adjust"))
+}
+
+histOutput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::plotOutput(ns("main_plot"), height = "300px")
+}
+
+## file: rowsApp.R
+rowsApp <- function() {
+  ui <- bslib::page(
+    title = "Geyser Rows Modules",
+    rowsInput("rows"),
+    rowsUI("rows")
+  )
+  server <- function(input, output, session) {
+    rowsServer("rows")
+  }
+  shiny::shinyApp(ui, server)
+}
+
+rowsServer <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    dataset <- datasetsServer("datasets")
+    histServer("hist", dataset)
+    gghistServer("gghist", dataset)
+    ggpointServer("ggpoint", dataset)
+  })
+}
+
+rowsInput <- function(id) {
+  ns <- shiny::NS(id)
+  bslib::layout_columns(
+    datasetsInput(ns("datasets")),
+    datasetsUI(ns("datasets"))
+  )
+}
+
+rowsUI <- function(id) {
+  ns <- shiny::NS(id)
+  bslib::layout_columns(
+    bslib::card(bslib::card_header("hist"),
+                histInput(ns("hist")), 
+                histOutput(ns("hist")),
+                histUI(ns("hist"))),
+    bslib::card(bslib::card_header("gghist"),
+                gghistInput(ns("gghist")), 
+                gghistOutput(ns("gghist")),
+                gghistUI(ns("gghist"))),
+    bslib::card(bslib::card_header("ggpoint"),
+                ggpointInput(ns("ggpoint")), 
+                ggpointOutput(ns("ggpoint")),
+                ggpointUI(ns("ggpoint"))))
+}
+
+## file: switchApp.R
+switchApp <- function() {
+  ui <- bslib::page(
+    switchInput("switch"),
+    switchOutput("switch"), 
+    switchUI("switch")
+  )
+  server <- function(input, output, session) {
+    switchServer("switch")
+  }
+  shiny::shinyApp(ui, server)
+}
+
+switchServer <- function(id) {
+  shiny::moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    
+    dataset <- datasetsServer("datasets")
+    histServer("hist", dataset)
+    gghistServer("gghist", dataset)
+    ggpointServer("ggpoint", dataset)
+    
+    output$inputSwitch <- shiny::renderUI({
+      shiny::req(input$plottype)
+      get(paste0(input$plottype, "Input"))(ns(input$plottype))
+    })
+    output$uiSwitch <- shiny::renderUI({
+      shiny::req(input$plottype)
+      get(paste0(input$plottype, "UI"))(ns(input$plottype))
+    })
+    output$outputSwitch <- shiny::renderUI({
+      shiny::req(input$plottype)
+      get(paste0(input$plottype, "Output"))(ns(input$plottype))
+    })
+  })
+}
+
+switchInput <- function(id) {
+  ns <- shiny::NS(id)
+  list(
+    bslib::layout_columns(
+      shiny::selectInput(ns("plottype"), "Plot Type:",
+                         c("hist","gghist","ggpoint")),
+      datasetsInput(ns("datasets")),
+      datasetsUI(ns("datasets"))),
+  shiny::uiOutput(ns("inputSwitch"))
+  )
+}
+
+switchUI <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("uiSwitch"))
+}
+
+switchOutput <- function(id) {
+  ns <- shiny::NS(id)
+  shiny::uiOutput(ns("outputSwitch"))
+}
+```
+
+## Source Code
+
+Below you can view the complete source files for all modules and helper scripts that compose this application.
+
+::: {.panel-tabset}
+
+### app.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/app.R")
+#| eval: false
+```
+
+### datanames.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/datanames.R")
+#| eval: false
+```
+
+### datasetsApp.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/datasetsApp.R")
+#| eval: false
+```
+
+### gghistApp.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/gghistApp.R")
+#| eval: false
+```
+
+### ggpointApp.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/ggpointApp.R")
+#| eval: false
+```
+
+### histApp.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/histApp.R")
+#| eval: false
+```
+
+### rowsApp.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/rowsApp.R")
+#| eval: false
+```
+
+### switchApp.R
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/demo/switchApp.R")
+#| eval: false
+```
+
+:::
