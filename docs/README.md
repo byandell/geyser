@@ -54,14 +54,12 @@ slide deck.
 
 ### ShinyLive Demos
 
-I tried building these demos on GitHub Pages using
-`shinylive` for the demo app in
-[inst/connect_modules](https://github.com/byandell/geyser/tree/main/inst/connect_modules)
-shown above.
-For more information, see
-
-- [Prepare R app for Shinylive Export](https://byandell.github.io/Documentation/github/shinylive.html)
-- [Quarto Dashboard Shinylive](https://byandell.github.io/Documentation/github/quartolive.html)
+I built demos on GitHub Pages using
+[shinylive](https://shiny.posit.co/py/get-started/shinylive.html).
+See
+[Showcase Shiny Apps and Code](https://byandell.github.io/Documentation/prompts/gallery.html)
+and
+[Deploy GitHub Pages via GitHub Actions](https://byandell.github.io/Documentation/github/actions.html)
 for more information.
 
 ## R and Python Package Layouts

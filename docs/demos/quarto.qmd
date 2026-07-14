@@ -11,8 +11,8 @@ This section displays the [geyser Quarto Dashboard app](https://github.com/byand
 
 ```         
 <iframe src="https://connect.doit.wisc.edu/geyserQuartoDemo"
-style="width: 100%; height: 800px;
-border: 1px solid #ccc; border-radius: 4px;"></iframe>
+  style="width: 100%; height: 800px;
+  border: 1px solid #ccc; border-radius: 4px;"></iframe>
 ```
 
 ::: {.shiny-app-frame style="margin-bottom: 30px;"}
