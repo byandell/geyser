@@ -7,7 +7,9 @@ toc: false
 
 [← Back to Demos Gallery](index.qmd)
 
-This section displays the [geyser Quarto Dashboard app](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd) hosted on Posit Connect, using an `iframe` embedding.
+This section displays the [geyser Quarto Dashboard app](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd) hosted on Posit Connect, using an
+[iframe](https://www.w3schools.com/TAGS/tag_iframe.asp)
+embedding.
 
 ```         
 <iframe src="https://connect.doit.wisc.edu/geyserQuartoDemo"
