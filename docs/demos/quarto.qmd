@@ -7,22 +7,27 @@ toc: false
 
 [← Back to Demos Gallery](index.qmd)
 
-This section displays the geyser Quarto Dashboard app hosted on Posit Connect, using an `iframe` embedding.
+This section displays the [geyser Quarto Dashboard app](https://github.com/byandell/geyser/blob/main/inst/connect_modules/quarto/demo.qmd) hosted on Posit Connect, using an `iframe` embedding.
 
-<div class="shiny-app-frame" style="margin-bottom: 30px;">
-  <iframe src="https://connect.doit.wisc.edu/geyserQuartoDemo" style="width: 100%; height: 800px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
-</div>
+```         
+<iframe src="https://connect.doit.wisc.edu/geyserQuartoDemo"
+style="width: 100%; height: 800px;
+border: 1px solid #ccc; border-radius: 4px;"></iframe>
+```
+
+::: {.shiny-app-frame style="margin-bottom: 30px;"}
+<iframe src="https://connect.doit.wisc.edu/geyserQuartoDemo" style="width: 100%; height: 800px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
+:::
 
 ## Source Code
 
 Below you can view the complete source file for the Quarto dashboard.
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### demo.qmd
+
 ```{r}
 #| code: !expr readLines("../../inst/connect_modules/quarto/demo.qmd")
 #| eval: false
 ```
-
 :::
