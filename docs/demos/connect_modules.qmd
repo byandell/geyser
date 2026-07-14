@@ -2,6 +2,7 @@
 title: "Connected Modules (Shinylive)"
 description: "An advanced Shiny application demonstrating how multiple independent modules connect, share reactive data, and communicate within a navigation bar layout."
 author: "Brian S. Yandell"
+image: "../images/appRows.png"
 toc: true
 ---
 

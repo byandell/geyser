@@ -2,6 +2,7 @@
 title: "Build Module (Shinylive)"
 description: "A serverless WebAssembly-powered R Shiny app running directly in the browser using the package's modular code, with full source tabs."
 author: "Brian S. Yandell"
+image: "../images/faithful.png"
 toc: true
 ---
 

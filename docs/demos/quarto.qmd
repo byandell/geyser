@@ -2,6 +2,7 @@
 title: "Quarto Dashboard"
 description: "A native Quarto Dashboard layout showing Shiny module connections. Note: Runs via an embedded iframe from Posit Connect."
 author: "Brian S. Yandell"
+image: "../images/pagesQmd.png"
 toc: false
 ---
 

@@ -2,6 +2,7 @@
 title: "Python Module (Shinylive)"
 description: "A serverless WebAssembly-powered Python Shiny app demonstrating the implementation of custom modules in Python using shiny.module."
 author: "Brian S. Yandell"
+image: "../images/faithful.png"
 toc: true
 ---
 

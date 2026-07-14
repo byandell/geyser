@@ -2,6 +2,7 @@
 title: "Posit Gallery Example"
 description: "The classic Old Faithful Shiny app as hosted on the official Posit Shiny Gallery, embedded using a traditional iframe."
 author: "Brian S. Yandell"
+image: "../images/faithful.png"
 toc: false
 ---
 
