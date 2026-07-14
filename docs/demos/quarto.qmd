@@ -1,205 +1,28 @@
 ---
-title: "Geyser Demo in Quarto"
-author: "Brian Yandell"
-description: "A native Quarto Dashboard layout showing Shiny module connections. Note: Requires a live Shiny server to run interactively; it is static on GitHub Pages. See <https://connect.doit.wisc.edu/geyserQuartoDemo>."
-format: dashboard
-server: shiny
-editor: visual
+title: "Quarto Dashboard"
+description: "A native Quarto Dashboard layout showing Shiny module connections. Note: Runs via an embedded iframe from Posit Connect."
+author: "Brian S. Yandell"
+toc: false
 ---
 
-```{r}
-#| context: setup
-#| include: false
-library(shiny)
-library(bslib)
-library(ggplot2)
-library(dplyr)
-library(DT)
-library(stringr)
-library(tibble)
+[← Back to Demos Gallery](index.qmd)
 
-source("datanames.R")
-source("datasetsApp.R")
-source("gghistApp.R")
-source("ggpointApp.R")
-source("histApp.R")
+This section displays the geyser Quarto Dashboard app hosted on Posit Connect, using an `iframe` embedding.
+
+<div class="shiny-app-frame" style="margin-bottom: 30px;">
+  <iframe src="https://connect.doit.wisc.edu/geyserQuartoDemo" style="width: 100%; height: 800px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
+</div>
+
+## Source Code
+
+Below you can view the complete source file for the Quarto dashboard.
+
+::: {.panel-tabset}
+
+### demo.qmd
+```{r}
+#| code: !expr readLines("../../inst/connect_modules/quarto/demo.qmd")
+#| eval: false
 ```
 
-# hist
-
-##  {.sidebar}
-
-### 
-
-```{r}
-histInput("hist")
-# Display this only if the density is shown
-histUI("hist")
-```
-
-## 
-
-```{r}
-histOutput("hist")
-```
-
-```{r}
-#| context: server
-histServer("hist")
-```
-
-# geom_hist
-
-##  {.sidebar}
-
-### 
-
-```{r}
-gghistInput("gghist")
-# Display this only if the density is shown
-gghistUI("gghist")
-```
-
-## 
-
-```{r}
-gghistOutput("gghist")
-```
-
-```{r}
-#| context: server
-gghistServer("gghist")
-```
-
-# geom_point
-
-##  {.sidebar}
-
-### 
-
-```{r}
-ggpointInput("ggpoint")
-# Display this only if the density is shown
-ggpointUI("ggpoint")
-```
-
-## 
-
-```{r}
-ggpointOutput("ggpoint")
-```
-
-```{r}
-#| context: server
-ggpointServer("ggpoint")
-```
-
-# rows
-
-## Row - Datasets {height="20%"}
-
-### Column dataset
-
-```{r}
-datasetsInput("dataset")
-```
-
-### Column variable
-
-```{r}
-datasetsUI("dataset")
-```
-
-## Row - Plots {height="80%"}
-
-### Column - Hist
-
-```{r}
-#| title: Basic Histogram
-histInput("histr")
-histOutput("histr")
-histUI("histr")
-```
-
-### Column - GGhist
-
-```{r}
-#| title: GGplot2 Histogram
-gghistInput("gghistr")
-gghistOutput("gghistr")
-gghistUI("gghistr")
-```
-
-### Column - GGpoint
-
-```{r}
-#| title: GGplot2 Point Plot
-ggpointInput("ggpointr")
-ggpointOutput("ggpointr")
-ggpointUI("ggpointr")
-```
-
-```{r}
-#| context: server
-datasets <- datasetsServer("dataset")
-histServer("histr", datasets)
-gghistServer("gghistr", datasets)
-ggpointServer("ggpointr", datasets)
-```
-
-# switch
-
-##  {.sidebar}
-
-```{r}
-shiny::selectInput("plottype", "Plot Type:", c("hist","gghist","ggpoint"))
-```
-
-```{r}
-datasetsInput("datasets")
-```
-
-```{r}
-datasetsUI("datasets")
-```
-
-## 
-
-### Row - Inputs {height="30%"}
-
-```{r}
-shiny::uiOutput("inputSwitch")
-```
-
-### Row - Inputs {height="50%"}
-
-```{r}
-shiny::uiOutput("outputSwitch")
-```
-
-### Row - Inputs {height="20%"}
-
-```{r}
-shiny::uiOutput("uiSwitch")
-```
-
-```{r}
-#| context: server
-dataset <- datasetsServer("datasets")
-histServer("hists", dataset)
-gghistServer("gghists", dataset)
-ggpointServer("ggpoints", dataset)
-    
-output$inputSwitch <- shiny::renderUI({
-  shiny::req(input$plottype)
-    get(paste0(input$plottype, "Input"))(paste0(input$plottype, "s"))
-  })
-output$uiSwitch <- shiny::renderUI({
-  shiny::req(input$plottype)
-  get(paste0(input$plottype, "UI"))(paste0(input$plottype, "s"))
-})
-output$outputSwitch <- shiny::renderUI({
-  shiny::req(input$plottype)
-  get(paste0(input$plottype, "Output"))(paste0(input$plottype, "s"))
-})
-```
+:::
