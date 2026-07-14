@@ -1,6 +1,7 @@
 ---
 title: "Geyser Demo in Quarto"
 author: "Brian Yandell"
+description: "A native Quarto Dashboard layout showing Shiny module connections. Note: Requires a live Shiny server to run interactively; it is static on GitHub Pages. See <https://connect.doit.wisc.edu/geyserQuartoDemo>."
 format: dashboard
 server: shiny
 editor: visual
@@ -9,8 +10,19 @@ editor: visual
 ```{r}
 #| context: setup
 #| include: false
-pak::pak("byandell/geyser")
-library(geyser)
+library(shiny)
+library(bslib)
+library(ggplot2)
+library(dplyr)
+library(DT)
+library(stringr)
+library(tibble)
+
+source("datanames.R")
+source("datasetsApp.R")
+source("gghistApp.R")
+source("ggpointApp.R")
+source("histApp.R")
 ```
 
 # hist

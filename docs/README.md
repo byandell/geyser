@@ -31,9 +31,12 @@ Earlier versions of these slide decks are available from [Posit Connect](https:/
 
 Live demos rendered with GitHub Pages:
 
-- [geyserDemo](shiny/) ([source](https://github.com/byandell/geyser/blob/main/inst/connect_modules/app.R))
-- [geyserQuartoDemo](demo_shinylive.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demo_shinylive.qmd))
-- [geyserModuleServerDemo](demos/index.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/index.qmd)) ([prompt](gallery.md))
+- [`geyser` demos](demos/) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/index.qmd)) ([prompt](https://byandell.github.io/Documentation/prompts/gallery.html))
+  - [Build Module](demos/build_module.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/build_module.qmd))
+  - [Connect Modules](demos/connect_modules.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/connect_modules.qmd))
+  - [Python Module](demos/python_module.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/python_module.qmd))
+  - [Quarto](demos/quarto.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/quarto.qmd))
+  - [Posit Gallery](demos/posit_gallery.html) ([source](https://github.com/byandell/geyser/blob/main/docs/demos/posit_gallery.qmd))
 
 Live demos are also available via [Posit Connect](https://it.wisc.edu/services/data-science-platform-posit-connect/).
 
