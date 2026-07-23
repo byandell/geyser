@@ -196,3 +196,4 @@ inst/*/*/*.html
 /docs/_extensions/
 /docs/shinylive-sw.js
 /docs/app.json
+_site/

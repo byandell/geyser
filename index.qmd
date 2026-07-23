@@ -1,0 +1,7 @@
+---
+title: "geyser: Shiny Module Demo"
+subtitle: "R & Python package demonstrating Shiny module patterns using Old Faithful geyser data"
+toc: false
+---
+
+{{< include README.md >}}

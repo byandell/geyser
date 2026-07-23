@@ -1,0 +1,54 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - module.md
+    - docs/README.md
+    - docs/geyserShinyR.qmd
+    - docs/geyserShinyPython.qmd
+    - docs/demos/index.qmd
+    - docs/demos/build_module.qmd
+    - docs/demos/connect_modules.qmd
+    - docs/demos/python_module.qmd
+    - docs/demos/quarto.qmd
+    - docs/demos/posit_gallery.qmd
+
+website:
+  title: "geyser"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: module.md
+        text: Module Guide
+      - text: Docs & Slides
+        menu:
+          - href: docs/README.md
+            text: Overview
+          - href: docs/geyserShinyR.qmd
+            text: R Shiny Slides
+          - href: docs/geyserShinyPython.qmd
+            text: Python Shiny Slides
+      - text: Demos Gallery
+        menu:
+          - href: docs/demos/index.qmd
+            text: Gallery Overview
+          - href: docs/demos/build_module.qmd
+            text: Build Module
+          - href: docs/demos/connect_modules.qmd
+            text: Connect Modules
+          - href: docs/demos/python_module.qmd
+            text: Python Module
+          - href: docs/demos/quarto.qmd
+            text: Quarto Shinylive
+          - href: docs/demos/posit_gallery.qmd
+            text: Posit Gallery
+    right:
+      - icon: github
+        href: https://github.com/byandell/geyser
+
+format:
+  html:
+    theme: cosmo
+    toc: true

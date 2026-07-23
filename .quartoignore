@@ -1,0 +1,7 @@
+myenv/
+.venv/
+.Rproj.user/
+inst/
+R_Shiny_Club_20241211_Yandell/
+build/
+geyser.egg-info/
