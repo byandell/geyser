@@ -23,7 +23,10 @@ pip install --quiet git+https://github.com/byandell/geyser.git
 
 ## Exploring the Repo
 
+- **[Developer Guide](DEVELOPER.md)**: Architectural index and developer guide for R and Python modules.
+- **[Guides Record](guides.md)**: Combined blueprint prompts, implementation plan, and walkthrough record.
 - **[Module Guide](module.md)**: Detailed tutorial on Shiny modules in R and Python.
+- **[Publish Update](./publish.md)**: Update about publishing the repo via GitHub Pages.
 - **[Documentation & Slides](docs/README.md)**: Presentations and documentation.
   - [R Shiny Modules Presentation](docs/geyserShinyR.qmd)
   - [Python Shiny Modules Presentation](docs/geyserShinyPython.qmd)

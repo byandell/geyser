@@ -1,0 +1,57 @@
+---
+title: "Developer Guide for R Shiny Modules in geyser"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Developer Guide for R Shiny Modules in geyser}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk_set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# R Package Developer Guide
+
+Welcome to the R package Developer Guide for `geyser` (v0.7.2). This vignette documents the 5-function Shiny module architecture, namespace conventions, and module composition patterns used throughout the package.
+
+## 5-Function Module Pattern
+
+Every module in the `geyser` package adheres to a strict 5-function structure:
+
+1. **`moduleNameInput(id)`**: Generates input control widgets. Uses `ns <- NS(id)` for UI namespacing.
+2. **`moduleNameOutput(id)`**: Generates output display elements. Uses `ns <- NS(id)`.
+3. **`moduleNameUI(id)`**: Combines Input and Output UI elements into a full layout panel.
+4. **`moduleNameServer(id, dataset = reactive(faithful))`**: Implements server reactive logic inside `moduleServer(id, function(input, output, session) {...})`.
+5. **`moduleNameApp(dataset = faithful)`**: Standalone testing wrapper app returning a `shinyApp(ui, server)` instance.
+
+## Exported R Modules
+
+| Module | Source File | Purpose |
+|---|---|---|
+| `histApp()` | `R/histApp.R` | Base R graphics histogram |
+| `gghistApp()` | `R/gghistApp.R` | ggplot2 histogram |
+| `ggpointApp()` | `R/ggpointApp.R` | ggplot2 scatter plot |
+| `datasetsApp()` | `R/datasetsApp.R` | Dataset selector (filters numeric cols) |
+| `dataApp()` | `R/dataApp.R` | Interactive `DT` data table viewer |
+| `rowsApp()` | `R/rowsApp.R` | Multi-module horizontal row container |
+| `switchApp()` | `R/switchApp.R` | Dynamic module switcher |
+| `wrapperApp()` | `R/wrapperApp.R` | Module wrapper demonstration |
+
+## Development Workflow
+
+```r
+# Load development package
+devtools::load_all()
+
+# Test a module standalone
+histApp()
+
+# Re-build package documentation
+devtools::document()
+```
+
+For full hybrid repository architecture (including Python modules), see `DEVELOPER.md` in the repository root.
