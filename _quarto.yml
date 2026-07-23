@@ -4,6 +4,9 @@ project:
   render:
     - index.qmd
     - module.md
+    - DEVELOPER.md
+    - vignettes/DeveloperGuide.Rmd
+    - docs/devel/python.md
     - docs/README.md
     - docs/geyserShinyR.qmd
     - docs/geyserShinyPython.qmd
@@ -22,6 +25,14 @@ website:
         text: Home
       - href: module.md
         text: Module Guide
+      - text: Developer Guides
+        menu:
+          - href: DEVELOPER.md
+            text: Architectural Overview
+          - href: vignettes/DeveloperGuide.Rmd
+            text: R Developer Guide
+          - href: docs/devel/python.md
+            text: Python Developer Guide
       - text: Docs & Slides
         menu:
           - href: docs/README.md

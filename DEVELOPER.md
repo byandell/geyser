@@ -358,8 +358,8 @@ See [publish.md](publish.md) for GitHub Pages publishing details.
 ## Sub-Guides & Further Reading
 
 For deeper language-specific sub-guides and detailed documentation:
-- 📖 **[R Vignette Developer Guide](vignettes/DeveloperGuide.Rmd)** (`vignettes/DeveloperGuide.Rmd`)
-- 🐍 **[Python Developer Guide](docs/devel/python.md)** (`docs/devel/python.md`)
-- 📦 **[Python Package README](geyser/README.md)** (`geyser/README.md`)
-- 🎓 **[Shiny Module Tutorial](module.md)** (`module.md`)
-- 🚀 **[Publishing & GitHub Pages Guide](publish.md)** (`publish.md`)
+- 📖 **[R Vignette Developer Guide](vignettes/DeveloperGuide.Rmd)** (`vignettes/DeveloperGuide.Rmd`) | [(GitHub Source)](https://github.com/byandell/geyser/blob/main/vignettes/DeveloperGuide.Rmd)
+- 🐍 **[Python Developer Guide](docs/devel/python.md)** (`docs/devel/python.md`) | [(GitHub Source)](https://github.com/byandell/geyser/blob/main/docs/devel/python.md)
+- 📦 **[Python Package README](geyser/README.md)** (`geyser/README.md`) | [(GitHub Source)](https://github.com/byandell/geyser/blob/main/geyser/README.md)
+- 🎓 **[Shiny Module Tutorial](module.md)** (`module.md`) | [(GitHub Source)](https://github.com/byandell/geyser/blob/main/module.md)
+- 🚀 **[Publishing & GitHub Pages Guide](publish.md)** (`publish.md`) | [(GitHub Source)](https://github.com/byandell/geyser/blob/main/publish.md)

@@ -106,12 +106,18 @@ geyser/
    - R package vignette documenting R Shiny modules for package compilation (`devtools::build_vignettes()`).
 
 5. **[`README.md`](README.md)**:
-   - Updated with direct link to `DEVELOPER.md` under "Exploring the Repo".
+   - Updated with direct links to Developer Guides (both published site pages and GitHub source).
+
+6. **Website Publishing & Navbar Integration ([`_quarto.yml`](_quarto.yml) & [`publish.md`](publish.md))**:
+   - Added `DEVELOPER.md`, `vignettes/DeveloperGuide.Rmd`, and `docs/devel/python.md` to Quarto render targets.
+   - Added a **Developer Guides** dropdown menu to the website navbar linking to Architectural Overview, R Developer Guide, and Python Developer Guide.
 
 ### Document Reference Links
 
-- 📘 [Root Developer Guide (`DEVELOPER.md`)](DEVELOPER.md)
-- 🐍 [Python Developer Guide (`docs/devel/python.md`)](docs/devel/python.md)
-- 📦 [Python Package Source Reference (`geyser/README.md`)](geyser/README.md)
-- 📖 [R Vignette Guide (`vignettes/DeveloperGuide.Rmd`)](vignettes/DeveloperGuide.Rmd)
-- 🏠 [Repository README (`README.md`)](README.md)
+- 📘 **Architectural Overview (`DEVELOPER.md`)**: [Local File](DEVELOPER.md) | [Published Page](https://byandell.github.io/geyser/DEVELOPER.html) | [GitHub Source](https://github.com/byandell/geyser/blob/main/DEVELOPER.md)
+- 📖 **R Developer Guide (`vignettes/DeveloperGuide.Rmd`)**: [Local File](vignettes/DeveloperGuide.Rmd) | [Published Page](https://byandell.github.io/geyser/vignettes/DeveloperGuide.html) | [GitHub Source](https://github.com/byandell/geyser/blob/main/vignettes/DeveloperGuide.Rmd)
+- 🐍 **Python Developer Guide (`docs/devel/python.md`)**: [Local File](docs/devel/python.md) | [Published Page](https://byandell.github.io/geyser/docs/devel/python.html) | [GitHub Source](https://github.com/byandell/geyser/blob/main/docs/devel/python.md)
+- 📦 **Python Package Source Reference (`geyser/README.md`)**: [Local File](geyser/README.md) | [GitHub Source](https://github.com/byandell/geyser/blob/main/geyser/README.md)
+- 🏠 **Repository Landing Page (`README.md`)**: [Local File](README.md) | [Published Home](https://byandell.github.io/geyser/index.html) | [GitHub Source](https://github.com/byandell/geyser/blob/main/README.md)
+- 🚀 **Publishing Guide (`publish.md`)**: [Local File](publish.md) | [GitHub Source](https://github.com/byandell/geyser/blob/main/publish.md)
+
